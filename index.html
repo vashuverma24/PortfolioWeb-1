@@ -61,14 +61,14 @@
           stroke="url(#lineGradient)"
           stroke-width="2"
         />
-        <circle cx="20" cy="40" r="6" fill="#6cf0e8" />
-        <circle cx="300" cy="120" r="6" fill="#ff7a59" />
-        <circle cx="500" cy="80" r="6" fill="#9d7bff" />
+        <circle cx="20" cy="40" r="6" fill="#ff9a3d" />
+        <circle cx="300" cy="120" r="6" fill="#ff9a3d" />
+        <circle cx="500" cy="80" r="6" fill="#ff9a3d" />
         <defs>
           <linearGradient id="lineGradient" x1="0" y1="0" x2="520" y2="280">
-            <stop offset="0" stop-color="#6cf0e8" />
-            <stop offset="0.5" stop-color="#ff7a59" />
-            <stop offset="1" stop-color="#9d7bff" />
+            <stop offset="0" stop-color="#ffd36a" />
+            <stop offset="0.5" stop-color="#ff9a3d" />
+            <stop offset="1" stop-color="#f36a2b" />
           </linearGradient>
         </defs>
       </svg>
@@ -268,29 +268,66 @@
           <p class="eyebrow">Skills</p>
           <h2>Technical skills at a glance.</h2>
         </div>
-        <div class="skills-grid">
-          <div class="skill-block reveal">
-            <h3>Languages</h3>
-            <p>Java, Python (Basics), Swift, SwiftUI.</p>
+        <div class="skills-rails reveal">
+          <div class="skill-row">
+            <div class="skill-label">
+              <h3>Languages</h3>
+              <p class="skill-intro">Languages I build and ship with regularly.</p>
+            </div>
+            <div class="skill-rail" data-skill-rail>
+              <span class="skill-pill">Swift</span>
+              <span class="skill-pill">SwiftUI</span>
+              <span class="skill-pill">Java</span>
+              <span class="skill-pill">Python (Basics)</span>
+            </div>
           </div>
-          <div class="skill-block reveal">
-            <h3>Core Concepts</h3>
-            <p>
-              Data Structures & Algorithms, Object-Oriented Programming, DBMS,
-              Operating Systems.
-            </p>
+          <div class="skill-row">
+            <div class="skill-label">
+              <h3>Core Concepts</h3>
+              <p class="skill-intro">Foundations I rely on for clean architecture.</p>
+            </div>
+            <div class="skill-rail" data-skill-rail>
+              <span class="skill-pill">Data Structures</span>
+              <span class="skill-pill">Algorithms</span>
+              <span class="skill-pill">OOP</span>
+              <span class="skill-pill">DBMS</span>
+              <span class="skill-pill">Operating Systems</span>
+            </div>
           </div>
-          <div class="skill-block reveal">
-            <h3>UI/UX Tools</h3>
-            <p>Figma, Canva, Keynote.</p>
+          <div class="skill-row">
+            <div class="skill-label">
+              <h3>UI/UX Tools</h3>
+              <p class="skill-intro">Design tools for UI polish and storytelling.</p>
+            </div>
+            <div class="skill-rail" data-skill-rail>
+              <span class="skill-pill">Figma</span>
+              <span class="skill-pill">Canva</span>
+              <span class="skill-pill">Keynote</span>
+            </div>
           </div>
-          <div class="skill-block reveal">
-            <h3>Dev Tools</h3>
-            <p>Xcode, VS Code, Git, GitHub, JIRA (Agile).</p>
+          <div class="skill-row">
+            <div class="skill-label">
+              <h3>Dev Tools</h3>
+              <p class="skill-intro">Daily tools for shipping and collaboration.</p>
+            </div>
+            <div class="skill-rail" data-skill-rail>
+              <span class="skill-pill">Xcode</span>
+              <span class="skill-pill">VS Code</span>
+              <span class="skill-pill">Git</span>
+              <span class="skill-pill">GitHub</span>
+              <span class="skill-pill">JIRA (Agile)</span>
+            </div>
           </div>
-          <div class="skill-block reveal">
-            <h3>Technologies</h3>
-            <p>UIKit, Supabase, SceneKit.</p>
+          <div class="skill-row">
+            <div class="skill-label">
+              <h3>Technologies</h3>
+              <p class="skill-intro">Platforms and services used in production.</p>
+            </div>
+            <div class="skill-rail" data-skill-rail>
+              <span class="skill-pill">UIKit</span>
+              <span class="skill-pill">Supabase</span>
+              <span class="skill-pill">SceneKit</span>
+            </div>
           </div>
         </div>
       </section>
@@ -394,80 +431,64 @@
               href="https://github.com/SachinTarkar842/LeoLingo"
               target="_blank"
               rel="noreferrer"
+              aria-label="Open LeoLingo on GitHub"
+              title="LeoLingo"
             >
-              <div class="device-mockup">
-                <div class="device-screen screen-leolingo">
-                  <img
-                    class="device-icon"
-                    src="leolingo.png"
-                    alt="LeoLingo app icon"
-                  />
-                </div>
-              </div>
-              <div class="gallery-meta">
-                <h4>LeoLingo</h4>
-                <p>Speech therapy iPad app</p>
-              </div>
+              <img
+                class="project-icon"
+                src="leolingo.png"
+                alt="LeoLingo app icon"
+                loading="lazy"
+              />
+              <span class="sr-only">LeoLingo</span>
             </a>
             <a
               class="gallery-card reveal"
               href="https://github.com/SachinTarkar842/Preplus"
               target="_blank"
               rel="noreferrer"
+              aria-label="Open PrePlus on GitHub"
+              title="PrePlus"
             >
-              <div class="device-mockup">
-                <div class="device-screen screen-preplus">
-                  <img
-                    class="device-icon"
-                    src="preplus.png"
-                    alt="PrePlus app icon"
-                  />
-                </div>
-              </div>
-              <div class="gallery-meta">
-                <h4>PrePlus</h4>
-                <p>AI smart study companion</p>
-              </div>
+              <img
+                class="project-icon"
+                src="preplus.png"
+                alt="PrePlus app icon"
+                loading="lazy"
+              />
+              <span class="sr-only">PrePlus</span>
             </a>
             <a
               class="gallery-card reveal"
               href="https://github.com/SachinTarkar842/MediOps"
               target="_blank"
               rel="noreferrer"
+              aria-label="Open MediOps on GitHub"
+              title="MediOps"
             >
-              <div class="device-mockup">
-                <div class="device-screen screen-mediops">
-                  <img
-                    class="device-icon"
-                    src="mediops.png"
-                    alt="MediOps app icon"
-                  />
-                </div>
-              </div>
-              <div class="gallery-meta">
-                <h4>MediOps</h4>
-                <p>Hospital management system</p>
-              </div>
+              <img
+                class="project-icon"
+                src="mediops.png"
+                alt="MediOps app icon"
+                loading="lazy"
+              />
+              <span class="sr-only">MediOps</span>
             </a>
             <a
               class="gallery-card reveal"
               href="https://github.com/SachinTarkar842/HeyMadhav"
               target="_blank"
               rel="noreferrer"
+              aria-label="Open HeyMadhav on GitHub"
+              title="HeyMadhav"
             >
-              <div class="device-mockup">
-                <div class="device-screen screen-heymadhav">
-                  <img
-                    class="device-icon"
-                    src="heymadhav.png"
-                    alt="HeyMadhav app icon"
-                  />
-                </div>
-              </div>
-              <div class="gallery-meta">
-                <h4>HeyMadhav</h4>
-                <p>Bhagavad Gita learning app</p>
-              </div>
+              <img
+                class="project-icon"
+                src="heymadhav.png"
+                alt="HeyMadhav app icon"
+                loading="lazy"
+              />
+              <span class="sr-only">HeyMadhav</span>
             </a>
           </div>
           <div class="projects-showcase">
@@ -1028,6 +1049,14 @@
         </div>
       </section>
     </main>
+
+    <button class="theme-toggle" type="button" aria-label="Toggle light mode" aria-pressed="false">
+      <span class="theme-toggle__label theme-toggle__label--light" aria-hidden="true">Light</span>
+      <span class="theme-toggle__track" aria-hidden="true">
+        <span class="theme-toggle__thumb"></span>
+      </span>
+      <span class="theme-toggle__label theme-toggle__label--dark" aria-hidden="true">Dark</span>
+    </button>
 
     <footer class="footer">
       <div class="footer-content">

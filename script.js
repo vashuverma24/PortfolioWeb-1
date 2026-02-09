@@ -2,10 +2,42 @@ const revealItems = document.querySelectorAll('.reveal');
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const root = document.documentElement;
 const scrollBar = document.querySelector('.scroll-bar');
+const themeToggle = document.querySelector('.theme-toggle');
+
+const prefersLightScheme = window.matchMedia('(prefers-color-scheme: light)');
+const storedTheme = localStorage.getItem('theme');
+
+const applyTheme = (theme) => {
+  root.setAttribute('data-theme', theme);
+  if (!themeToggle) return;
+  const isLight = theme === 'light';
+  themeToggle.setAttribute('aria-pressed', isLight ? 'true' : 'false');
+  themeToggle.setAttribute(
+    'aria-label',
+    isLight ? 'Switch to dark mode' : 'Switch to light mode'
+  );
+};
+
+const initialTheme = storedTheme || (prefersLightScheme.matches ? 'light' : 'dark');
+applyTheme(initialTheme);
 
 if ('scrollRestoration' in window.history) {
   window.history.scrollRestoration = 'manual';
 }
+
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    const nextTheme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    applyTheme(nextTheme);
+    localStorage.setItem('theme', nextTheme);
+  });
+}
+
+prefersLightScheme.addEventListener('change', (event) => {
+  if (!localStorage.getItem('theme')) {
+    applyTheme(event.matches ? 'light' : 'dark');
+  }
+});
 
 const scrollToTopImmediate = () => {
   document.documentElement.scrollTop = 0;
@@ -124,6 +156,8 @@ updateScroll();
 const labTitle = document.querySelector('[data-lab-title]');
 const labDesc = document.querySelector('[data-lab-desc]');
 const labChips = document.querySelectorAll('.chip[data-mode]');
+const skillRails = document.querySelectorAll('[data-skill-rail]');
+
 
 const labContent = {
   Education: {
@@ -163,6 +197,37 @@ if (labTitle && labDesc && labChips.length) {
       labTitle.textContent = content.title;
       labDesc.textContent = content.desc;
     });
+  });
+}
+
+if (skillRails.length) {
+  skillRails.forEach((rail) => {
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    rail.addEventListener('pointerdown', (event) => {
+      isDown = true;
+      rail.setPointerCapture(event.pointerId);
+      rail.classList.add('is-dragging');
+      startX = event.clientX;
+      scrollLeft = rail.scrollLeft;
+    });
+
+    rail.addEventListener('pointermove', (event) => {
+      if (!isDown) return;
+      const delta = event.clientX - startX;
+      rail.scrollLeft = scrollLeft - delta;
+    });
+
+    const stopDrag = () => {
+      isDown = false;
+      rail.classList.remove('is-dragging');
+    };
+
+    rail.addEventListener('pointerup', stopDrag);
+    rail.addEventListener('pointerleave', stopDrag);
+    rail.addEventListener('pointercancel', stopDrag);
   });
 }
 
@@ -301,8 +366,8 @@ const fetchGitHubHeatmap = async () => {
       });
     }
 
-    buildHeatmap(ghHeatmap, map, { days: 182 });
-    setText(ghHeatmapStatus, 'Last 6 months of activity');
+    buildHeatmap(ghHeatmap, map, { days: 240 });
+    setText(ghHeatmapStatus, 'Last 8 months of activity');
   } catch (error) {
     if (ghHeatmap) {
       ghHeatmap.classList.add('is-image');
@@ -335,8 +400,8 @@ const fetchLeetCodeHeatmap = async () => {
       map.set(toDateKey(date), count);
     });
 
-    buildHeatmap(lcHeatmap, map, { days: 182 });
-    setText(lcHeatmapStatus, 'Last 6 months of activity');
+    buildHeatmap(lcHeatmap, map, { days: 240 });
+    setText(lcHeatmapStatus, 'Last 8 months of activity');
   } catch (error) {
     setText(lcHeatmapStatus, 'Unable to load LeetCode activity grid.');
   }
