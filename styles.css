@@ -160,7 +160,7 @@ main {
   position: relative;
   padding: 32px 80px 0;
   z-index: 1;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .nav {
@@ -170,14 +170,12 @@ main {
   gap: 16px;
   width: min(1120px, 100%);
   margin: 0 auto;
-  background: linear-gradient(#0f0d14, #0f0d14) padding-box,
-    linear-gradient(120deg, rgba(108, 240, 232, 0.5), rgba(255, 122, 89, 0.4), rgba(157, 123, 255, 0.5))
-      border-box;
-  border: 1px solid transparent;
-  padding: 10px 16px;
-  border-radius: 999px;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 14px 30px rgba(4, 3, 8, 0.45);
+  background: rgba(15, 13, 20, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 14px 20px;
+  border-radius: 14px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 22px rgba(4, 3, 8, 0.35);
   position: sticky;
   top: 20px;
   z-index: 5;
@@ -225,12 +223,11 @@ main {
 
 .nav-links {
   display: flex;
-  gap: 6px;
+  gap: 16px;
   font-size: 0.9rem;
-  padding: 4px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0;
+  background: transparent;
+  border: none;
   flex-wrap: nowrap;
 }
 
@@ -242,42 +239,44 @@ main {
 
 .nav-links a {
   color: var(--muted);
-  padding: 6px 10px;
-  border-radius: 999px;
+  padding: 6px 4px;
+  border-radius: 6px;
   position: relative;
   transition: color 0.3s ease, background 0.3s ease;
 }
 
 .nav-links a:hover {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .nav-links a::after {
   content: '';
   position: absolute;
-  left: 50%;
-  bottom: 4px;
-  width: 6px;
-  height: 6px;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
   border-radius: 999px;
-  background: transparent;
-  transform: translateX(-50%);
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  background: var(--accent-2);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0.7;
 }
 
 .nav-links a:hover::after {
-  background: var(--accent-2);
-  box-shadow: 0 0 10px rgba(108, 240, 232, 0.7);
+  transform: scaleX(1);
+  box-shadow: 0 0 10px rgba(108, 240, 232, 0.5);
 }
 
 .cta {
   background: linear-gradient(135deg, #6cf0e8, #4f7cff);
   color: #0d0b11;
   padding: 8px 18px;
-  border-radius: 999px;
+  border-radius: 12px;
   font-weight: 600;
-  box-shadow: 0 12px 26px rgba(108, 240, 232, 0.35);
+  box-shadow: 0 10px 20px rgba(108, 240, 232, 0.28);
   transition: transform 0.3s ease;
 }
 
@@ -530,22 +529,43 @@ main {
 .profile-card {
   padding: 28px;
   border-radius: var(--radius);
-  background: linear-gradient(160deg, rgba(34, 31, 44, 0.95), rgba(21, 19, 27, 0.9));
+  background:
+    linear-gradient(90deg, rgba(108, 240, 232, 0.08), transparent 45%),
+    linear-gradient(160deg, rgba(34, 31, 44, 0.95), rgba(21, 19, 27, 0.9));
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: var(--shadow);
+  display: grid;
+  grid-template-columns: minmax(210px, 34%) 1fr;
+  gap: 26px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.avatar {
-  width: 68px;
-  height: 68px;
-  border-radius: 18px;
+.profile-media {
+  position: relative;
+  min-height: 260px;
+  height: 100%;
+  align-self: stretch;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #111018;
+  box-shadow: 0 22px 44px rgba(5, 4, 12, 0.55);
+  isolation: isolate;
+}
+
+.profile-photo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transform: scale(1.02);
+  filter: none;
+}
+
+.profile-content {
   display: grid;
-  place-items: center;
-  font-size: 1.8rem;
-  font-family: 'Syne', sans-serif;
-  background: linear-gradient(135deg, var(--accent-2), var(--accent-3));
-  color: #0b0b10;
-  margin-bottom: 18px;
+  gap: 18px;
 }
 
 .profile-info h2 {
@@ -1501,6 +1521,32 @@ main {
   padding-bottom: 2px;
 }
 
+.experience-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 32%);
+  gap: 22px;
+  align-items: center;
+}
+
+.experience-media {
+  align-self: stretch;
+  border-radius: 14px;
+  padding: 10px;
+  background: rgba(12, 11, 16, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 36px rgba(5, 4, 12, 0.45);
+  display: flex;
+}
+
+.experience-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 10px;
+  background: #0b0b10;
+}
+
 .education-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -1773,6 +1819,18 @@ main {
 
   .project-visual {
     justify-items: start;
+  }
+
+  .profile-card {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-media {
+    min-height: 240px;
+  }
+
+  .experience-card {
+    grid-template-columns: 1fr;
   }
 }
 
