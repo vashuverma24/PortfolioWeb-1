@@ -2311,6 +2311,20 @@ html[data-theme='light'] .resume-preview {
   gap: 12px;
 }
 
+.footer-views {
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.footer-views span {
+  color: var(--text);
+  font-weight: 600;
+  margin-left: 6px;
+}
+
 .theme-toggle {
   position: fixed;
   right: 28px;

@@ -18,7 +18,7 @@ const applyTheme = (theme) => {
   );
 };
 
-const initialTheme = storedTheme || (prefersLightScheme.matches ? 'light' : 'dark');
+const initialTheme = storedTheme || 'dark';
 applyTheme(initialTheme);
 
 if ('scrollRestoration' in window.history) {
@@ -157,6 +157,7 @@ const labTitle = document.querySelector('[data-lab-title]');
 const labDesc = document.querySelector('[data-lab-desc]');
 const labChips = document.querySelectorAll('.chip[data-mode]');
 const skillRails = document.querySelectorAll('[data-skill-rail]');
+const viewCountEl = document.querySelector('[data-view-count]');
 
 
 const labContent = {
@@ -230,6 +231,43 @@ if (skillRails.length) {
     rail.addEventListener('pointercancel', stopDrag);
   });
 }
+
+const updateViewCount = async () => {
+  if (!viewCountEl) return;
+  const namespace = 'sachin-portfolio';
+  const key = 'site-views';
+  const baseUrl = `https://api.counterapi.dev/v1/${namespace}/${key}`;
+  const todayKey = new Date().toISOString().slice(0, 10);
+  const storageKey = 'siteViewLastCounted';
+
+  let shouldIncrement = true;
+  try {
+    shouldIncrement = localStorage.getItem(storageKey) !== todayKey;
+  } catch (error) {
+    shouldIncrement = true;
+  }
+
+  try {
+    const url = shouldIncrement ? `${baseUrl}/up` : baseUrl;
+    const response = await fetch(url, { cache: 'no-store' });
+    if (!response.ok) throw new Error('View count fetch failed');
+    const data = await response.json();
+    const count = data.count ?? data.value ?? data.result ?? data.total;
+    viewCountEl.textContent = count ?? '--';
+
+    if (shouldIncrement) {
+      try {
+        localStorage.setItem(storageKey, todayKey);
+      } catch (error) {
+        // Ignore storage errors.
+      }
+    }
+  } catch (error) {
+    viewCountEl.textContent = '--';
+  }
+};
+
+updateViewCount();
 
 const ghUser = 'SachinTarkar842';
 const lcUser = 'tarkarsachin842';
