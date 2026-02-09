@@ -2319,10 +2319,10 @@ html[data-theme='light'] .resume-preview {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 14px;
+  padding: 10px 16px;
   border-radius: 999px;
   border: 1px solid var(--border);
-  background: rgba(15, 20, 30, 0.86);
+  background: rgba(15, 20, 30, 0.88);
   backdrop-filter: blur(16px);
   box-shadow: 0 14px 30px rgba(4, 8, 16, 0.4);
   color: var(--text);
@@ -2364,11 +2364,22 @@ html[data-theme='light'] .resume-preview {
   height: 26px;
   border-radius: 999px;
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.02));
   padding: 2px;
   display: flex;
   align-items: center;
-  transition: background 0.3s ease, border 0.3s ease;
+  transition: background 0.35s ease, border 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle__track::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255, 154, 61, 0.25), transparent 55%);
+  opacity: 0.2;
+  transition: opacity 0.35s ease;
 }
 
 .theme-toggle__thumb {
@@ -2378,7 +2389,9 @@ html[data-theme='light'] .resume-preview {
   background: linear-gradient(135deg, var(--accent-3), var(--accent));
   box-shadow: 0 6px 14px rgba(243, 106, 43, 0.35);
   transform: translateX(24px);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.3, 1.4), box-shadow 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
 html[data-theme='light'] .theme-toggle__thumb {
@@ -2403,6 +2416,18 @@ html[data-theme='light'] .theme-toggle {
 
 html[data-theme='light'] .theme-toggle__track {
   background: rgba(18, 22, 30, 0.08);
+}
+
+html[data-theme='light'] .theme-toggle__track::before {
+  opacity: 0.15;
+}
+
+.theme-toggle:active .theme-toggle__thumb {
+  transform: translateX(22px) scale(0.96);
+}
+
+html[data-theme='light'] .theme-toggle:active .theme-toggle__thumb {
+  transform: translateX(2px) scale(0.96);
 }
 
 @media (max-width: 640px) {
