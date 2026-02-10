@@ -156,26 +156,53 @@ updateScroll();
 const labTitle = document.querySelector('[data-lab-title]');
 const labDesc = document.querySelector('[data-lab-desc]');
 const labChips = document.querySelectorAll('.chip[data-mode]');
+const labIcon = document.querySelector('[data-lab-icon]');
+const labMetricTitles = document.querySelectorAll('[data-lab-metric]');
+const labMetricLabels = document.querySelectorAll('[data-lab-metric-label]');
 const skillRails = document.querySelectorAll('[data-skill-rail]');
 const viewCountEl = document.querySelector('[data-view-count]');
 
 
 const labContent = {
-  Education: {
-    title: 'Education-first journeys',
-    desc: 'Designing playful learning loops that keep students motivated and confident.',
+  LeoLingo: {
+    title: 'LeoLingo - Speech Therapy iPad App',
+    desc: 'Interactive games and real-time vocal feedback for kids, with progress tracking for parents and therapists.',
+    icon: { src: 'leolingo.png', alt: 'LeoLingo app icon' },
+    metrics: [
+      { title: 'Domain', label: 'Speech therapy + learning' },
+      { title: 'Platform', label: 'iPadOS (SwiftUI)' },
+      { title: 'Stack', label: 'SwiftUI + Firebase' },
+    ],
   },
-  Speech: {
-    title: 'Speech therapy support',
-    desc: 'Building friendly vocal coaching tools that make practice feel encouraging.',
+  PrePlus: {
+    title: 'PrePlus - AI Smart Study Companion',
+    desc: 'AI tutor, smart notes, and quiz generation to personalize study plans and revision.',
+    icon: { src: 'preplus.png', alt: 'PrePlus app icon' },
+    metrics: [
+      { title: 'Domain', label: 'EdTech + AI' },
+      { title: 'Platform', label: 'iOS (SwiftUI)' },
+      { title: 'Stack', label: 'SwiftUI + Supabase' },
+    ],
   },
-  AI: {
-    title: 'AI learning companions',
-    desc: 'Creating smart guidance that adapts to each learner in real time.',
+  MediOps: {
+    title: 'MediOps - Hospital Management',
+    desc: 'Role-based dashboards for patients, doctors, and admins to streamline hospital operations.',
+    icon: { src: 'mediops.png', alt: 'MediOps app icon' },
+    metrics: [
+      { title: 'Domain', label: 'Healthcare ops' },
+      { title: 'Platform', label: 'iOS (UIKit)' },
+      { title: 'Stack', label: 'Swift + Supabase' },
+    ],
   },
-  Simulation: {
-    title: 'Interactive simulations',
-    desc: 'Crafting immersive controls for gravity, space, and motion exploration.',
+  HeyMadhav: {
+    title: 'HeyMadhav - Gita Learning App',
+    desc: 'Daily verses, reflections, and AI Q&A in a calm, guided experience.',
+    icon: { src: 'heymadhav.png', alt: 'HeyMadhav app icon' },
+    metrics: [
+      { title: 'Domain', label: 'Wellness + learning' },
+      { title: 'Platform', label: 'iOS (SwiftUI)' },
+      { title: 'Stack', label: 'SwiftUI + AI' },
+    ],
   },
 };
 
@@ -197,6 +224,24 @@ if (labTitle && labDesc && labChips.length) {
       chip.setAttribute('aria-pressed', 'true');
       labTitle.textContent = content.title;
       labDesc.textContent = content.desc;
+
+      if (labIcon && content.icon) {
+        labIcon.classList.add('swap');
+        labIcon.src = content.icon.src;
+        labIcon.alt = content.icon.alt;
+        window.setTimeout(() => labIcon.classList.remove('swap'), 180);
+      }
+
+      if (content.metrics && labMetricTitles.length && labMetricLabels.length) {
+        content.metrics.forEach((metric, index) => {
+          if (labMetricTitles[index]) {
+            labMetricTitles[index].textContent = metric.title;
+          }
+          if (labMetricLabels[index]) {
+            labMetricLabels[index].textContent = metric.label;
+          }
+        });
+      }
     });
   });
 }
