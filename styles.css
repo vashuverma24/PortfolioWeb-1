@@ -1317,32 +1317,6 @@ html[data-theme='light'] .heatmap-grid.is-image img {
   transform: translateY(-3px);
 }
 
-.gallery-card::after {
-  content: '↗';
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 24px;
-  height: 24px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 154, 61, 0.3);
-  display: grid;
-  place-items: center;
-  font-size: 0.75rem;
-  color: var(--accent);
-  background: rgba(255, 154, 61, 0.1);
-  opacity: 0;
-  transform: translateY(2px);
-  transition: opacity 0.25s ease, transform 0.25s ease, border 0.25s ease, background 0.25s ease;
-  pointer-events: none;
-}
-
-.gallery-card:hover::after {
-  opacity: 1;
-  transform: translateY(0);
-  border-color: rgba(255, 154, 61, 0.5);
-  background: rgba(255, 154, 61, 0.18);
-}
 
 .gallery-card:focus-visible {
   outline: 2px solid rgba(255, 154, 61, 0.45);
@@ -1451,15 +1425,6 @@ html[data-theme='light'] .project-icon {
   box-shadow: 0 10px 22px rgba(18, 24, 40, 0.12);
 }
 
-html[data-theme='light'] .gallery-card::after {
-  border-color: rgba(229, 106, 0, 0.35);
-  color: var(--accent);
-}
-
-html[data-theme='light'] .gallery-card:hover::after {
-  border-color: rgba(229, 106, 0, 0.5);
-  background: rgba(229, 106, 0, 0.15);
-}
 
 .project-feature {
   padding: 30px;
