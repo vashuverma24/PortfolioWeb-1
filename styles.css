@@ -482,40 +482,6 @@ html[data-theme='light'] .cta.secondary {
   gap: 24px;
 }
 
-.journey-lines {
-  position: absolute;
-  right: -40px;
-  top: 120px;
-  width: min(520px, 90vw);
-  opacity: 0.12;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.journey-lines path {
-  stroke-dasharray: 400;
-  stroke-dashoffset: 400;
-  animation: draw 7s ease-in-out infinite;
-}
-
-.journey-lines circle {
-  fill: var(--accent);
-}
-
-@keyframes draw {
-  0% {
-    stroke-dashoffset: 400;
-    opacity: 0.2;
-  }
-  40% {
-    stroke-dashoffset: 0;
-    opacity: 1;
-  }
-  100% {
-    stroke-dashoffset: -400;
-    opacity: 0;
-  }
-}
 
 .hero-floaters {
   display: none;
@@ -2446,9 +2412,6 @@ html[data-theme='light'] .theme-toggle:active .theme-toggle__thumb {
     padding-right: 32px;
   }
 
-  .journey-lines {
-    display: none;
-  }
 
   .section {
     grid-template-columns: 1fr;
@@ -2531,13 +2494,8 @@ html[data-theme='light'] .theme-toggle:active .theme-toggle__thumb {
   }
 
   .h1-gradient,
-  .journey-lines path,
   .floater {
     animation: none;
-  }
-
-  .journey-lines path {
-    stroke-dashoffset: 0;
   }
 
   .reveal,
