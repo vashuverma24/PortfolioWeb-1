@@ -61,6 +61,20 @@ window.addEventListener('pageshow', (event) => {
   }
 });
 
+const introOverlay = document.querySelector('.intro-overlay');
+const hideIntro = () => {
+  if (!introOverlay || introOverlay.classList.contains('is-hidden')) return;
+  introOverlay.classList.add('is-hidden');
+  document.body.classList.remove('intro-active');
+};
+
+if (introOverlay) {
+  const introDelay = prefersReducedMotion ? 600 : 2400;
+  window.setTimeout(hideIntro, introDelay);
+  introOverlay.addEventListener('click', hideIntro);
+  window.addEventListener('keydown', hideIntro, { once: true });
+}
+
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {

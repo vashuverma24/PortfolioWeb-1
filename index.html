@@ -15,7 +15,7 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png?v=3" />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body class="intro-active">
     <div class="scroll-progress" aria-hidden="true">
       <span class="scroll-bar"></span>
     </div>
@@ -25,6 +25,21 @@
       <span class="orb orb-3" style="--speed: -0.04"></span>
     </div>
     <div class="cursor-glow" aria-hidden="true"></div>
+
+    <div class="intro-overlay" aria-live="polite">
+      <div class="intro-hero">
+        <img
+          class="intro-avatar"
+          src="sachin.png"
+          alt="Sachin Tarkar portrait"
+          loading="eager"
+        />
+        <div class="intro-copy">
+          <span class="intro-name">Sachin Tarkar</span>
+          <span class="intro-role">iOS App Developer &middot; UI/UX Designer</span>
+        </div>
+      </div>
+    </div>
 
     <header class="hero" id="top">
       <nav class="nav">
