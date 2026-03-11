@@ -173,8 +173,83 @@ const labChips = document.querySelectorAll('.chip[data-mode]');
 const labIcon = document.querySelector('[data-lab-icon]');
 const labMetricTitles = document.querySelectorAll('[data-lab-metric]');
 const labMetricLabels = document.querySelectorAll('[data-lab-metric-label]');
+const semesterList = document.querySelector('[data-semester-list]');
+const reportModal = document.querySelector('[data-report-modal]');
+const reportTitle = document.querySelector('[data-report-title]');
+const reportImage = document.querySelector('[data-report-image]');
+const reportPlaceholder = document.querySelector('[data-report-placeholder]');
+const reportNumber = document.querySelector('[data-report-number]');
+const reportMessage = document.querySelector('[data-report-message]');
+const reportCloseButtons = document.querySelectorAll('[data-report-close]');
 const skillRails = document.querySelectorAll('[data-skill-rail]');
 const viewCountEl = document.querySelector('[data-view-count]');
+
+const semesterContent = [
+  {
+    number: '01',
+    chipLabel: 'Sem 1',
+    label: 'Semester 1',
+    title: 'Semester 1',
+    message: 'Semester 1 report card',
+    src: 'ReportCard1.jpg',
+  },
+  {
+    number: '02',
+    chipLabel: 'Sem 2',
+    label: 'Semester 2',
+    title: 'Semester 2',
+    message: 'Semester 2 report card',
+    src: 'ReportCard2.jpg',
+  },
+  {
+    number: '03',
+    chipLabel: 'Sem 3',
+    label: 'Semester 3',
+    title: 'Semester 3',
+    message: 'Semester 3 report card',
+    src: 'ReportCard3.jpg',
+  },
+  {
+    number: '04',
+    chipLabel: 'Sem 4',
+    label: 'Semester 4',
+    title: 'Semester 4',
+    message: 'Semester 4 report card',
+    src: 'ReportCard4.jpg',
+  },
+  {
+    number: '05',
+    chipLabel: 'Sem 5',
+    label: 'Semester 5',
+    title: 'Semester 5',
+    message: 'Semester 5 report card',
+    src: 'ReportCard5.jpg',
+  },
+  {
+    number: '06',
+    chipLabel: 'Sem 6',
+    label: 'Semester 6',
+    title: 'Semester 6',
+    message: 'Semester 6 report card',
+    src: 'ReportCard6.jpg',
+  },
+  {
+    number: '07',
+    chipLabel: 'Sem 7',
+    label: 'Semester 7',
+    title: 'Semester 7',
+    message: 'Semester 7 report card',
+    src: 'ReportCard7.jpg',
+  },
+  {
+    number: '08',
+    chipLabel: 'Sem 8',
+    label: 'Semester 8',
+    title: 'Semester 8',
+    message: 'Semester 8 is currently in progress. The report card will be added once results are available.',
+    src: '',
+  },
+];
 
 
 const labContent = {
@@ -257,6 +332,119 @@ if (labTitle && labDesc && labChips.length) {
         });
       }
     });
+  });
+}
+
+if (
+  semesterList &&
+  reportModal &&
+  reportTitle &&
+  reportImage &&
+  reportPlaceholder &&
+  reportNumber &&
+  reportMessage
+) {
+  semesterList.innerHTML = semesterContent
+    .map(
+      (semester) => `
+        <button
+          class="semester-card${semester.src ? '' : ' is-pending'}"
+          type="button"
+          aria-label="${semester.src ? `Open ${semester.label} report card` : `${semester.label} is in progress`}"
+          data-semester-card
+          data-semester-number="${semester.number}"
+          data-semester-title="${semester.title}"
+          data-semester-message="${semester.message}"
+          data-semester-src="${semester.src}"
+        >
+          <span class="semester-card-label">${semester.chipLabel}</span>
+        </button>
+      `
+    )
+    .join('');
+
+  const semesterCards = semesterList.querySelectorAll('[data-semester-card]');
+  const semesterImageCache = new Map();
+  let lastFocusedSemester = null;
+
+  const probeSemesterImage = (src) => {
+    if (!src) return Promise.resolve(false);
+    if (semesterImageCache.has(src)) {
+      return Promise.resolve(semesterImageCache.get(src));
+    }
+
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        semesterImageCache.set(src, true);
+        resolve(true);
+      };
+      img.onerror = () => {
+        semesterImageCache.set(src, false);
+        resolve(false);
+      };
+      img.src = src;
+    });
+  };
+
+  const closeReportModal = () => {
+    reportModal.hidden = true;
+    document.body.classList.remove('modal-open');
+    if (lastFocusedSemester) {
+      lastFocusedSemester.focus();
+    }
+  };
+
+  const openReportModal = async (card) => {
+    const {
+      semesterTitle: title,
+      semesterMessage: message,
+      semesterSrc: src,
+      semesterNumber: number,
+    } = card.dataset;
+
+    semesterCards.forEach((item) => item.classList.remove('is-active'));
+    card.classList.add('is-active');
+    lastFocusedSemester = card;
+
+    reportTitle.textContent = title;
+    reportNumber.textContent = number;
+    reportImage.hidden = true;
+    reportImage.removeAttribute('src');
+    reportPlaceholder.hidden = false;
+    reportMessage.textContent = src ? 'Loading report card...' : message;
+    reportModal.hidden = false;
+    document.body.classList.add('modal-open');
+
+    const hasImage = await probeSemesterImage(src);
+
+    if (!card.classList.contains('is-active')) return;
+
+    if (hasImage) {
+      reportImage.src = src;
+      reportImage.alt = `${title} report card`;
+      reportImage.hidden = false;
+      reportPlaceholder.hidden = true;
+    } else {
+      reportPlaceholder.hidden = false;
+      reportMessage.textContent = message;
+    }
+  };
+
+  semesterCards.forEach((card) => {
+    card.addEventListener('click', () => {
+      openReportModal(card);
+    });
+  });
+
+  reportCloseButtons.forEach((button) => {
+    button.addEventListener('click', closeReportModal);
+  });
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !reportModal.hidden) {
+      closeReportModal();
+    }
   });
 }
 
@@ -344,6 +532,8 @@ const lcTotal = document.querySelector('[data-lc-total]');
 const lcEasy = document.querySelector('[data-lc-easy]');
 const lcMedium = document.querySelector('[data-lc-medium]');
 const lcHard = document.querySelector('[data-lc-hard]');
+const lcRank = document.querySelector('[data-lc-rank]');
+const lcAcceptance = document.querySelector('[data-lc-acceptance]');
 const lcStatus = document.querySelector('[data-lc-status]');
 
 const ghHeatmap = document.querySelector('[data-gh-heatmap]');
@@ -373,37 +563,180 @@ const leetCodeEndpoints = [
 ];
 
 const fetchLeetCodeStats = async () => {
-  if (!lcTotal && !lcEasy && !lcMedium && !lcHard) return;
-  let data = null;
+  if (!lcTotal && !lcEasy && !lcMedium && !lcHard && !lcRank && !lcAcceptance) {
+    return;
+  }
+  const sources = [];
 
   for (const endpoint of leetCodeEndpoints) {
     try {
       const response = await fetch(endpoint);
       if (!response.ok) throw new Error('LeetCode fetch failed');
       const result = await response.json();
-      if (result && (result.totalSolved !== undefined || result.solved !== undefined)) {
-        data = result;
-        break;
+      if (result && typeof result === 'object') {
+        sources.push(result);
       }
     } catch (error) {
       // Try the next endpoint.
     }
   }
 
-  if (!data) {
+  if (!sources.length) {
     setText(lcStatus, 'Unable to load LeetCode stats right now.');
     return;
   }
 
-  const total = data.totalSolved ?? data.solved ?? '--';
-  const easy = data.easySolved ?? data.easy ?? '--';
-  const medium = data.mediumSolved ?? data.medium ?? '--';
-  const hard = data.hardSolved ?? data.hard ?? '--';
+  const getPathValue = (obj, path) =>
+    path.split('.').reduce((acc, key) => {
+      if (acc === null || acc === undefined) return undefined;
+      const index = Number(key);
+      if (Number.isInteger(index) && Array.isArray(acc)) {
+        return acc[index];
+      }
+      return acc[key];
+    }, obj);
 
-  setText(lcTotal, total);
-  setText(lcEasy, easy);
-  setText(lcMedium, medium);
-  setText(lcHard, hard);
+  const pickFirst = (paths) => {
+    for (const path of paths) {
+      for (const source of sources) {
+        const value = getPathValue(source, path);
+        if (value !== undefined && value !== null && value !== '') return value;
+      }
+    }
+    return undefined;
+  };
+
+  const findNestedValue = (targetKeys) => {
+    for (const source of sources) {
+      const stack = [source];
+
+      while (stack.length) {
+        const current = stack.pop();
+        if (!current || typeof current !== 'object') continue;
+
+        if (Array.isArray(current)) {
+          current.forEach((item) => stack.push(item));
+          continue;
+        }
+
+        for (const [key, value] of Object.entries(current)) {
+          if (
+            targetKeys.includes(key) &&
+            (typeof value === 'number' || typeof value === 'string')
+          ) {
+            return value;
+          }
+          if (value && typeof value === 'object') {
+            stack.push(value);
+          }
+        }
+      }
+    }
+
+    return undefined;
+  };
+
+  const toNumber = (value) => {
+    if (typeof value === 'number') return Number.isFinite(value) ? value : null;
+    if (typeof value !== 'string') return null;
+    const cleaned = value.replace(/[,#%\s]/g, '');
+    if (!cleaned) return null;
+    const parsed = Number(cleaned);
+    return Number.isFinite(parsed) ? parsed : null;
+  };
+
+  const formatNumber = (value, fallback = '--') => {
+    const numeric = toNumber(value);
+    if (numeric === null) return fallback;
+    return Intl.NumberFormat('en-US', { maximumFractionDigits: 1 }).format(numeric);
+  };
+
+  const formatRank = (value) => {
+    const numeric = toNumber(value);
+    if (numeric === null) return '--';
+    return `#${Intl.NumberFormat('en-US').format(Math.round(numeric))}`;
+  };
+
+  const formatPercent = (value) => {
+    if (typeof value === 'string' && value.includes('%')) {
+      const numeric = toNumber(value);
+      return numeric === null ? '--' : `${numeric.toFixed(1)}%`;
+    }
+
+    const numeric = toNumber(value);
+    if (numeric === null) return '--';
+    const percentValue = numeric > 1 ? numeric : numeric * 100;
+    return `${percentValue.toFixed(1)}%`;
+  };
+
+  const total = pickFirst([
+    'totalSolved',
+    'solved',
+    'total_solved',
+    'data.matchedUser.submitStats.acSubmissionNum.0.count',
+  ]);
+  const easy = pickFirst([
+    'easySolved',
+    'easy',
+    'easy_solved',
+    'data.matchedUser.submitStats.acSubmissionNum.1.count',
+  ]);
+  const medium = pickFirst([
+    'mediumSolved',
+    'medium',
+    'medium_solved',
+    'data.matchedUser.submitStats.acSubmissionNum.2.count',
+  ]);
+  const hard = pickFirst([
+    'hardSolved',
+    'hard',
+    'hard_solved',
+    'data.matchedUser.submitStats.acSubmissionNum.3.count',
+  ]);
+  const ranking = pickFirst([
+    'ranking',
+    'rank',
+    'globalRanking',
+    'userContestRanking.globalRanking',
+  ]);
+  const acceptanceDirect = pickFirst([
+    'acceptanceRate',
+    'acceptance',
+    'acceptance_rate',
+    'data.acceptanceRate',
+    'data.acceptance',
+    'profile.acceptanceRate',
+    'matchedUser.profile.acceptanceRate',
+  ]) ?? findNestedValue(['acceptanceRate', 'acceptance_rate', 'acceptance']);
+  const acceptedCount = pickFirst([
+    'submitStatsGlobal.acSubmissionNum.0.count',
+    'data.matchedUser.submitStatsGlobal.acSubmissionNum.0.count',
+    'matchedUser.submitStatsGlobal.acSubmissionNum.0.count',
+  ]);
+  const submissionsCount = pickFirst([
+    'submitStatsGlobal.acSubmissionNum.0.submissions',
+    'data.matchedUser.submitStatsGlobal.acSubmissionNum.0.submissions',
+    'matchedUser.submitStatsGlobal.acSubmissionNum.0.submissions',
+  ]);
+  let acceptanceValue = acceptanceDirect;
+  if (acceptanceValue === undefined) {
+    const acceptedNumeric = toNumber(acceptedCount);
+    const submissionsNumeric = toNumber(submissionsCount);
+    if (
+      acceptedNumeric !== null &&
+      submissionsNumeric !== null &&
+      submissionsNumeric > 0
+    ) {
+      acceptanceValue = (acceptedNumeric / submissionsNumeric) * 100;
+    }
+  }
+
+  setText(lcTotal, formatNumber(total));
+  setText(lcEasy, formatNumber(easy));
+  setText(lcMedium, formatNumber(medium));
+  setText(lcHard, formatNumber(hard));
+  setText(lcRank, formatRank(ranking));
+  setText(lcAcceptance, formatPercent(acceptanceValue));
   setText(lcStatus, 'Updated just now');
 };
 
@@ -476,28 +809,99 @@ const fetchGitHubHeatmap = async () => {
 
 const fetchLeetCodeHeatmap = async () => {
   if (!lcHeatmap) return;
+  const toCalendarMap = (payload) => {
+    if (!payload || typeof payload !== 'object') return null;
+
+    const pickCalendar = () => {
+      const candidates = [
+        payload.submissionCalendar,
+        payload.submission_calendar,
+        payload.calendar,
+        payload.data?.submissionCalendar,
+        payload.data?.submission_calendar,
+        payload.matchedUser?.userCalendar?.submissionCalendar,
+      ];
+
+      return candidates.find((value) => value !== undefined && value !== null);
+    };
+
+    const rawCalendar = pickCalendar();
+    if (!rawCalendar) return null;
+
+    let parsedCalendar = rawCalendar;
+    if (typeof parsedCalendar === 'string') {
+      try {
+        parsedCalendar = JSON.parse(parsedCalendar);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    const map = new Map();
+
+    // Supports both timestamp-keyed objects and date-keyed entries across API variants.
+    const pushEntry = (rawKey, rawValue) => {
+      const value =
+        typeof rawValue === 'number'
+          ? rawValue
+          : Number(rawValue?.count ?? rawValue?.value ?? rawValue);
+      if (!Number.isFinite(value)) return;
+
+      if (typeof rawKey === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(rawKey)) {
+        map.set(rawKey, value);
+        return;
+      }
+
+      const numericKey = Number(rawKey);
+      if (!Number.isFinite(numericKey)) return;
+
+      const timestampMs = numericKey > 1e12 ? numericKey : numericKey * 1000;
+      const date = new Date(timestampMs);
+      if (Number.isNaN(date.getTime())) return;
+      map.set(toDateKey(date), value);
+    };
+
+    if (Array.isArray(parsedCalendar)) {
+      parsedCalendar.forEach((entry) => {
+        if (!entry) return;
+        pushEntry(entry.timestamp ?? entry.date ?? entry.time, entry.count ?? entry.value);
+      });
+      return map.size ? map : null;
+    }
+
+    if (typeof parsedCalendar === 'object') {
+      Object.entries(parsedCalendar).forEach(([key, value]) => {
+        pushEntry(key, value);
+      });
+      return map.size ? map : null;
+    }
+
+    return null;
+  };
+
   try {
-    const response = await fetch(
-      `https://leetcode-stats-api.herokuapp.com/${lcUser}`
-    );
-    if (!response.ok) throw new Error('LeetCode heatmap fetch failed');
-    const data = await response.json();
-    if (!data || !data.submissionCalendar) {
+    let calendarMap = null;
+
+    for (const endpoint of leetCodeEndpoints) {
+      try {
+        const response = await fetch(endpoint);
+        if (!response.ok) throw new Error('LeetCode heatmap fetch failed');
+        const data = await response.json();
+        const parsed = toCalendarMap(data);
+        if (parsed && parsed.size) {
+          calendarMap = parsed;
+          break;
+        }
+      } catch (error) {
+        // Try the next endpoint.
+      }
+    }
+
+    if (!calendarMap || !calendarMap.size) {
       throw new Error('LeetCode calendar missing');
     }
 
-    const calendar =
-      typeof data.submissionCalendar === 'string'
-        ? JSON.parse(data.submissionCalendar)
-        : data.submissionCalendar;
-
-    const map = new Map();
-    Object.entries(calendar).forEach(([timestamp, count]) => {
-      const date = new Date(Number(timestamp) * 1000);
-      map.set(toDateKey(date), count);
-    });
-
-    buildHeatmap(lcHeatmap, map, { days: 240 });
+    buildHeatmap(lcHeatmap, calendarMap, { days: 240 });
     setText(lcHeatmapStatus, 'Last 8 months of activity');
   } catch (error) {
     setText(lcHeatmapStatus, 'Unable to load LeetCode activity grid.');

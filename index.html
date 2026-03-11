@@ -387,6 +387,14 @@
                 <span class="stat-number" data-lc-hard>--</span>
                 <span class="stat-label">Hard</span>
               </div>
+              <div class="stat-item">
+                <span class="stat-number" data-lc-rank>--</span>
+                <span class="stat-label">Ranking</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number" data-lc-acceptance>--</span>
+                <span class="stat-label">Acceptance</span>
+              </div>
             </div>
             <p class="stat-meta" data-lc-status>Loading live data...</p>
             <div class="heatmap">
@@ -901,7 +909,7 @@
             <span class="education-year">2022 &ndash; 2026</span>
             <h3>B.Tech &ndash; Computer Science and Engineering</h3>
             <p>Galgotias University</p>
-            <p>CGPA: 8.23</p>
+            <p>CGPA: 8.29</p>
           </article>
           <article class="education-card reveal">
             <span class="education-year">2021</span>
@@ -917,6 +925,57 @@
           </article>
         </div>
       </section>
+
+      <section class="section report-gallery" id="report-gallery">
+        <div class="section-header reveal report-gallery-header">
+          <div>
+            <p class="eyebrow">Academic Archive</p>
+            <h2>Academic record, semester by semester.</h2>
+            <p>
+              Tap a semester to open the report card. Semester 8 is still in
+              progress.
+            </p>
+          </div>
+        </div>
+        <div class="semester-gallery-shell reveal">
+          <div class="semester-list" aria-label="Semester report gallery" data-semester-list></div>
+        </div>
+      </section>
+
+      <div class="report-modal" data-report-modal hidden>
+        <div class="report-modal-backdrop" data-report-close></div>
+        <div
+          class="report-modal-dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="report-modal-title"
+        >
+          <div class="report-modal-top">
+            <div>
+              <p class="report-modal-label">Academic Record</p>
+              <h3 id="report-modal-title" data-report-title>Semester</h3>
+            </div>
+            <button class="report-modal-close" type="button" data-report-close>
+              Close
+            </button>
+          </div>
+          <div class="report-modal-frame">
+            <img
+              class="report-modal-image"
+              data-report-image
+              alt="Selected semester report card"
+              hidden
+            />
+            <div class="report-modal-placeholder" data-report-placeholder>
+              <span class="report-modal-number" data-report-number>08</span>
+              <p data-report-message>
+                Semester 8 is currently in progress. The report card will be added
+                once results are available.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <section class="section highlights" id="highlights">
         <div class="section-header reveal">
