@@ -483,9 +483,22 @@ const updateViewCount = async () => {
   if (!viewCountEl) return;
   const namespace = 'sachin-portfolio';
   const key = 'site-views';
-  const baseUrl = `https://api.counterapi.dev/v1/${namespace}/${key}`;
+  const providers = [
+    {
+      get: `https://api.counterapi.dev/v1/${namespace}/${key}`,
+      up: `https://api.counterapi.dev/v1/${namespace}/${key}/up`,
+      parse: (data) => data.count ?? data.value ?? data.result ?? data.total,
+    },
+    {
+      get: `https://api.countapi.xyz/get/${namespace}/${key}`,
+      up: `https://api.countapi.xyz/hit/${namespace}/${key}`,
+      parse: (data) => data.value ?? data.count ?? data.result ?? data.total,
+    },
+  ];
   const todayKey = new Date().toISOString().slice(0, 10);
   const storageKey = 'siteViewLastCounted';
+  const localFallbackKey = 'siteViewLocalCount';
+  const formatCount = (value) => Intl.NumberFormat('en-US').format(value);
 
   let shouldIncrement = true;
   try {
@@ -495,12 +508,40 @@ const updateViewCount = async () => {
   }
 
   try {
-    const url = shouldIncrement ? `${baseUrl}/up` : baseUrl;
-    const response = await fetch(url, { cache: 'no-store' });
-    if (!response.ok) throw new Error('View count fetch failed');
-    const data = await response.json();
-    const count = data.count ?? data.value ?? data.result ?? data.total;
-    viewCountEl.textContent = count ?? '--';
+    let count = null;
+
+    for (const provider of providers) {
+      try {
+        const url = shouldIncrement ? provider.up : provider.get;
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) throw new Error('View count fetch failed');
+        const data = await response.json();
+        const parsedCount = Number(provider.parse(data));
+        if (Number.isFinite(parsedCount) && parsedCount >= 0) {
+          count = parsedCount;
+          break;
+        }
+      } catch (error) {
+        // Try next provider.
+      }
+    }
+
+    if (count === null) {
+      let localCount = 0;
+      try {
+        const storedLocal = Number(localStorage.getItem(localFallbackKey));
+        localCount = Number.isFinite(storedLocal) && storedLocal > 0 ? storedLocal : 0;
+        if (shouldIncrement) {
+          localCount += 1;
+          localStorage.setItem(localFallbackKey, String(localCount));
+        }
+      } catch (error) {
+        localCount += shouldIncrement ? 1 : 0;
+      }
+      count = localCount;
+    }
+
+    viewCountEl.textContent = formatCount(count);
 
     if (shouldIncrement) {
       try {
@@ -510,7 +551,7 @@ const updateViewCount = async () => {
       }
     }
   } catch (error) {
-    viewCountEl.textContent = '--';
+    viewCountEl.textContent = '0';
   }
 };
 
@@ -533,7 +574,6 @@ const lcEasy = document.querySelector('[data-lc-easy]');
 const lcMedium = document.querySelector('[data-lc-medium]');
 const lcHard = document.querySelector('[data-lc-hard]');
 const lcRank = document.querySelector('[data-lc-rank]');
-const lcAcceptance = document.querySelector('[data-lc-acceptance]');
 const lcStatus = document.querySelector('[data-lc-status]');
 
 const ghHeatmap = document.querySelector('[data-gh-heatmap]');
@@ -563,7 +603,7 @@ const leetCodeEndpoints = [
 ];
 
 const fetchLeetCodeStats = async () => {
-  if (!lcTotal && !lcEasy && !lcMedium && !lcHard && !lcRank && !lcAcceptance) {
+  if (!lcTotal && !lcEasy && !lcMedium && !lcHard && !lcRank) {
     return;
   }
   const sources = [];
@@ -606,36 +646,6 @@ const fetchLeetCodeStats = async () => {
     return undefined;
   };
 
-  const findNestedValue = (targetKeys) => {
-    for (const source of sources) {
-      const stack = [source];
-
-      while (stack.length) {
-        const current = stack.pop();
-        if (!current || typeof current !== 'object') continue;
-
-        if (Array.isArray(current)) {
-          current.forEach((item) => stack.push(item));
-          continue;
-        }
-
-        for (const [key, value] of Object.entries(current)) {
-          if (
-            targetKeys.includes(key) &&
-            (typeof value === 'number' || typeof value === 'string')
-          ) {
-            return value;
-          }
-          if (value && typeof value === 'object') {
-            stack.push(value);
-          }
-        }
-      }
-    }
-
-    return undefined;
-  };
-
   const toNumber = (value) => {
     if (typeof value === 'number') return Number.isFinite(value) ? value : null;
     if (typeof value !== 'string') return null;
@@ -655,18 +665,6 @@ const fetchLeetCodeStats = async () => {
     const numeric = toNumber(value);
     if (numeric === null) return '--';
     return `#${Intl.NumberFormat('en-US').format(Math.round(numeric))}`;
-  };
-
-  const formatPercent = (value) => {
-    if (typeof value === 'string' && value.includes('%')) {
-      const numeric = toNumber(value);
-      return numeric === null ? '--' : `${numeric.toFixed(1)}%`;
-    }
-
-    const numeric = toNumber(value);
-    if (numeric === null) return '--';
-    const percentValue = numeric > 1 ? numeric : numeric * 100;
-    return `${percentValue.toFixed(1)}%`;
   };
 
   const total = pickFirst([
@@ -699,44 +697,12 @@ const fetchLeetCodeStats = async () => {
     'globalRanking',
     'userContestRanking.globalRanking',
   ]);
-  const acceptanceDirect = pickFirst([
-    'acceptanceRate',
-    'acceptance',
-    'acceptance_rate',
-    'data.acceptanceRate',
-    'data.acceptance',
-    'profile.acceptanceRate',
-    'matchedUser.profile.acceptanceRate',
-  ]) ?? findNestedValue(['acceptanceRate', 'acceptance_rate', 'acceptance']);
-  const acceptedCount = pickFirst([
-    'submitStatsGlobal.acSubmissionNum.0.count',
-    'data.matchedUser.submitStatsGlobal.acSubmissionNum.0.count',
-    'matchedUser.submitStatsGlobal.acSubmissionNum.0.count',
-  ]);
-  const submissionsCount = pickFirst([
-    'submitStatsGlobal.acSubmissionNum.0.submissions',
-    'data.matchedUser.submitStatsGlobal.acSubmissionNum.0.submissions',
-    'matchedUser.submitStatsGlobal.acSubmissionNum.0.submissions',
-  ]);
-  let acceptanceValue = acceptanceDirect;
-  if (acceptanceValue === undefined) {
-    const acceptedNumeric = toNumber(acceptedCount);
-    const submissionsNumeric = toNumber(submissionsCount);
-    if (
-      acceptedNumeric !== null &&
-      submissionsNumeric !== null &&
-      submissionsNumeric > 0
-    ) {
-      acceptanceValue = (acceptedNumeric / submissionsNumeric) * 100;
-    }
-  }
 
   setText(lcTotal, formatNumber(total));
   setText(lcEasy, formatNumber(easy));
   setText(lcMedium, formatNumber(medium));
   setText(lcHard, formatNumber(hard));
   setText(lcRank, formatRank(ranking));
-  setText(lcAcceptance, formatPercent(acceptanceValue));
   setText(lcStatus, 'Updated just now');
 };
 
