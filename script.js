@@ -4,9 +4,6 @@ const root = document.documentElement;
 const scrollBar = document.querySelector('.scroll-bar');
 const themeToggle = document.querySelector('.theme-toggle');
 
-const prefersLightScheme = window.matchMedia('(prefers-color-scheme: light)');
-const storedTheme = localStorage.getItem('theme');
-
 const applyTheme = (theme) => {
   root.setAttribute('data-theme', theme);
   if (!themeToggle) return;
@@ -18,8 +15,7 @@ const applyTheme = (theme) => {
   );
 };
 
-const initialTheme = storedTheme || 'dark';
-applyTheme(initialTheme);
+applyTheme('dark');
 
 if ('scrollRestoration' in window.history) {
   window.history.scrollRestoration = 'manual';
@@ -29,15 +25,8 @@ if (themeToggle) {
   themeToggle.addEventListener('click', () => {
     const nextTheme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
     applyTheme(nextTheme);
-    localStorage.setItem('theme', nextTheme);
   });
 }
-
-prefersLightScheme.addEventListener('change', (event) => {
-  if (!localStorage.getItem('theme')) {
-    applyTheme(event.matches ? 'light' : 'dark');
-  }
-});
 
 const scrollToTopImmediate = () => {
   document.documentElement.scrollTop = 0;
@@ -498,7 +487,37 @@ const updateViewCount = async () => {
   const todayKey = new Date().toISOString().slice(0, 10);
   const storageKey = 'siteViewLastCounted';
   const localFallbackKey = 'siteViewLocalCount';
+  const lastKnownKey = 'siteViewLastKnown';
   const formatCount = (value) => Intl.NumberFormat('en-US').format(value);
+  const parseCounterValue = (raw) => {
+    if (typeof raw === 'number') {
+      return Number.isFinite(raw) && raw >= 0 ? raw : null;
+    }
+    if (typeof raw === 'string') {
+      const cleaned = raw.replace(/[^\d.-]/g, '');
+      if (!cleaned) return null;
+      const parsed = Number(cleaned);
+      return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
+    }
+    return null;
+  };
+  const readStoredCount = (keyName) => {
+    try {
+      const stored = Number(localStorage.getItem(keyName));
+      return Number.isFinite(stored) && stored >= 0 ? stored : null;
+    } catch (error) {
+      return null;
+    }
+  };
+  const writeStoredCount = (keyName, value) => {
+    try {
+      if (Number.isFinite(value) && value >= 0) {
+        localStorage.setItem(keyName, String(value));
+      }
+    } catch (error) {
+      // Ignore storage errors.
+    }
+  };
 
   let shouldIncrement = true;
   try {
@@ -509,6 +528,7 @@ const updateViewCount = async () => {
 
   try {
     let count = null;
+    let resolvedFromProvider = false;
 
     for (const provider of providers) {
       try {
@@ -516,9 +536,10 @@ const updateViewCount = async () => {
         const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) throw new Error('View count fetch failed');
         const data = await response.json();
-        const parsedCount = Number(provider.parse(data));
-        if (Number.isFinite(parsedCount) && parsedCount >= 0) {
+        const parsedCount = parseCounterValue(provider.parse(data));
+        if (parsedCount !== null) {
           count = parsedCount;
+          resolvedFromProvider = true;
           break;
         }
       } catch (error) {
@@ -527,21 +548,28 @@ const updateViewCount = async () => {
     }
 
     if (count === null) {
-      let localCount = 0;
-      try {
-        const storedLocal = Number(localStorage.getItem(localFallbackKey));
-        localCount = Number.isFinite(storedLocal) && storedLocal > 0 ? storedLocal : 0;
-        if (shouldIncrement) {
-          localCount += 1;
-          localStorage.setItem(localFallbackKey, String(localCount));
-        }
-      } catch (error) {
-        localCount += shouldIncrement ? 1 : 0;
+      const storedLocal = readStoredCount(localFallbackKey) ?? 0;
+      const storedKnown = readStoredCount(lastKnownKey) ?? 0;
+      const baseline = Math.max(storedLocal, storedKnown);
+
+      if (baseline > 0) {
+        count = shouldIncrement ? baseline + 1 : baseline;
+      } else if (shouldIncrement) {
+        count = 1;
       }
-      count = localCount;
     }
 
-    viewCountEl.textContent = formatCount(count);
+    if (count !== null && count >= 0) {
+      viewCountEl.textContent = formatCount(count);
+      writeStoredCount(localFallbackKey, count);
+      if (resolvedFromProvider || count > 0) {
+        writeStoredCount(lastKnownKey, count);
+      }
+    } else {
+      const fallbackKnown = readStoredCount(lastKnownKey);
+      viewCountEl.textContent =
+        fallbackKnown !== null && fallbackKnown > 0 ? formatCount(fallbackKnown) : '--';
+    }
 
     if (shouldIncrement) {
       try {
@@ -551,7 +579,9 @@ const updateViewCount = async () => {
       }
     }
   } catch (error) {
-    viewCountEl.textContent = '0';
+    const fallbackKnown = readStoredCount(lastKnownKey);
+    viewCountEl.textContent =
+      fallbackKnown !== null && fallbackKnown > 0 ? formatCount(fallbackKnown) : '--';
   }
 };
 
