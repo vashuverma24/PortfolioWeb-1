@@ -1796,84 +1796,52 @@ html[data-theme='light'] .stat-link {
   border-bottom-color: rgba(18, 22, 30, 0.24);
 }
 
-html[data-theme='light'] .stat-card {
-  border-color: rgba(38, 52, 77, 0.14);
-  background:
-    radial-gradient(420px circle at 100% -30%, rgba(255, 255, 255, 0.9), transparent 56%),
-    linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(245, 248, 255, 0.94));
-  box-shadow:
-    0 18px 34px rgba(24, 40, 64, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.86);
-}
-
-html[data-theme='light'] .stat-card[data-source='github'] {
-  border-color: rgba(46, 103, 205, 0.24);
-  background:
-    radial-gradient(360px circle at -6% -32%, rgba(91, 169, 255, 0.24), transparent 54%),
-    linear-gradient(162deg, rgba(255, 255, 255, 0.98), rgba(239, 247, 255, 0.94));
-}
-
-html[data-theme='light'] .stat-card[data-source='github']::before {
-  background: linear-gradient(90deg, #4c95ff, #2a67c7);
-}
-
 html[data-theme='light'] .gh-language-panel {
-  border-color: rgba(38, 52, 77, 0.14);
+  border-color: rgba(18, 22, 30, 0.14);
   background:
-    radial-gradient(140px circle at 18% 12%, rgba(80, 170, 255, 0.24), transparent 68%),
-    linear-gradient(154deg, rgba(255, 255, 255, 0.94), rgba(236, 245, 255, 0.94));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    radial-gradient(130px circle at 20% 12%, rgba(63, 216, 255, 0.12), transparent 68%),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.95), rgba(247, 245, 239, 0.95));
 }
 
 html[data-theme='light'] .gh-lang-track {
-  background: rgba(42, 70, 119, 0.12);
+  background: rgba(18, 22, 30, 0.1);
 }
 
 html[data-theme='light'] .gh-extra-item {
-  border-color: rgba(39, 63, 107, 0.14);
-  background: linear-gradient(150deg, rgba(255, 255, 255, 0.86), rgba(236, 245, 255, 0.8));
+  border-color: rgba(18, 22, 30, 0.1);
+  background: rgba(18, 22, 30, 0.02);
 }
 
 html[data-theme='light'] .radial-wrap {
-  border-color: rgba(41, 59, 90, 0.14);
+  border-color: rgba(18, 22, 30, 0.12);
   background:
-    radial-gradient(125px circle at 30% 22%, rgba(255, 255, 255, 0.95), transparent 76%),
-    linear-gradient(156deg, rgba(255, 255, 255, 0.96), rgba(236, 244, 255, 0.92));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.86),
-    0 14px 28px rgba(23, 40, 66, 0.1);
-}
-
-html[data-theme='light'] .stat-card[data-source='leetcode'] .radial-wrap {
-  background:
-    radial-gradient(125px circle at 30% 22%, rgba(255, 255, 255, 0.96), transparent 76%),
-    linear-gradient(156deg, rgba(255, 255, 255, 0.95), rgba(255, 244, 226, 0.92));
+    radial-gradient(90px circle at 30% 22%, rgba(255, 255, 255, 0.9), transparent 78%),
+    linear-gradient(155deg, rgba(255, 255, 255, 0.96), rgba(245, 242, 236, 0.94));
 }
 
 html[data-theme='light'] .radial-track {
-  stroke: rgba(52, 67, 96, 0.2);
+  stroke: rgba(18, 22, 30, 0.12);
 }
 
 html[data-theme='light'] .metric-card {
-  border-color: rgba(35, 49, 73, 0.14);
-  background: linear-gradient(150deg, rgba(255, 255, 255, 0.86), rgba(246, 250, 255, 0.82));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.74);
+  border-color: rgba(18, 22, 30, 0.12);
+  background: rgba(18, 22, 30, 0.03);
 }
 
 html[data-theme='light'] .metric-card:hover,
 html[data-theme='light'] .metric-card:focus-visible {
-  border-color: rgba(212, 124, 36, 0.48);
-  background: linear-gradient(150deg, rgba(255, 245, 229, 0.95), rgba(255, 238, 212, 0.82));
+  border-color: rgba(229, 106, 0, 0.4);
+  background: rgba(229, 106, 0, 0.08);
 }
 
 html[data-theme='light'] .metric-card.metric-card-static:hover,
 html[data-theme='light'] .metric-card.metric-card-static:focus-visible {
-  border-color: rgba(35, 49, 73, 0.14);
-  background: linear-gradient(150deg, rgba(255, 255, 255, 0.86), rgba(246, 250, 255, 0.82));
+  border-color: rgba(18, 22, 30, 0.12);
+  background: rgba(18, 22, 30, 0.03);
 }
 
 html[data-theme='light'] .metric-card.is-active {
-  box-shadow: 0 12px 24px rgba(28, 44, 71, 0.14);
+  box-shadow: 0 8px 16px rgba(18, 22, 30, 0.12);
 }
 
 .stat-meta-row {
@@ -1930,46 +1898,27 @@ html[data-theme='light'] .metric-card.is-active {
 }
 
 html[data-theme='light'] .stat-meta-pill {
-  border-color: rgba(36, 53, 82, 0.16);
-  background: rgba(255, 255, 255, 0.76);
+  border-color: rgba(18, 22, 30, 0.14);
+  background: rgba(18, 22, 30, 0.03);
 }
 
 html[data-theme='light'] .insight-chip {
-  border-color: rgba(36, 53, 82, 0.14);
-  background: rgba(255, 255, 255, 0.74);
-}
-
-html[data-theme='light'] .insight-chip strong {
-  color: #162338;
+  border-color: rgba(18, 22, 30, 0.12);
+  background: rgba(18, 22, 30, 0.03);
 }
 
 html[data-theme='light'] .lc-rank-badge {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  border-color: rgba(209, 102, 11, 0.34);
+  border-color: rgba(209, 102, 11, 0.36);
   background:
-    radial-gradient(180px circle at 110% -36%, rgba(255, 173, 65, 0.32), transparent 66%),
-    linear-gradient(145deg, rgba(255, 250, 238, 0.98), rgba(255, 235, 200, 0.82));
+    radial-gradient(150px circle at 95% -32%, rgba(255, 168, 64, 0.4), transparent 66%),
+    linear-gradient(145deg, rgba(255, 246, 231, 0.96), rgba(255, 229, 191, 0.8));
   box-shadow:
-    0 14px 28px rgba(180, 93, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.78);
-}
-
-html[data-theme='light'] .lc-rank-badge::after {
-  content: '';
-  position: absolute;
-  right: -54px;
-  top: -52px;
-  width: 134px;
-  height: 134px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 177, 68, 0.34), rgba(255, 177, 68, 0));
-  z-index: -1;
+    0 14px 26px rgba(180, 93, 0, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.76);
 }
 
 html[data-theme='light'] .lc-rank-label {
-  color: rgba(91, 54, 14, 0.86);
+  color: rgba(81, 51, 22, 0.82);
 }
 
 html[data-theme='light'] .lc-rank-value {
@@ -1982,18 +1931,14 @@ html[data-theme='light'] .lc-rank-value {
 }
 
 html[data-theme='light'] .lc-rank-meta {
-  color: #2f4668;
+  color: #34425a;
 }
 
 html[data-theme='light'] .stat-card[data-source='leetcode'] {
-  border-color: rgba(214, 121, 31, 0.28);
+  border-color: rgba(214, 121, 31, 0.25);
   background:
-    radial-gradient(460px circle at 108% -30%, rgba(255, 196, 105, 0.24), transparent 52%),
-    linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(255, 245, 228, 0.92));
-}
-
-html[data-theme='light'] .stat-card[data-source='leetcode'] .metric-card {
-  background: linear-gradient(150deg, rgba(255, 255, 255, 0.84), rgba(255, 246, 230, 0.82));
+    radial-gradient(440px circle at 100% -26%, rgba(255, 190, 97, 0.2), transparent 52%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.96), rgba(255, 247, 234, 0.9));
 }
 
 html[data-theme='light'] .stat-card[data-source='leetcode']::before {
@@ -2057,21 +2002,18 @@ html[data-theme='light'] .stat-card[data-source='leetcode']::before {
 }
 
 html[data-theme='light'] .heatmap-grid {
-  --heat-0: #e3e7ee;
-}
-
-html[data-theme='light'] .stat-card[data-source='github'] .heatmap-grid {
-  --heat-1: rgba(124, 178, 255, 0.35);
-  --heat-2: rgba(96, 158, 247, 0.56);
-  --heat-3: rgba(56, 122, 228, 0.74);
-  --heat-4: rgba(26, 91, 204, 0.9);
+  --heat-0: rgba(18, 22, 30, 0.08);
+  --heat-1: rgba(255, 211, 106, 0.35);
+  --heat-2: rgba(255, 174, 92, 0.55);
+  --heat-3: rgba(255, 154, 61, 0.7);
+  --heat-4: rgba(243, 106, 43, 0.9);
 }
 
 html[data-theme='light'] .stat-card[data-source='leetcode'] .heatmap-grid {
-  --heat-1: rgba(255, 209, 123, 0.35);
-  --heat-2: rgba(255, 171, 86, 0.56);
-  --heat-3: rgba(244, 137, 53, 0.74);
-  --heat-4: rgba(217, 94, 28, 0.9);
+  --heat-1: rgba(255, 211, 106, 0.3);
+  --heat-2: rgba(255, 174, 92, 0.5);
+  --heat-3: rgba(255, 154, 61, 0.68);
+  --heat-4: rgba(243, 106, 43, 0.88);
 }
 
 html[data-theme='light'] .heatmap-grid.is-image img {
