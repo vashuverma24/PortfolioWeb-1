@@ -2,30 +2,9 @@ const revealItems = document.querySelectorAll('.reveal');
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const root = document.documentElement;
 const scrollBar = document.querySelector('.scroll-bar');
-const themeToggle = document.querySelector('.theme-toggle');
-
-const applyTheme = (theme) => {
-  root.setAttribute('data-theme', theme);
-  if (!themeToggle) return;
-  const isLight = theme === 'light';
-  themeToggle.setAttribute('aria-pressed', isLight ? 'true' : 'false');
-  themeToggle.setAttribute(
-    'aria-label',
-    isLight ? 'Switch to dark mode' : 'Switch to light mode'
-  );
-};
-
-applyTheme('dark');
 
 if ('scrollRestoration' in window.history) {
   window.history.scrollRestoration = 'manual';
-}
-
-if (themeToggle) {
-  themeToggle.addEventListener('click', () => {
-    const nextTheme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-    applyTheme(nextTheme);
-  });
 }
 
 const scrollToTopImmediate = () => {
