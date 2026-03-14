@@ -564,35 +564,369 @@ const setText = (el, value) => {
   if (el) el.textContent = value;
 };
 
+const toNumber = (value) => {
+  if (typeof value === 'number') return Number.isFinite(value) ? value : null;
+  if (typeof value !== 'string') return null;
+  const cleaned = value.replace(/[,#%\s]/g, '');
+  if (!cleaned || cleaned === '--') return null;
+  const parsed = Number(cleaned);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
+const normalizeNumber = (value) => {
+  const numeric = toNumber(value);
+  return numeric !== null && numeric >= 0 ? numeric : null;
+};
+
+const formatInteger = (value, fallback = '--') => {
+  const numeric = normalizeNumber(value);
+  if (numeric === null) return fallback;
+  return Intl.NumberFormat('en-US').format(Math.round(numeric));
+};
+
+const formatPercent = (value) => {
+  if (!Number.isFinite(value)) return '--%';
+  if (value >= 99.95) return '100%';
+  const decimals = value >= 10 ? 0 : 1;
+  return `${value.toFixed(decimals)}%`;
+};
+
+const getPathValue = (obj, path) =>
+  path.split('.').reduce((acc, key) => {
+    if (acc === null || acc === undefined) return undefined;
+    const index = Number(key);
+    if (Number.isInteger(index) && Array.isArray(acc)) {
+      return acc[index];
+    }
+    return acc[key];
+  }, obj);
+
+const pickFirstFromSources = (sources, paths) => {
+  for (const path of paths) {
+    for (const source of sources) {
+      const value = getPathValue(source, path);
+      if (value !== undefined && value !== null && value !== '') return value;
+    }
+  }
+  return undefined;
+};
+
+const setSegmentDistribution = (segments, order, values) => {
+  const normalized = order.map((key) => {
+    const value = Number(values[key]);
+    return Number.isFinite(value) && value > 0 ? value : 0;
+  });
+
+  const total = normalized.reduce((sum, value) => sum + value, 0);
+  const activeCount = normalized.filter((value) => value > 0).length;
+  const gap = activeCount > 1 ? 1.4 : 0;
+  const usableArc = Math.max(0, 100 - gap * activeCount);
+  let start = 0;
+
+  order.forEach((key, index) => {
+    const segment = segments[key];
+    if (!segment) return;
+    const value = normalized[index];
+
+    if (!total || !value || !usableArc) {
+      segment.style.strokeDasharray = '0 100';
+      segment.style.strokeDashoffset = '0';
+      return;
+    }
+
+    const arcLength = (value / total) * usableArc;
+    segment.style.strokeDasharray = `${arcLength} ${100 - arcLength}`;
+    segment.style.strokeDashoffset = `${-start}`;
+    start += arcLength + gap;
+  });
+};
+
+const setCardFocusState = (cards, key, attrName) => {
+  cards.forEach((card) => {
+    const isActive = card.dataset[attrName] === key;
+    card.classList.toggle('is-active', isActive);
+    card.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  });
+};
+
 const ghRepos = document.querySelector('[data-gh-repos]');
 const ghFollowers = document.querySelector('[data-gh-followers]');
-const ghFollowing = document.querySelector('[data-gh-following]');
 const ghStatus = document.querySelector('[data-gh-status]');
+const ghTotalStars = document.querySelector('[data-gh-total-stars]');
+const ghTopRepo = document.querySelector('[data-gh-top-repo]');
+const ghActiveRepos = document.querySelector('[data-gh-active-repos]');
+const ghLanguageCount = document.querySelector('[data-gh-language-count]');
+const ghLanguages = document.querySelector('[data-gh-languages]');
+const ghActiveDays = document.querySelector('[data-gh-active-days]');
+const ghLongestStreak = document.querySelector('[data-gh-longest-streak]');
+const ghYearSubmissions = document.querySelector('[data-gh-year-submissions]');
 
 const lcTotal = document.querySelector('[data-lc-total]');
+const lcTotalQuestions = document.querySelector('[data-lc-total-questions]');
 const lcEasy = document.querySelector('[data-lc-easy]');
+const lcEasyTotal = document.querySelector('[data-lc-easy-total]');
 const lcMedium = document.querySelector('[data-lc-medium]');
+const lcMediumTotal = document.querySelector('[data-lc-medium-total]');
 const lcHard = document.querySelector('[data-lc-hard]');
+const lcHardTotal = document.querySelector('[data-lc-hard-total]');
 const lcRank = document.querySelector('[data-lc-rank]');
+const lcRankMeta = document.querySelector('[data-lc-rank-meta]');
 const lcStatus = document.querySelector('[data-lc-status]');
+const lcRing = document.querySelector('[data-lc-ring]');
+const lcSegments = {
+  easy: document.querySelector('[data-lc-segment="easy"]'),
+  medium: document.querySelector('[data-lc-segment="medium"]'),
+  hard: document.querySelector('[data-lc-segment="hard"]'),
+};
+const lcCards = Array.from(document.querySelectorAll('[data-lc-focus]'));
+const lcShareTotal = document.querySelector('[data-lc-share-total]');
+const lcShareEasy = document.querySelector('[data-lc-share-easy]');
+const lcShareMedium = document.querySelector('[data-lc-share-medium]');
+const lcShareHard = document.querySelector('[data-lc-share-hard]');
+const lcHighlightValue = document.querySelector('[data-lc-highlight-value]');
+const lcHighlightTotal = document.querySelector('[data-lc-highlight-total]');
+const lcHighlightLabel = document.querySelector('[data-lc-highlight-label]');
+const lcHighlightShare = document.querySelector('[data-lc-highlight-share]');
+const lcYearSubmissions = document.querySelector('[data-lc-year-submissions]');
+const lcCurrentStreak = document.querySelector('[data-lc-current-streak]');
+const lcLongestStreak = document.querySelector('[data-lc-longest-streak]');
+const lcDifficultyScore = document.querySelector('[data-lc-difficulty-score]');
 
 const ghHeatmap = document.querySelector('[data-gh-heatmap]');
 const ghHeatmapStatus = document.querySelector('[data-gh-heatmap-status]');
 const lcHeatmap = document.querySelector('[data-lc-heatmap]');
 const lcHeatmapStatus = document.querySelector('[data-lc-heatmap-status]');
 
-const fetchGitHubStats = async () => {
-  if (!ghRepos && !ghFollowers && !ghFollowing) return;
-  try {
-    const response = await fetch(`https://api.github.com/users/${ghUser}`);
-    if (!response.ok) throw new Error('GitHub fetch failed');
-    const data = await response.json();
+const renderGitHubLanguageMix = (languageMap) => {
+  const entries = [...languageMap.entries()].sort((a, b) => b[1] - a[1]);
 
-    setText(ghRepos, data.public_repos ?? '--');
-    setText(ghFollowers, data.followers ?? '--');
-    setText(ghFollowing, data.following ?? '--');
-    setText(ghStatus, 'Updated just now');
+  if (ghLanguageCount) {
+    ghLanguageCount.textContent = entries.length ? `${entries.length} langs` : '-- langs';
+  }
+
+  if (!ghLanguages) return;
+  ghLanguages.innerHTML = '';
+
+  if (!entries.length) {
+    const empty = document.createElement('p');
+    empty.className = 'gh-language-empty';
+    empty.textContent = 'No primary language data available.';
+    ghLanguages.appendChild(empty);
+    return;
+  }
+
+  const top = entries[0][1] || 1;
+  entries.slice(0, 4).forEach(([language, count], index) => {
+    const row = document.createElement('div');
+    row.className = 'gh-lang-row';
+
+    const name = document.createElement('span');
+    name.className = 'gh-lang-name';
+    name.textContent = language;
+
+    const track = document.createElement('span');
+    track.className = 'gh-lang-track';
+
+    const fill = document.createElement('span');
+    fill.className = `gh-lang-fill${index ? ` is-${index + 1}` : ''}`;
+    fill.style.setProperty('--pct', `${Math.max(8, Math.round((count / top) * 100))}%`);
+    track.appendChild(fill);
+
+    const countEl = document.createElement('span');
+    countEl.className = 'gh-lang-count';
+    countEl.textContent = formatInteger(count);
+
+    row.appendChild(name);
+    row.appendChild(track);
+    row.appendChild(countEl);
+    ghLanguages.appendChild(row);
+  });
+};
+
+const lcMetricConfig = {
+  total: { label: 'Solved', valueKey: 'total', totalKey: 'totalQuestions' },
+  easy: { label: 'Easy', valueKey: 'easy', totalKey: 'totalEasy' },
+  medium: { label: 'Medium', valueKey: 'medium', totalKey: 'totalMedium' },
+  hard: { label: 'Hard', valueKey: 'hard', totalKey: 'totalHard' },
+};
+
+let lcActive = 'total';
+let lcSnapshot = {
+  total: null,
+  totalQuestions: null,
+  easy: null,
+  totalEasy: null,
+  medium: null,
+  totalMedium: null,
+  hard: null,
+  totalHard: null,
+};
+
+const updateLeetCodeFocus = (metric) => {
+  if (!lcMetricConfig[metric]) return;
+  lcActive = metric;
+  if (lcRing) {
+    lcRing.setAttribute('data-active', metric);
+  }
+  setCardFocusState(lcCards, metric, 'lcFocus');
+
+  const config = lcMetricConfig[metric];
+  const value = normalizeNumber(lcSnapshot[config.valueKey]);
+  const total = normalizeNumber(lcSnapshot[config.totalKey]);
+
+  const ratio =
+    value !== null && total !== null && total > 0
+      ? (value / total) * 100
+      : null;
+
+  setText(lcHighlightValue, formatInteger(value));
+  setText(lcHighlightTotal, formatInteger(total));
+  setText(lcHighlightLabel, config.label);
+  setText(
+    lcHighlightShare,
+    ratio !== null ? `${formatPercent(ratio)} solved` : 'Hover a tier to inspect solve ratio'
+  );
+};
+
+const refreshLeetCodeVisuals = () => {
+  const easySolved = normalizeNumber(lcSnapshot.easy) ?? 0;
+  const mediumSolved = normalizeNumber(lcSnapshot.medium) ?? 0;
+  const hardSolved = normalizeNumber(lcSnapshot.hard) ?? 0;
+
+  setSegmentDistribution(
+    lcSegments,
+    ['easy', 'medium', 'hard'],
+    { easy: easySolved, medium: mediumSolved, hard: hardSolved }
+  );
+
+  const totalSolved = normalizeNumber(lcSnapshot.total);
+  const totalQuestions = normalizeNumber(lcSnapshot.totalQuestions);
+  const easySolvedRaw = normalizeNumber(lcSnapshot.easy);
+  const mediumSolvedRaw = normalizeNumber(lcSnapshot.medium);
+  const hardSolvedRaw = normalizeNumber(lcSnapshot.hard);
+  const easyTotal = normalizeNumber(lcSnapshot.totalEasy);
+  const mediumTotal = normalizeNumber(lcSnapshot.totalMedium);
+  const hardTotal = normalizeNumber(lcSnapshot.totalHard);
+
+  setText(
+    lcShareTotal,
+    totalSolved !== null && totalQuestions && totalQuestions > 0
+      ? formatPercent((totalSolved / totalQuestions) * 100)
+      : '--%'
+  );
+  setText(
+    lcShareEasy,
+    easySolvedRaw !== null && easyTotal && easyTotal > 0
+      ? formatPercent((easySolvedRaw / easyTotal) * 100)
+      : '--%'
+  );
+  setText(
+    lcShareMedium,
+    mediumSolvedRaw !== null && mediumTotal && mediumTotal > 0
+      ? formatPercent((mediumSolvedRaw / mediumTotal) * 100)
+      : '--%'
+  );
+  setText(
+    lcShareHard,
+    hardSolvedRaw !== null && hardTotal && hardTotal > 0
+      ? formatPercent((hardSolvedRaw / hardTotal) * 100)
+      : '--%'
+  );
+
+  updateLeetCodeFocus(lcActive);
+};
+
+lcCards.forEach((card) => {
+  const metric = card.dataset.lcFocus;
+  if (!metric || !lcMetricConfig[metric]) return;
+  card.addEventListener('click', () => updateLeetCodeFocus(metric));
+  card.addEventListener('pointerenter', () => updateLeetCodeFocus(metric));
+  card.addEventListener('focus', () => updateLeetCodeFocus(metric));
+});
+
+const fetchGitHubStats = async () => {
+  if (!ghRepos && !ghFollowers) return;
+  try {
+    const userPromise = fetch(`https://api.github.com/users/${ghUser}`);
+    const repoPromise = fetch(
+      `https://api.github.com/users/${ghUser}/repos?per_page=100&sort=updated`
+    );
+
+    const [userResponse, repoResponse] = await Promise.all([userPromise, repoPromise]);
+    if (!userResponse.ok) throw new Error('GitHub user fetch failed');
+
+    const user = await userResponse.json();
+    setText(ghRepos, formatInteger(user.public_repos));
+    setText(ghFollowers, formatInteger(user.followers));
+
+    let repositories = [];
+    let hasRepoData = false;
+    if (repoResponse.ok) {
+      const parsedRepos = await repoResponse.json();
+      if (Array.isArray(parsedRepos)) {
+        repositories = parsedRepos;
+        hasRepoData = true;
+      }
+    }
+
+    if (hasRepoData) {
+      const nonForkRepos = repositories.filter((repo) => !repo.fork);
+      const languageMap = new Map();
+      let totalStars = 0;
+      let mostStarredRepo = null;
+
+      nonForkRepos.forEach((repo) => {
+        const stars = normalizeNumber(repo.stargazers_count) ?? 0;
+        totalStars += stars;
+        if (!mostStarredRepo || stars > (normalizeNumber(mostStarredRepo.stargazers_count) ?? -1)) {
+          mostStarredRepo = repo;
+        }
+
+        if (typeof repo.language === 'string' && repo.language.trim()) {
+          const language = repo.language.trim();
+          languageMap.set(language, (languageMap.get(language) ?? 0) + 1);
+        }
+      });
+
+      const ninetyDaysAgo = Date.now() - 90 * 24 * 60 * 60 * 1000;
+      const activeRepos = nonForkRepos.filter((repo) => {
+        const pushed = new Date(repo.pushed_at || 0).getTime();
+        return Number.isFinite(pushed) && pushed >= ninetyDaysAgo;
+      }).length;
+
+      setText(ghTotalStars, formatInteger(totalStars));
+      setText(ghActiveRepos, formatInteger(activeRepos));
+      setText(
+        ghTopRepo,
+        mostStarredRepo
+          ? `${mostStarredRepo.name} (${formatInteger(mostStarredRepo.stargazers_count)} stars)`
+          : '--'
+      );
+      renderGitHubLanguageMix(languageMap);
+    } else {
+      setText(ghTotalStars, '--');
+      setText(ghActiveRepos, '--');
+      setText(ghTopRepo, '--');
+      setText(ghLanguageCount, '-- langs');
+      if (ghLanguages) {
+        ghLanguages.innerHTML = '<p class="gh-language-empty">Language data unavailable.</p>';
+      }
+    }
+
+    setText(
+      ghStatus,
+      hasRepoData ? 'Updated just now' : 'Updated profile data (repo insights unavailable).'
+    );
   } catch (error) {
+    setText(ghRepos, '--');
+    setText(ghFollowers, '--');
+    setText(ghTotalStars, '--');
+    setText(ghActiveRepos, '--');
+    setText(ghTopRepo, '--');
+    setText(ghLanguageCount, '-- langs');
+    if (ghLanguages) {
+      ghLanguages.innerHTML = '<p class="gh-language-empty">Unable to load language profile.</p>';
+    }
     setText(ghStatus, 'Unable to load GitHub stats right now.');
   }
 };
@@ -622,44 +956,11 @@ const fetchLeetCodeStats = async () => {
   }
 
   if (!sources.length) {
+    setText(lcRankMeta, 'Contest rank snapshot');
+    setText(lcDifficultyScore, '--');
     setText(lcStatus, 'Unable to load LeetCode stats right now.');
     return;
   }
-
-  const getPathValue = (obj, path) =>
-    path.split('.').reduce((acc, key) => {
-      if (acc === null || acc === undefined) return undefined;
-      const index = Number(key);
-      if (Number.isInteger(index) && Array.isArray(acc)) {
-        return acc[index];
-      }
-      return acc[key];
-    }, obj);
-
-  const pickFirst = (paths) => {
-    for (const path of paths) {
-      for (const source of sources) {
-        const value = getPathValue(source, path);
-        if (value !== undefined && value !== null && value !== '') return value;
-      }
-    }
-    return undefined;
-  };
-
-  const toNumber = (value) => {
-    if (typeof value === 'number') return Number.isFinite(value) ? value : null;
-    if (typeof value !== 'string') return null;
-    const cleaned = value.replace(/[,#%\s]/g, '');
-    if (!cleaned) return null;
-    const parsed = Number(cleaned);
-    return Number.isFinite(parsed) ? parsed : null;
-  };
-
-  const formatNumber = (value, fallback = '--') => {
-    const numeric = toNumber(value);
-    if (numeric === null) return fallback;
-    return Intl.NumberFormat('en-US', { maximumFractionDigits: 1 }).format(numeric);
-  };
 
   const formatRank = (value) => {
     const numeric = toNumber(value);
@@ -667,53 +968,216 @@ const fetchLeetCodeStats = async () => {
     return `#${Intl.NumberFormat('en-US').format(Math.round(numeric))}`;
   };
 
-  const total = pickFirst([
+  const total = pickFirstFromSources(sources, [
     'totalSolved',
     'solved',
     'total_solved',
     'data.matchedUser.submitStats.acSubmissionNum.0.count',
   ]);
-  const easy = pickFirst([
+  const easy = pickFirstFromSources(sources, [
     'easySolved',
     'easy',
     'easy_solved',
     'data.matchedUser.submitStats.acSubmissionNum.1.count',
   ]);
-  const medium = pickFirst([
+  const medium = pickFirstFromSources(sources, [
     'mediumSolved',
     'medium',
     'medium_solved',
     'data.matchedUser.submitStats.acSubmissionNum.2.count',
   ]);
-  const hard = pickFirst([
+  const hard = pickFirstFromSources(sources, [
     'hardSolved',
     'hard',
     'hard_solved',
     'data.matchedUser.submitStats.acSubmissionNum.3.count',
   ]);
-  const ranking = pickFirst([
+  const totalQuestions = pickFirstFromSources(sources, [
+    'totalQuestions',
+    'total_questions',
+    'totalQuestionsCount',
+    'allQuestionsCount.0.count',
+    'data.allQuestionsCount.0.count',
+  ]);
+  const totalEasy = pickFirstFromSources(sources, [
+    'totalEasy',
+    'easyTotal',
+    'easy_total',
+    'allQuestionsCount.1.count',
+    'data.allQuestionsCount.1.count',
+  ]);
+  const totalMedium = pickFirstFromSources(sources, [
+    'totalMedium',
+    'mediumTotal',
+    'medium_total',
+    'allQuestionsCount.2.count',
+    'data.allQuestionsCount.2.count',
+  ]);
+  const totalHard = pickFirstFromSources(sources, [
+    'totalHard',
+    'hardTotal',
+    'hard_total',
+    'allQuestionsCount.3.count',
+    'data.allQuestionsCount.3.count',
+  ]);
+  const ranking = pickFirstFromSources(sources, [
     'ranking',
     'rank',
     'globalRanking',
     'userContestRanking.globalRanking',
   ]);
+  const totalParticipants = pickFirstFromSources(sources, [
+    'totalParticipants',
+    'total_participants',
+    'contestTotalParticipants',
+    'userContestRanking.totalParticipants',
+    'data.userContestRanking.totalParticipants',
+    'matchedUser.userContestRanking.totalParticipants',
+  ]);
 
-  setText(lcTotal, formatNumber(total));
-  setText(lcEasy, formatNumber(easy));
-  setText(lcMedium, formatNumber(medium));
-  setText(lcHard, formatNumber(hard));
+  const easyValue = normalizeNumber(easy);
+  const mediumValue = normalizeNumber(medium);
+  const hardValue = normalizeNumber(hard);
+
+  const parsedTotal = normalizeNumber(total);
+  const computedSolved =
+    easyValue !== null && mediumValue !== null && hardValue !== null
+      ? easyValue + mediumValue + hardValue
+      : null;
+  const solvedValue = parsedTotal !== null ? parsedTotal : computedSolved;
+
+  const parsedTotalEasy = normalizeNumber(totalEasy);
+  const parsedTotalMedium = normalizeNumber(totalMedium);
+  const parsedTotalHard = normalizeNumber(totalHard);
+
+  const parsedTotalQuestions = normalizeNumber(totalQuestions);
+  const computedTotalQuestions =
+    parsedTotalEasy !== null && parsedTotalMedium !== null && parsedTotalHard !== null
+      ? parsedTotalEasy + parsedTotalMedium + parsedTotalHard
+      : null;
+
+  lcSnapshot = {
+    total: solvedValue,
+    totalQuestions: parsedTotalQuestions !== null ? parsedTotalQuestions : computedTotalQuestions,
+    easy: easyValue,
+    totalEasy: parsedTotalEasy,
+    medium: mediumValue,
+    totalMedium: parsedTotalMedium,
+    hard: hardValue,
+    totalHard: parsedTotalHard,
+  };
+
+  setText(lcTotal, formatInteger(lcSnapshot.total));
+  setText(lcTotalQuestions, formatInteger(lcSnapshot.totalQuestions));
+  setText(lcEasy, formatInteger(lcSnapshot.easy));
+  setText(lcEasyTotal, formatInteger(lcSnapshot.totalEasy));
+  setText(lcMedium, formatInteger(lcSnapshot.medium));
+  setText(lcMediumTotal, formatInteger(lcSnapshot.totalMedium));
+  setText(lcHard, formatInteger(lcSnapshot.hard));
+  setText(lcHardTotal, formatInteger(lcSnapshot.totalHard));
   setText(lcRank, formatRank(ranking));
+
+  const rankingNumber = normalizeNumber(ranking);
+  const participantsNumber = normalizeNumber(totalParticipants);
+  const topPercent =
+    rankingNumber !== null &&
+    participantsNumber !== null &&
+    participantsNumber > 0
+      ? (rankingNumber / participantsNumber) * 100
+      : null;
+  const safeTopPercent =
+    topPercent !== null ? Math.min(100, Math.max(0, topPercent)) : null;
+
+  setText(
+    lcRankMeta,
+    safeTopPercent !== null
+      ? `Top ${safeTopPercent < 10 ? safeTopPercent.toFixed(1) : safeTopPercent.toFixed(0)}%`
+      : 'Contest rank snapshot'
+  );
+
+  const difficultyScore =
+    (normalizeNumber(lcSnapshot.easy) ?? 0) * 1 +
+    (normalizeNumber(lcSnapshot.medium) ?? 0) * 2 +
+    (normalizeNumber(lcSnapshot.hard) ?? 0) * 3;
+  setText(lcDifficultyScore, difficultyScore > 0 ? formatInteger(difficultyScore) : '--');
+
+  refreshLeetCodeVisuals();
   setText(lcStatus, 'Updated just now');
 };
 
+refreshLeetCodeVisuals();
 fetchGitHubStats();
 fetchLeetCodeStats();
 
 const toDateKey = (date) => date.toISOString().slice(0, 10);
 
+const sumRecentActivity = (countByDate, days = 365) => {
+  if (!(countByDate instanceof Map) || !countByDate.size) return 0;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const start = new Date(today);
+  start.setDate(today.getDate() - (days - 1));
+
+  let sum = 0;
+  for (let i = 0; i < days; i += 1) {
+    const date = new Date(start);
+    date.setDate(start.getDate() + i);
+    const key = toDateKey(date);
+    const count = Number(countByDate.get(key) ?? 0);
+    if (Number.isFinite(count)) {
+      sum += count;
+    }
+  }
+
+  return sum;
+};
+
+const getActivityInsights = (countByDate, days = 365) => {
+  if (!(countByDate instanceof Map) || !countByDate.size) {
+    return { activeDays: 0, longest: 0, current: 0 };
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const start = new Date(today);
+  start.setDate(today.getDate() - (days - 1));
+
+  let activeDays = 0;
+  let currentRun = 0;
+  let longestRun = 0;
+  const activeFlags = [];
+
+  for (let i = 0; i < days; i += 1) {
+    const date = new Date(start);
+    date.setDate(start.getDate() + i);
+    const key = toDateKey(date);
+    const count = Number(countByDate.get(key) ?? 0);
+    const active = Number.isFinite(count) && count > 0;
+    activeFlags.push(active);
+
+    if (active) {
+      activeDays += 1;
+      currentRun += 1;
+      if (currentRun > longestRun) longestRun = currentRun;
+    } else {
+      currentRun = 0;
+    }
+  }
+
+  let currentStreak = 0;
+  for (let i = activeFlags.length - 1; i >= 0; i -= 1) {
+    if (!activeFlags[i]) break;
+    currentStreak += 1;
+  }
+
+  return { activeDays, longest: longestRun, current: currentStreak };
+};
+
 const buildHeatmap = (container, countByDate, options = {}) => {
   if (!container) return;
   const days = options.days ?? 182;
+  const label = options.label ?? 'activity';
   const today = new Date();
   const start = new Date(today);
   start.setHours(0, 0, 0, 0);
@@ -739,7 +1203,7 @@ const buildHeatmap = (container, countByDate, options = {}) => {
     const intensity =
       max === 0 ? 0 : Math.min(4, Math.ceil((count / max) * 4));
     cell.className = `heatmap-cell heat-${intensity}`;
-    cell.title = `${key}: ${count} contributions`;
+    cell.title = `${key}: ${count} ${label}`;
     container.appendChild(cell);
   });
 };
@@ -762,13 +1226,20 @@ const fetchGitHubHeatmap = async () => {
       });
     }
 
-    buildHeatmap(ghHeatmap, map, { days: 240 });
-    setText(ghHeatmapStatus, 'Last 8 months of activity');
+    buildHeatmap(ghHeatmap, map, { days: 365, label: 'contributions' });
+    setText(ghYearSubmissions, formatInteger(sumRecentActivity(map, 365)));
+    const ghInsights = getActivityInsights(map, 365);
+    setText(ghActiveDays, formatInteger(ghInsights.activeDays));
+    setText(ghLongestStreak, ghInsights.longest > 0 ? `${formatInteger(ghInsights.longest)}d` : '--');
+    setText(ghHeatmapStatus, 'Last 1 year of activity');
   } catch (error) {
     if (ghHeatmap) {
       ghHeatmap.classList.add('is-image');
       ghHeatmap.innerHTML = `<img src="https://ghchart.rshah.org/${ghUser}" alt="GitHub contribution heatmap" />`;
     }
+    setText(ghYearSubmissions, '--');
+    setText(ghActiveDays, '--');
+    setText(ghLongestStreak, '--');
     setText(ghHeatmapStatus, 'Live grid unavailable, showing fallback.');
   }
 };
@@ -867,9 +1338,22 @@ const fetchLeetCodeHeatmap = async () => {
       throw new Error('LeetCode calendar missing');
     }
 
-    buildHeatmap(lcHeatmap, calendarMap, { days: 240 });
-    setText(lcHeatmapStatus, 'Last 8 months of activity');
+    buildHeatmap(lcHeatmap, calendarMap, { days: 365, label: 'submissions' });
+    setText(lcYearSubmissions, formatInteger(sumRecentActivity(calendarMap, 365)));
+    const lcInsights = getActivityInsights(calendarMap, 365);
+    setText(
+      lcCurrentStreak,
+      lcInsights.current > 0 ? `${formatInteger(lcInsights.current)}d` : '0d'
+    );
+    setText(
+      lcLongestStreak,
+      lcInsights.longest > 0 ? `${formatInteger(lcInsights.longest)}d` : '--'
+    );
+    setText(lcHeatmapStatus, 'Last 1 year of activity');
   } catch (error) {
+    setText(lcYearSubmissions, '--');
+    setText(lcCurrentStreak, '--');
+    setText(lcLongestStreak, '--');
     setText(lcHeatmapStatus, 'Unable to load LeetCode activity grid.');
   }
 };

@@ -321,7 +321,7 @@
         <div class="stats-grid">
           <article class="stat-card reveal" data-source="github">
             <div class="stat-card-head">
-              <div>
+              <div class="stat-card-title-block">
                 <p class="stat-eyebrow">GitHub</p>
                 <h3>Open-source footprint</h3>
               </div>
@@ -333,21 +333,58 @@
                 >@SachinTarkar842</a
               >
             </div>
-            <div class="stat-row">
-              <div class="stat-item">
-                <span class="stat-number" data-gh-repos>--</span>
-                <span class="stat-label">Public Repos</span>
+            <div class="stat-viz" data-stat-viz="github">
+              <div class="gh-language-panel">
+                <div class="gh-language-head">
+                  <p class="gh-language-eyebrow">Language mix by repositories</p>
+                  <span class="gh-language-total" data-gh-language-count>-- langs</span>
+                </div>
+                <div class="gh-language-bars" data-gh-languages>
+                  <p class="gh-language-empty">Loading language profile...</p>
+                </div>
+                <div class="gh-extra-grid">
+                  <p class="gh-extra-item">
+                    <span class="gh-extra-label">Top Repository</span>
+                    <strong class="gh-extra-value" data-gh-top-repo>--</strong>
+                  </p>
+                  <p class="gh-extra-item">
+                    <span class="gh-extra-label">Active Repos (90d)</span>
+                    <strong class="gh-extra-value" data-gh-active-repos>--</strong>
+                  </p>
+                </div>
               </div>
-              <div class="stat-item">
-                <span class="stat-number" data-gh-followers>--</span>
-                <span class="stat-label">Followers</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number" data-gh-following>--</span>
-                <span class="stat-label">Following</span>
+
+              <div class="metric-stack metric-stack-gh">
+                <div class="metric-card metric-card-static">
+                  <span class="metric-card-label">Public Repos</span>
+                  <span class="metric-card-value" data-gh-repos>--</span>
+                  <span class="metric-card-sub">Visible repositories</span>
+                </div>
+                <div class="metric-card metric-card-static">
+                  <span class="metric-card-label">Followers</span>
+                  <span class="metric-card-value" data-gh-followers>--</span>
+                  <span class="metric-card-sub">People following you</span>
+                </div>
+                <div class="metric-card metric-card-static">
+                  <span class="metric-card-label">Total Stars</span>
+                  <span class="metric-card-value" data-gh-total-stars>--</span>
+                  <span class="metric-card-sub">Stars across public repos</span>
+                </div>
+                <div class="metric-card metric-card-static">
+                  <span class="metric-card-label">Best Streak (1Y)</span>
+                  <span class="metric-card-value" data-gh-longest-streak>--</span>
+                  <span class="metric-card-sub"
+                    ><span data-gh-active-days>--</span> active days this year</span
+                  >
+                </div>
               </div>
             </div>
-            <p class="stat-meta" data-gh-status>Loading live data...</p>
+            <div class="stat-meta-row">
+              <p class="stat-meta" data-gh-status>Loading live data...</p>
+              <p class="stat-meta stat-meta-pill">
+                1Y Contributions <strong data-gh-year-submissions>--</strong>
+              </p>
+            </div>
             <div class="heatmap">
               <div class="heatmap-grid" data-gh-heatmap></div>
               <p class="heatmap-meta" data-gh-heatmap-status>
@@ -358,9 +395,14 @@
 
           <article class="stat-card reveal" data-source="leetcode">
             <div class="stat-card-head">
-              <div>
+              <div class="stat-card-title-block">
                 <p class="stat-eyebrow">LeetCode</p>
                 <h3>Problem solving streak</h3>
+                <div class="lc-rank-badge">
+                  <span class="lc-rank-label">Global Rank</span>
+                  <strong class="lc-rank-value" data-lc-rank>--</strong>
+                  <span class="lc-rank-meta" data-lc-rank-meta>Top --%</span>
+                </div>
               </div>
               <a
                 class="stat-link"
@@ -370,29 +412,121 @@
                 >@tarkarsachin842</a
               >
             </div>
-            <div class="stat-row">
-              <div class="stat-item">
-                <span class="stat-number" data-lc-total>--</span>
-                <span class="stat-label">Total Solved</span>
+            <div class="stat-viz" data-stat-viz="leetcode">
+              <div class="radial-wrap lc-ring" data-lc-ring data-active="total">
+                <svg
+                  class="radial-svg"
+                  viewBox="0 0 220 220"
+                  role="img"
+                  aria-label="LeetCode solved distribution by difficulty"
+                >
+                  <circle class="radial-track" cx="110" cy="110" r="82"></circle>
+                  <circle
+                    class="radial-segment lc-easy"
+                    data-lc-segment="easy"
+                    cx="110"
+                    cy="110"
+                    r="82"
+                    pathLength="100"
+                  ></circle>
+                  <circle
+                    class="radial-segment lc-medium"
+                    data-lc-segment="medium"
+                    cx="110"
+                    cy="110"
+                    r="82"
+                    pathLength="100"
+                  ></circle>
+                  <circle
+                    class="radial-segment lc-hard"
+                    data-lc-segment="hard"
+                    cx="110"
+                    cy="110"
+                    r="82"
+                    pathLength="100"
+                  ></circle>
+                </svg>
+                <div class="radial-center">
+                  <span class="radial-main">
+                    <span data-lc-highlight-value>--</span>
+                    <span class="radial-divider">/</span>
+                    <span data-lc-highlight-total>--</span>
+                  </span>
+                  <span class="radial-sub" data-lc-highlight-label>Solved</span>
+                  <span class="radial-meta" data-lc-highlight-share>
+                    Hover a tier to inspect solve ratio
+                  </span>
+                </div>
               </div>
-              <div class="stat-item">
-                <span class="stat-number" data-lc-easy>--</span>
-                <span class="stat-label">Easy</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number" data-lc-medium>--</span>
-                <span class="stat-label">Medium</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number" data-lc-hard>--</span>
-                <span class="stat-label">Hard</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number" data-lc-rank>--</span>
-                <span class="stat-label">Ranking</span>
+
+              <div class="metric-stack" data-lc-breakdown>
+                <button
+                  class="metric-card is-active"
+                  type="button"
+                  data-lc-focus="total"
+                  aria-pressed="true"
+                >
+                  <span class="metric-card-label">Solved</span>
+                  <span class="metric-card-value"
+                    ><span data-lc-total>--</span>/<span data-lc-total-questions>--</span></span
+                  >
+                  <span class="metric-card-share" data-lc-share-total>--%</span>
+                </button>
+                <button
+                  class="metric-card"
+                  type="button"
+                  data-lc-focus="easy"
+                  aria-pressed="false"
+                >
+                  <span class="metric-card-label">Easy</span>
+                  <span class="metric-card-value"
+                    ><span data-lc-easy>--</span>/<span data-lc-easy-total>--</span></span
+                  >
+                  <span class="metric-card-share" data-lc-share-easy>--%</span>
+                </button>
+                <button
+                  class="metric-card"
+                  type="button"
+                  data-lc-focus="medium"
+                  aria-pressed="false"
+                >
+                  <span class="metric-card-label">Medium</span>
+                  <span class="metric-card-value"
+                    ><span data-lc-medium>--</span>/<span data-lc-medium-total>--</span></span
+                  >
+                  <span class="metric-card-share" data-lc-share-medium>--%</span>
+                </button>
+                <button
+                  class="metric-card"
+                  type="button"
+                  data-lc-focus="hard"
+                  aria-pressed="false"
+                >
+                  <span class="metric-card-label">Hard</span>
+                  <span class="metric-card-value"
+                    ><span data-lc-hard>--</span>/<span data-lc-hard-total>--</span></span
+                  >
+                  <span class="metric-card-share" data-lc-share-hard>--%</span>
+                </button>
               </div>
             </div>
-            <p class="stat-meta" data-lc-status>Loading live data...</p>
+            <div class="stat-meta-row">
+              <p class="stat-meta" data-lc-status>Loading live data...</p>
+              <p class="stat-meta stat-meta-pill">
+                1Y Submissions <strong data-lc-year-submissions>--</strong>
+              </p>
+            </div>
+            <div class="insight-row">
+              <p class="insight-chip">
+                Current Streak <strong data-lc-current-streak>--</strong>
+              </p>
+              <p class="insight-chip">
+                Best Streak <strong data-lc-longest-streak>--</strong>
+              </p>
+              <p class="insight-chip">
+                Difficulty Score <strong data-lc-difficulty-score>--</strong>
+              </p>
+            </div>
             <div class="heatmap">
               <div class="heatmap-grid" data-lc-heatmap></div>
               <p class="heatmap-meta" data-lc-heatmap-status>
