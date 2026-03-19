@@ -7,6 +7,11 @@ if ('scrollRestoration' in window.history) {
   window.history.scrollRestoration = 'manual';
 }
 
+const clearInitialHash = () => {
+  if (!window.location.hash) return;
+  window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+};
+
 const scrollToTopImmediate = () => {
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
@@ -14,11 +19,11 @@ const scrollToTopImmediate = () => {
 };
 
 const ensureStartAtTop = () => {
-  if (!window.location.hash) {
-    scrollToTopImmediate();
-    window.requestAnimationFrame(scrollToTopImmediate);
-    window.setTimeout(scrollToTopImmediate, 60);
-  }
+  clearInitialHash();
+  scrollToTopImmediate();
+  window.requestAnimationFrame(scrollToTopImmediate);
+  window.setTimeout(scrollToTopImmediate, 60);
+  window.setTimeout(scrollToTopImmediate, 180);
 };
 
 window.addEventListener('DOMContentLoaded', ensureStartAtTop);
@@ -34,6 +39,7 @@ const hideIntro = () => {
   if (!introOverlay || introOverlay.classList.contains('is-hidden')) return;
   introOverlay.classList.add('is-hidden');
   document.body.classList.remove('intro-active');
+  scrollToTopImmediate();
 };
 
 if (introOverlay) {
@@ -111,6 +117,8 @@ if (!prefersReducedMotion) {
   });
 }
 
+const heroStage = document.querySelector('[data-hero-stage]');
+
 let scrollRafId = null;
 const updateScroll = () => {
   const scrollTop = window.scrollY;
@@ -120,6 +128,14 @@ const updateScroll = () => {
 
   if (scrollBar) {
     scrollBar.style.transform = `scaleX(${progress})`;
+  }
+
+  if (heroStage) {
+    const heroProgress = Math.min(scrollTop / (window.innerHeight * 0.9), 1);
+    heroStage.style.setProperty('--hero-bg-lift', `${heroProgress * 30}px`);
+    heroStage.style.setProperty('--hero-scale', `${1.05 + (heroProgress * 0.04)}`);
+    heroStage.style.setProperty('--hero-content-shift', `${heroProgress * -54}px`);
+    heroStage.style.setProperty('--hero-content-opacity', `${1 - (heroProgress * 0.92)}`);
   }
 
   scrollRafId = null;
@@ -856,26 +872,32 @@ lcCards.forEach((card) => {
 const fetchGitHubStats = async () => {
   if (!ghRepos && !ghFollowers) return;
   try {
-    const userPromise = fetch(`https://api.github.com/users/${ghUser}`);
-    const repoPromise = fetch(
-      `https://api.github.com/users/${ghUser}/repos?per_page=100&sort=updated`
-    );
-
-    const [userResponse, repoResponse] = await Promise.all([userPromise, repoPromise]);
-    if (!userResponse.ok) throw new Error('GitHub user fetch failed');
+    console.log('Fetching GitHub stats for user:', ghUser);
+    const userResponse = await fetch(`https://api.github.com/users/${ghUser}`, { cache: 'no-store' });
+    if (!userResponse.ok) {
+      console.error('GitHub user fetch failed:', userResponse.status, userResponse.statusText);
+      throw new Error('GitHub user fetch failed');
+    }
 
     const user = await userResponse.json();
+    console.log('GitHub user data:', user);
     setText(ghRepos, formatInteger(user.public_repos));
     setText(ghFollowers, formatInteger(user.followers));
 
+    // Try to fetch repos (may fail due to rate limiting)
     let repositories = [];
     let hasRepoData = false;
-    if (repoResponse.ok) {
-      const parsedRepos = await repoResponse.json();
-      if (Array.isArray(parsedRepos)) {
-        repositories = parsedRepos;
+    try {
+      const repoResponse = await fetchGitHubRepos(ghUser);
+      if (repoResponse && Array.isArray(repoResponse) && repoResponse.length > 0) {
+        repositories = repoResponse;
         hasRepoData = true;
+        console.log('Fetched repositories:', repositories.length);
+      } else {
+        console.warn('No repositories found or repos fetch returned null');
       }
+    } catch (repoError) {
+      console.error('Failed to fetch repos:', repoError);
     }
 
     if (hasRepoData) {
@@ -912,21 +934,19 @@ const fetchGitHubStats = async () => {
           : '--'
       );
       renderGitHubLanguageMix(languageMap);
+      setText(ghStatus, 'Updated just now');
     } else {
       setText(ghTotalStars, '--');
       setText(ghActiveRepos, '--');
       setText(ghTopRepo, '--');
       setText(ghLanguageCount, '-- langs');
       if (ghLanguages) {
-        ghLanguages.innerHTML = '<p class="gh-language-empty">Language data unavailable.</p>';
+        ghLanguages.innerHTML = '<p class="gh-language-empty">Repo data temporarily unavailable (check rate limit).</p>';
       }
+      setText(ghStatus, 'Profile loaded • repo insights unavailable');
     }
-
-    setText(
-      ghStatus,
-      hasRepoData ? 'Updated just now' : 'Updated profile data (repo insights unavailable).'
-    );
   } catch (error) {
+    console.error('Error fetching GitHub stats:', error);
     setText(ghRepos, '--');
     setText(ghFollowers, '--');
     setText(ghTotalStars, '--');
@@ -934,10 +954,53 @@ const fetchGitHubStats = async () => {
     setText(ghTopRepo, '--');
     setText(ghLanguageCount, '-- langs');
     if (ghLanguages) {
-      ghLanguages.innerHTML = '<p class="gh-language-empty">Unable to load language profile.</p>';
+      ghLanguages.innerHTML = '<p class="gh-language-empty">Unable to load GitHub profile at this time.</p>';
     }
-    setText(ghStatus, 'Unable to load GitHub stats right now.');
+    setText(ghStatus, 'Unable to load GitHub stats. Try refreshing.');
   }
+};
+
+const fetchGitHubRepos = async (user) => {
+  const repos = [];
+  let page = 1;
+  const perPage = 100;
+  const timeout = 8000;
+  
+  while (page <= 5) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+      
+      const response = await fetch(
+        `https://api.github.com/users/${user}/repos?per_page=${perPage}&page=${page}&sort=updated`,
+        { signal: controller.signal }
+      );
+      clearTimeout(timeoutId);
+      
+      if (response.status === 403) {
+        console.warn('GitHub API rate limit reached');
+        break;
+      }
+      if (!response.ok) {
+        console.error(`Failed to fetch repos page ${page}:`, response.status);
+        break;
+      }
+      const data = await response.json();
+      if (!Array.isArray(data) || data.length === 0) {
+        break;
+      }
+      repos.push(...data);
+      if (data.length < perPage) {
+        break;
+      }
+      page++;
+    } catch (error) {
+      console.error(`Error fetching repos page ${page}:`, error.message);
+      if (page === 1) return null;
+      break;
+    }
+  }
+  return repos.length > 0 ? repos : null;
 };
 
 const leetCodeEndpoints = [
