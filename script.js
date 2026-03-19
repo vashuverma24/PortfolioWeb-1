@@ -2,6 +2,8 @@ const revealItems = document.querySelectorAll('.reveal');
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const root = document.documentElement;
 const scrollBar = document.querySelector('.scroll-bar');
+const storySections = [...document.querySelectorAll('main .section[id]')];
+const navLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
 
 if ('scrollRestoration' in window.history) {
   window.history.scrollRestoration = 'manual';
@@ -39,6 +41,7 @@ const hideIntro = () => {
   if (!introOverlay || introOverlay.classList.contains('is-hidden')) return;
   introOverlay.classList.add('is-hidden');
   document.body.classList.remove('intro-active');
+  document.body.classList.add('story-entered');
   scrollToTopImmediate();
 };
 
@@ -47,6 +50,9 @@ if (introOverlay) {
   window.setTimeout(hideIntro, introDelay);
   introOverlay.addEventListener('click', hideIntro);
   window.addEventListener('keydown', hideIntro, { once: true });
+} else {
+  document.body.classList.remove('intro-active');
+  document.body.classList.add('story-entered');
 }
 
 const observer = new IntersectionObserver(
@@ -63,9 +69,21 @@ const observer = new IntersectionObserver(
   }
 );
 
-revealItems.forEach((item, index) => {
-  item.style.transitionDelay = `${index * 0.05}s`;
-  observer.observe(item);
+const revealGroups = new Map();
+
+revealItems.forEach((item) => {
+  const group = item.closest('.hero-stage, .section, .footer') || document.body;
+  if (!revealGroups.has(group)) {
+    revealGroups.set(group, []);
+  }
+  revealGroups.get(group).push(item);
+});
+
+revealGroups.forEach((items) => {
+  items.forEach((item, index) => {
+    item.style.transitionDelay = `${Math.min(index, 5) * 0.08}s`;
+    observer.observe(item);
+  });
 });
 
 const tiltCards = document.querySelectorAll('.tilt');
@@ -118,6 +136,27 @@ if (!prefersReducedMotion) {
 }
 
 const heroStage = document.querySelector('[data-hero-stage]');
+let activeStoryId = '';
+
+const setActiveStorySection = (id) => {
+  if (activeStoryId === id) return;
+  activeStoryId = id;
+
+  storySections.forEach((section) => {
+    section.classList.toggle('is-story-active', section.id === id);
+  });
+
+  navLinks.forEach((link) => {
+    const isActive = link.getAttribute('href') === `#${id}`;
+    link.classList.toggle('is-active', isActive);
+
+    if (isActive) {
+      link.setAttribute('aria-current', 'location');
+    } else {
+      link.removeAttribute('aria-current');
+    }
+  });
+};
 
 let scrollRafId = null;
 const updateScroll = () => {
@@ -136,6 +175,19 @@ const updateScroll = () => {
     heroStage.style.setProperty('--hero-scale', `${1.05 + (heroProgress * 0.04)}`);
     heroStage.style.setProperty('--hero-content-shift', `${heroProgress * -54}px`);
     heroStage.style.setProperty('--hero-content-opacity', `${1 - (heroProgress * 0.92)}`);
+  }
+
+  if (storySections.length) {
+    const storyMarker = scrollTop + (window.innerHeight * 0.48);
+    let currentStoryId = '';
+
+    storySections.forEach((section) => {
+      if (storyMarker >= section.offsetTop) {
+        currentStoryId = section.id;
+      }
+    });
+
+    setActiveStorySection(currentStoryId);
   }
 
   scrollRafId = null;
