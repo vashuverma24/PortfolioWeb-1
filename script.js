@@ -4,7 +4,7 @@ const root = document.documentElement;
 const scrollBar = document.querySelector('.scroll-bar');
 const nav = document.querySelector('[data-nav]');
 const navToggle = document.querySelector('[data-nav-toggle]');
-const storySections = [...document.querySelectorAll('main .section[id]')];
+const storySections = [...document.querySelectorAll('main > .section[id]')];
 const navLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
 
 if ('scrollRestoration' in window.history) {
@@ -1375,6 +1375,20 @@ const buildHeatmap = (container, countByDate, options = {}) => {
   });
 };
 
+const scrollHeatmapToLatest = (container) => {
+  const scroller = container?.closest('.heatmap');
+  if (!scroller) return;
+
+  const snapToEnd = () => {
+    scroller.scrollLeft = scroller.scrollWidth - scroller.clientWidth;
+  };
+
+  window.requestAnimationFrame(() => {
+    snapToEnd();
+    window.requestAnimationFrame(snapToEnd);
+  });
+};
+
 const fetchGitHubHeatmap = async () => {
   if (!ghHeatmap) return;
   try {
@@ -1394,6 +1408,7 @@ const fetchGitHubHeatmap = async () => {
     }
 
     buildHeatmap(ghHeatmap, map, { days: 365, label: 'contributions' });
+    scrollHeatmapToLatest(ghHeatmap);
     setText(ghYearSubmissions, formatInteger(sumRecentActivity(map, 365)));
     const ghInsights = getActivityInsights(map, 365);
     setText(ghActiveDays, formatInteger(ghInsights.activeDays));
@@ -1403,6 +1418,16 @@ const fetchGitHubHeatmap = async () => {
     if (ghHeatmap) {
       ghHeatmap.classList.add('is-image');
       ghHeatmap.innerHTML = `<img src="https://ghchart.rshah.org/${ghUser}" alt="GitHub contribution heatmap" />`;
+      const fallbackImage = ghHeatmap.querySelector('img');
+      if (fallbackImage) {
+        if (fallbackImage.complete) {
+          scrollHeatmapToLatest(ghHeatmap);
+        } else {
+          fallbackImage.addEventListener('load', () => {
+            scrollHeatmapToLatest(ghHeatmap);
+          }, { once: true });
+        }
+      }
     }
     setText(ghYearSubmissions, '--');
     setText(ghActiveDays, '--');
@@ -1506,6 +1531,7 @@ const fetchLeetCodeHeatmap = async () => {
     }
 
     buildHeatmap(lcHeatmap, calendarMap, { days: 365, label: 'submissions' });
+    scrollHeatmapToLatest(lcHeatmap);
     setText(lcYearSubmissions, formatInteger(sumRecentActivity(calendarMap, 365)));
     const lcInsights = getActivityInsights(calendarMap, 365);
     setText(
