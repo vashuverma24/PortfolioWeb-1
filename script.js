@@ -2,6 +2,8 @@ const revealItems = document.querySelectorAll('.reveal');
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const root = document.documentElement;
 const scrollBar = document.querySelector('.scroll-bar');
+const nav = document.querySelector('[data-nav]');
+const navToggle = document.querySelector('[data-nav-toggle]');
 const storySections = [...document.querySelectorAll('main .section[id]')];
 const navLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
 
@@ -53,6 +55,47 @@ if (introOverlay) {
 } else {
   document.body.classList.remove('intro-active');
   document.body.classList.add('story-entered');
+}
+
+const setNavExpanded = (expanded) => {
+  if (!nav) return;
+  nav.classList.toggle('is-expanded', expanded);
+
+  if (navToggle) {
+    navToggle.setAttribute('aria-expanded', String(expanded));
+  }
+};
+
+if (nav && navToggle) {
+  navToggle.addEventListener('click', () => {
+    setNavExpanded(!nav.classList.contains('is-expanded'));
+  });
+
+  navLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 960) {
+        setNavExpanded(false);
+      }
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    if (window.innerWidth > 960) return;
+    if (nav.contains(event.target)) return;
+    setNavExpanded(false);
+  });
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      setNavExpanded(false);
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 960) {
+      setNavExpanded(false);
+    }
+  });
 }
 
 const observer = new IntersectionObserver(
