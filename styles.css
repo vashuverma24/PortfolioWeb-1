@@ -310,13 +310,13 @@ main {
   margin: 0;
   background: transparent;
   border: none;
-  padding: 0;
+  padding: clamp(18px, 3.2vw, 30px) clamp(16px, 3vw, 32px);
   border-radius: 0;
   backdrop-filter: none;
   box-shadow: none;
-  position: fixed;
-  top: clamp(18px, 3.2vw, 30px);
-  left: clamp(16px, 3vw, 32px);
+  position: absolute;
+  top: 0;
+  left: 0;
   transform: none;
   z-index: 100;
   isolation: isolate;
@@ -391,7 +391,7 @@ body.story-entered .nav-dock {
   appearance: none;
   border: none;
   cursor: pointer;
-  display: grid;
+  display: none !important;
   grid-template-columns: 20px;
   align-items: center;
   gap: 0;
@@ -403,6 +403,12 @@ body.story-entered .nav-dock {
   background: rgba(255, 255, 255, 0.03);
   color: var(--text);
   transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.nav:hover .nav-toggle,
+.nav:focus-within .nav-toggle,
+.nav.is-expanded .nav-toggle {
+  display: none !important;
 }
 
 .nav-toggle:hover {
@@ -501,6 +507,32 @@ body.story-entered .nav-dock {
   line-height: 1.1;
 }
 
+.nav-home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  min-height: 42px;
+  width: 42px;
+  padding: 0;
+  border-radius: 20px;
+  position: relative;
+  transition: color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: center;
+  z-index: 1;
+}
+
+.nav-home .nav-link-icon {
+  color: var(--accent-2);
+}
+
+.nav-home.is-active .nav-link-icon {
+  color: var(--text);
+}
+
 .nav-links {
   display: none;
   gap: 6px;
@@ -540,6 +572,7 @@ body.story-entered .nav-dock {
   text-transform: uppercase;
   text-align: center;
   z-index: 1;
+  background: transparent !important;
 }
 
 .nav-link-icon {
@@ -579,18 +612,26 @@ body.story-entered .nav-dock {
 
 .nav-links a:hover {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.04);
+  background: transparent !important;
   transform: translateX(0);
 }
 
 .nav-links a.is-active {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.07);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  background: transparent !important;
+  box-shadow: none;
 }
 
 .nav-links a.is-active .nav-link-icon {
+  color: var(--text);
+}
+
+.nav-links a[href="#top"] .nav-link-icon {
   color: var(--accent-2);
+}
+
+.nav-links a[href="#top"].is-active .nav-link-icon {
+  color: var(--text);
 }
 
 .nav-links a:hover .nav-link-icon svg,
