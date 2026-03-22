@@ -1884,12 +1884,14 @@ Remember: You represent Sachin's expertise and personality. Be confident in his 
     if (this.modal) {
       this.modal.removeAttribute('hidden');
       this.input.focus();
+      document.body.style.overflow = 'hidden';
     }
   },
 
   close() {
     if (this.modal) {
       this.modal.setAttribute('hidden', '');
+      document.body.style.overflow = '';
     }
   },
 
@@ -2047,9 +2049,9 @@ Remember: You represent Sachin's expertise and personality. Be confident in his 
       suggestions = suggestionPool.leolingo;
     } else if (msg.includes('preplus') || history.includes('preplus')) {
       suggestions = suggestionPool.preplus;
+    } else if (msg.includes('preplus') || history.includes('preplus')) {
+      suggestions = suggestionPool.preplus;
     } else if (msg.includes('mediops') || history.includes('mediops')) {
-      suggestions = suggestionPool.mediops;
-    } else if (msg.includes('heymadhav') || history.includes('heymadhav')) {
       suggestions = suggestionPool.heymadhav;
     } else if (msg.includes('swiftui') || history.includes('swiftui')) {
       suggestions = suggestionPool.swiftui;
