@@ -30,7 +30,42 @@ const ensureStartAtTop = () => {
   window.setTimeout(scrollToTopImmediate, 180);
 };
 
-window.addEventListener('DOMContentLoaded', ensureStartAtTop);
+// Preload all critical images
+const preloadImages = async () => {
+  const imageUrls = [
+    'leolingo.png',
+    'preplus.png',
+    'mediops.png',
+    'heymadhav.png',
+    'HeyMojo.gif',
+    'certificateimage.png',
+    'ReportCard1.jpg',
+    'ReportCard2.jpg',
+    'ReportCard3.jpg',
+    'ReportCard4.jpg',
+    'ReportCard5.jpg',
+    'ReportCard6.jpg',
+    'ReportCard7.jpg',
+  ];
+
+  return Promise.all(
+    imageUrls.map(url => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = resolve;
+        img.onerror = resolve;
+        img.src = url;
+      });
+    })
+  );
+};
+
+window.addEventListener('DOMContentLoaded', async () => {
+  // Start preloading images immediately
+  preloadImages().catch(console.error);
+  ensureStartAtTop();
+});
+
 window.addEventListener('load', ensureStartAtTop);
 window.addEventListener('pageshow', (event) => {
   if (event.persisted) {
@@ -1309,9 +1344,45 @@ const fetchLeetCodeStats = async () => {
   setText(lcStatus, 'Updated just now');
 };
 
+// Initialize LeetCode visuals immediately
 refreshLeetCodeVisuals();
-fetchGitHubStats();
-fetchLeetCodeStats();
+
+// Optimize scroll performance with throttling
+let scrollTimeout;
+let lastScrollTime = 0;
+const SCROLL_THROTTLE = 16; // ~60fps
+
+function throttledScroll() {
+  const now = Date.now();
+  if (now - lastScrollTime >= SCROLL_THROTTLE) {
+    updateScrollProgress();
+    updateCursorGlow();
+    updateParallax();
+    observeStoryElements();
+    lastScrollTime = now;
+  }
+}
+
+window.addEventListener('scroll', throttledScroll, { passive: true });
+
+// Start loading all data on page load
+window.addEventListener('DOMContentLoaded', async () => {
+  // Load GitHub and LeetCode stats in parallel
+  Promise.all([
+    fetchGitHubStats(),
+    fetchLeetCodeStats()
+  ]).then(() => {
+    console.log('GitHub and LeetCode stats loaded');
+  });
+
+  // Load heatmaps in parallel
+  Promise.all([
+    fetchGitHubHeatmap(),
+    fetchLeetCodeHeatmap()
+  ]).then(() => {
+    console.log('Heatmaps loaded');
+  });
+}, { once: true });
 
 const toDateKey = (date) => date.toISOString().slice(0, 10);
 
