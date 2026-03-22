@@ -811,10 +811,9 @@ const ghRepos = document.querySelector('[data-gh-repos]');
 const ghFollowers = document.querySelector('[data-gh-followers]');
 const ghStatus = document.querySelector('[data-gh-status]');
 const ghTotalStars = document.querySelector('[data-gh-total-stars]');
-const ghTopRepo = document.querySelector('[data-gh-top-repo]');
+const ghTopRepo = document.querySelector('[data-gh-active-repos]');
 const ghActiveRepos = document.querySelector('[data-gh-active-repos]');
-const ghLanguageCount = document.querySelector('[data-gh-language-count]');
-const ghLanguages = document.querySelector('[data-gh-languages]');
+const ghLanguageCount = document.querySelector('[data-gh-languages]');
 const ghActiveDays = document.querySelector('[data-gh-active-days]');
 const ghLongestStreak = document.querySelector('[data-gh-longest-streak]');
 const ghYearSubmissions = document.querySelector('[data-gh-year-submissions]');
@@ -1591,3 +1590,623 @@ const fetchLeetCodeHeatmap = async () => {
 
 fetchGitHubHeatmap();
 fetchLeetCodeHeatmap();
+
+// AI Chatbot Module
+// The AI is trained on Sachin's complete professional context (system prompt below).
+// It generates responses autonomously based on his expertise, projects, and personality.
+// The AI speaks on behalf of Sachin using the comprehensive information provided.
+const AIChat = {
+  modal: document.querySelector('[data-ai-modal]'),
+  backdrop: document.querySelector('.ai-chatbot-backdrop'),
+  messagesContainer: document.querySelector('[data-ai-messages]'),
+  form: document.querySelector('[data-ai-form]'),
+  input: document.querySelector('[data-ai-input]'),
+  sendBtn: document.querySelector('.ai-chatbot-send'),
+  suggestionsContainer: document.querySelector('[data-ai-suggestions]'),
+  openBtns: document.querySelectorAll('[data-ai-open]'),
+  closeBtns: document.querySelectorAll('[data-ai-close]'),
+  isLoading: false,
+  chatHistory: [],
+  systemPrompt: `You are Sachin Tarkar's AI assistant, trained on his complete professional profile, projects, and expertise. You embody his personality, values, and communication style. Provide detailed, contextual responses based on this comprehensive information.
+
+=== PERSONAL INFO ===
+Name: Sachin Tarkar
+Email: tarkarsachin842@gmail.com
+Phone: +91 9568635207
+LinkedIn: linkedin.com/in/sachin-tarkar/
+GitHub: github.com/SachinTarkar842
+Instagram: @sachinarjunsingh
+Location: Galgotias University, India
+
+=== EDUCATION ===
+Degree: B.Tech in Computer Science & Engineering
+University: Galgotias University, India
+Duration: 2022–2026 (Currently in 7th Semester)
+CGPA: 8.29/10.0
+Board: CBSE
+- 12th Grade (2021): 70.4%
+- 10th Grade (2019): 73.6%
+
+Special Recognition:
+- Selected for Apple's iOS Development Center at Galgotias University
+- Competitive selection: 100 students chosen out of 6000+ applicants
+- Access to industry-grade mentorship and real-world project experience
+
+=== PROFESSIONAL EXPERIENCE ===
+
+1. iOS Developer Intern – Infosys Ltd. (Mysore, India)
+   - Duration: Recent internship (Full Stack iOS Development)
+   - Role: iOS App Developer & Scrum Master
+   - Key Contributions:
+     * Developed SwiftUI modules for Hospital Management System app
+     * Managed role-based user dashboards (patients, doctors, admins)
+     * Acted as Scrum Master for 8-person team
+     * Facilitated Agile ceremonies and sprint planning
+     * Managed Git operations (branching, PRs, conflict resolution)
+     * Collaborated with designers and backend engineers
+     * Ensured on-time delivery of production-grade features
+   - Certificate: Earned Internship Certificate from Infosys
+
+2. iOS Developer – Apple's iOS Development Center (Galgotias University)
+   - Hands-on experience with real-world iOS development
+   - Built multiple production-ready applications
+   - Mentorship from industry experts
+   - Access to latest Apple development tools and frameworks
+
+=== PROJECTS ===
+
+1. LeoLingo – Speech Therapy iPad App
+   Domain: Healthcare & Education (Speech Therapy)
+   Platform: iPadOS
+   Tech Stack: SwiftUI, Firebase, Real-time Audio Processing
+   Key Features:
+   - Interactive speech therapy games designed for children with speech delay
+   - Real-time vocal feedback system
+   - Progress tracking for parents and therapists
+   - Community interaction space
+   - Kid-friendly UI with calming design
+   - Parent/Therapist dashboards for monitoring
+   Design Philosophy: Accessible, engaging, therapeutic
+   GitHub: github.com/SachinTarkar842/LeoLingo
+   Impact: Combines education, healthcare, and inclusive design
+
+2. PrePlus – AI Smart Study Companion
+   Domain: EdTech & Artificial Intelligence
+   Platform: iOS
+   Tech Stack: SwiftUI, Supabase, AI Integration, Prompt Engineering
+   Key Features:
+   - AI-powered tutor for instant homework help
+   - Smart Notes system with auto-organization
+   - Intelligent quiz generation from study materials
+   - Personalized learning recommendations
+   - Performance analytics and progress tracking
+   - Topic-specific study paths
+   Design Philosophy: Simplify studying, reduce cognitive load
+   GitHub: github.com/SachinTarkar842/Preplus
+   Problem Solved: Students wasting time organizing notes instead of learning
+
+3. MediOps – Hospital Management System
+   Domain: Healthcare Operations
+   Platform: iOS (Initially UIKit, evolved with Swift)
+   Tech Stack: Swift, UIKit, Supabase (PostgreSQL), REST APIs
+   Key Features:
+   - Multi-role dashboard system (Patients, Doctors, Administrators)
+   - Appointment scheduling and management
+   - Patient medical records system
+   - Doctor availability and scheduling
+   - Admin oversight and analytics
+   - Secure authentication and role-based access control
+   Design Philosophy: Streamline hospital workflows for all stakeholders
+   Development: Built during Infosys internship
+   Learning: User-centered design for multiple personas
+
+4. HeyMadhav – Bhagavad Gita Learning App
+   Domain: Wellness, Spirituality & Self-Development
+   Platform: iOS
+   Tech Stack: SwiftUI, AI Integration, Custom UI Design
+   Key Features:
+   - Daily Bhagavad Gita verses with explanations
+   - Reflections and contemplative prompts
+   - AI-powered Q&A system for spiritual questions
+   - Personalized daily insights
+   - Calming, minimal UI design
+   - Progress tracking for spiritual learning journey
+   Design Philosophy: Create serene, inviting experience for spiritual growth
+   GitHub: github.com/SachinTarkar842/HeyMadhav
+   Personal Significance: Blends spirituality with modern technology
+
+=== TECHNICAL SKILLS ===
+
+Mobile Development:
+- SwiftUI (Advanced) – Preferred framework for new projects
+- UIKit (Proficient) – For complex view hierarchies
+- Swift (Advanced) – 3+ years of hands-on experience
+- iOS SDK & APIs
+- Real-time Audio/Speech Processing
+- Gesture Recognition & Touch Handling
+
+Backend & Databases:
+- Firebase (Realtime Database, Cloud Firestore, Storage, Auth)
+- Supabase (PostgreSQL, Real-time subscriptions, Auth)
+- REST APIs & JSON
+- API Integration & Authentication
+- Data Synchronization
+
+AI & Prompt Engineering:
+- Prompt Engineering for API integration
+- AI/ML API integration (Chat models, embeddings)
+- LLM prompt optimization
+
+Design Tools:
+- Figma (Wireframing, prototyping, design systems)
+- Canva (Quick graphics & marketing materials)
+- Keynote (Presentations & animated prototypes)
+
+Development Tools:
+- Xcode (IDE, debugging, profiling)
+- VS Code (Code editing)
+- Git & GitHub (Version control, collaboration)
+- GitHub (Repository management, CI/CD basics)
+- JIRA (Agile project management)
+
+Computer Science Fundamentals:
+- Data Structures (Arrays, Linked Lists, Trees, Graphs, Hash Tables)
+- Algorithms (Sorting, Searching, Dynamic Programming)
+- Object-Oriented Programming (OOP principles)
+- Database Management Systems (DBMS)
+- Operating Systems (OS concepts)
+- System Design basics
+
+Soft Skills:
+- Agile & Scrum (Experienced as Scrum Master)
+- Team Collaboration & Communication
+- Leadership (Led teams, facilitated ceremonies)
+- Problem-solving & Critical Thinking
+- User-centered Design Thinking
+
+=== DESIGN PHILOSOPHY ===
+- Believes in human-centered design: "Understand the user first"
+- Clean, minimal UI with intuitive interactions
+- Motion design that feels natural and purposeful
+- Accessibility and inclusivity across all designs
+- Design-to-code pipeline: Prototype in Figma, implement in SwiftUI
+- Intersection of code and design – making apps both beautiful and technically excellent
+- Problem-solving approach: "Great UX isn't about making things look pretty – it's about solving real problems"
+
+=== CORE VALUES & APPROACH ===
+1. Impact-Driven Development: "Apps should solve real problems for real users"
+2. User First: Always start with understanding user needs and pain points
+3. Quality Over Speed: Ship well-crafted products, not quick hacks
+4. Continuous Learning: Always exploring new technologies and best practices
+5. Collaborative: Works well with designers, developers, and stakeholders
+6. Passionate: Genuine enthusiasm for iOS development and user experience
+
+=== COMMUNICATION STYLE ===
+- Friendly, approachable, and genuine
+- Conversational language (not corporate jargon)
+- Humble about knowledge, eager to learn
+- Specific examples from projects when explaining concepts
+- Passionate when discussing iOS development and design
+- No emojis
+- Concise but warm responses
+- Provides context and "why" behind decisions
+
+=== PORTFOLIO PRESENCE ===
+- Portfolio Website: Portfolio website showcasing all projects
+- GitHub: Active contributor with multiple production apps
+- LinkedIn: Professional network and endorsements
+- Dribbble: dribbble.com/sachin-tarkar (Design portfolio)
+- Email: Always responsive to opportunities and inquiries
+
+=== KEY STATISTICS ===
+- 4 major production iOS apps built
+- 7+ semesters of CS education completed
+- 100 out of 6000+ selected for Apple's iOS Dev Center
+- 8-person team led at Infosys
+- 8.29 CGPA maintained throughout studies
+- Multiple internships and hands-on experience
+
+=== RESPONSE GUIDELINES ===
+1. Always be specific – reference actual projects, technologies, and experiences
+2. Provide context – explain the "why" behind decisions
+3. Share learnings – discuss challenges faced and how they were overcome
+4. Be authentic – speak from real experience, not hypothetical knowledge
+5. Connect dots – link questions to relevant projects or experience
+6. Offer value – give actionable insights when possible
+7. Encourage conversation – ask follow-up questions when appropriate
+8. For opportunities – be enthusiastic but professional
+9. For technical questions – provide detailed explanations with examples
+10. For questions outside scope – gracefully suggest ways to connect directly
+
+=== EXAMPLE RESPONSE PATTERNS ===
+"When I built LeoLingo, I learned that [specific insight from project]..."
+"In my Infosys internship, I discovered that [team/process insight]..."
+"I'm particularly passionate about [specific technology/approach] because..."
+"The challenge with [project] was [problem], so I [solution]..."
+"What I found works best for [topic] is [approach from experience]..."
+
+Remember: You represent Sachin's expertise and personality. Be confident in his experience, specific with examples, and genuine in interactions. Every response should reflect his passion for creating impactful iOS experiences.`,
+  grokApiKey: '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',
+
+  init() {
+    this.setupEventListeners();
+    this.loadChatHistory();
+    this.restoreMessagesUI();
+  },
+
+  loadChatHistory() {
+    try {
+      const stored = sessionStorage.getItem('aiChatHistory');
+      if (stored) {
+        this.chatHistory = JSON.parse(stored);
+      }
+    } catch (error) {
+      console.error('Failed to load chat history:', error);
+      this.chatHistory = [];
+    }
+  },
+
+  saveChatHistory() {
+    try {
+      sessionStorage.setItem('aiChatHistory', JSON.stringify(this.chatHistory));
+    } catch (error) {
+      console.error('Failed to save chat history:', error);
+    }
+  },
+
+  restoreMessagesUI() {
+    if (this.chatHistory.length === 0) return;
+
+    this.chatHistory.forEach((msg) => {
+      const sender = msg.role === 'user' ? 'user' : 'bot';
+      this.addMessage(msg.content, sender);
+    });
+  },
+
+  setupEventListeners() {
+    this.openBtns.forEach(btn => btn.addEventListener('click', () => this.open()));
+    this.closeBtns.forEach(btn => btn.addEventListener('click', () => this.close()));
+    this.backdrop.addEventListener('click', () => this.close());
+    this.form.addEventListener('submit', (e) => this.handleSendMessage(e));
+    
+    // Setup suggestion buttons
+    const suggestionBtns = this.suggestionsContainer.querySelectorAll('.ai-suggestion-btn');
+    suggestionBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const suggestion = btn.dataset.suggestion;
+        this.input.value = suggestion;
+        this.handleSendMessage({ preventDefault: () => {} });
+      });
+    });
+  },
+
+  open() {
+    if (this.modal) {
+      this.modal.removeAttribute('hidden');
+      this.input.focus();
+    }
+  },
+
+  close() {
+    if (this.modal) {
+      this.modal.setAttribute('hidden', '');
+    }
+  },
+
+  async handleSendMessage(e) {
+    e.preventDefault();
+    const message = this.input.value.trim();
+    if (!message || this.isLoading) return;
+
+    this.input.value = '';
+    this.addMessage(message, 'user');
+    this.chatHistory.push({ role: 'user', content: message });
+    this.isLoading = true;
+    this.sendBtn.disabled = true;
+    
+    // Hide suggestions after first message
+    if (this.suggestionsContainer.style.display !== 'none') {
+      this.suggestionsContainer.style.display = 'none';
+    }
+
+    try {
+      const response = await this.getGrokResponse(message);
+      this.addMessage(response, 'bot');
+      this.chatHistory.push({ role: 'assistant', content: response });
+      this.saveChatHistory();
+    } catch (error) {
+      console.error('Chat error:', error);
+      let errorMsg = 'Unable to respond right now. ';
+      
+      if (error.message.includes('Rate limit') || error.message.includes('429')) {
+        errorMsg += 'API is busy. Reach Sachin: +91 9568635207 or tarkarsachin842@gmail.com';
+      } else {
+        errorMsg += 'Try again or contact: tarkarsachin842@gmail.com';
+      }
+      
+      this.addMessage(errorMsg, 'bot');
+    } finally {
+      this.isLoading = false;
+      this.sendBtn.disabled = false;
+      this.input.focus();
+    }
+  },
+
+  addMessage(text, sender) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `ai-message ai-message-${sender}`;
+    messageDiv.innerHTML = `<p>${this.parseMarkdown(text)}</p>`;
+    this.messagesContainer.appendChild(messageDiv);
+    
+    // Add follow-up suggestions after bot messages
+    if (sender === 'bot') {
+      this.addFollowUpSuggestions(text);
+    }
+    
+    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+  },
+
+  parseMarkdown(text) {
+    // Escape HTML first
+    let escaped = this.escapeHtml(text);
+    // Convert **bold** to <strong>bold</strong>
+    escaped = escaped.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    // Convert *italic* to <em>italic</em>
+    escaped = escaped.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    return escaped;
+  },
+
+  addFollowUpSuggestions(botMessage) {
+    const suggestions = this.generateFollowUpSuggestions(botMessage);
+    if (!suggestions.length) return;
+
+    const suggestionsDiv = document.createElement('div');
+    suggestionsDiv.className = 'ai-message ai-follow-up-suggestions';
+    
+    suggestions.forEach(suggestion => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ai-follow-up-btn';
+      btn.textContent = suggestion;
+      btn.addEventListener('click', () => {
+        this.input.value = suggestion;
+        this.handleSendMessage({ preventDefault: () => {} });
+      });
+      suggestionsDiv.appendChild(btn);
+    });
+
+    this.messagesContainer.appendChild(suggestionsDiv);
+    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+  },
+
+  generateFollowUpSuggestions(botMessage) {
+    const msg = botMessage.toLowerCase();
+    const history = this.chatHistory.map(m => m.content.toLowerCase()).join(' ');
+    
+    // Track what suggestions have already been shown
+    const recentSuggestions = new Set();
+    this.messagesContainer.querySelectorAll('.ai-follow-up-btn').forEach(btn => {
+      recentSuggestions.add(btn.textContent);
+    });
+    
+    const suggestionPool = {
+      leolingo: [
+        'What inspired this speech therapy idea?',
+        'How does real-time vocal feedback work?',
+        'What challenges did you face building it?',
+        'How do therapists track progress?'
+      ],
+      preplus: [
+        'How does the AI tutor learn from users?',
+        'Tell me about quiz generation',
+        'How do users organize notes?',
+        'What feedback have you received?'
+      ],
+      mediops: [
+        'How do you handle patient privacy?',
+        'What was the biggest technical challenge?',
+        'How many users tested it?',
+        'Any plans to expand features?'
+      ],
+      heymadhav: [
+        'How do you select daily verses?',
+        'What makes the Q&A system unique?',
+        'Is the app live on the App Store?',
+        'How do users engage with it?'
+      ],
+      swiftui: [
+        'What SwiftUI features do you love?',
+        'UIKit vs SwiftUI - your take?',
+        'Any SwiftUI gotchas you encountered?',
+        'Future of SwiftUI in your work?'
+      ],
+      design: [
+        'What\'s your design philosophy?',
+        'How do you approach accessibility?',
+        'Figma to code workflow?',
+        'How do you test UX?'
+      ],
+      infosys: [
+        'What did you learn at Infosys?',
+        'How was leading an 8-person team?',
+        'Any lessons from Scrum Master role?',
+        'What was your favorite project there?'
+      ],
+      apple: [
+        'How competitive was the selection?',
+        'Best part of Apple Dev Center?',
+        'Mentorship experience there?',
+        'How has it shaped your career?'
+      ]
+    };
+    
+    let suggestions = [];
+    
+    // Context-aware suggestions
+    if (msg.includes('leolingo') || history.includes('leolingo')) {
+      suggestions = suggestionPool.leolingo;
+    } else if (msg.includes('preplus') || history.includes('preplus')) {
+      suggestions = suggestionPool.preplus;
+    } else if (msg.includes('mediops') || history.includes('mediops')) {
+      suggestions = suggestionPool.mediops;
+    } else if (msg.includes('heymadhav') || history.includes('heymadhav')) {
+      suggestions = suggestionPool.heymadhav;
+    } else if (msg.includes('swiftui') || history.includes('swiftui')) {
+      suggestions = suggestionPool.swiftui;
+    } else if (msg.includes('design') || history.includes('design process')) {
+      suggestions = suggestionPool.design;
+    } else if (msg.includes('infosys') || history.includes('infosys')) {
+      suggestions = suggestionPool.infosys;
+    } else if (msg.includes('apple') || msg.includes('galgotias') || history.includes('apple development')) {
+      suggestions = suggestionPool.apple;
+    } else {
+      // Default suggestions for general conversation
+      suggestions = [
+        'What are you currently building?',
+        'What\'s your next tech to learn?',
+        'How do you approach problem-solving?',
+        'What\'s your ideal project?',
+        'How did iOS become your focus?',
+        'What\'s your proudest achievement?'
+      ];
+    }
+    
+    // Filter out already shown suggestions
+    const filtered = suggestions.filter(s => !recentSuggestions.has(s));
+    
+    // Return up to 3 new suggestions, or fallback to fresh ones
+    return filtered.slice(0, 3).length > 0 
+      ? filtered.slice(0, 3) 
+      : suggestions.slice(0, 3);
+  },
+
+  async getGrokResponse(userMessage) {
+    const maxRetries = 2;
+    let retryCount = 0;
+    let baseDelay = 2000;
+
+    while (retryCount < maxRetries) {
+      try {
+        if (retryCount > 0) {
+          const delay = baseDelay * Math.pow(2, retryCount - 1);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
+
+        const url = 'https://api.groq.com/openai/v1/chat/completions';
+        
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.grokApiKey}`
+        };
+
+        const messages = [
+          {
+            role: 'system',
+            content: this.systemPrompt
+          }
+        ];
+
+        // Minimal history (last 1 exchange only)
+        const recentHistory = this.chatHistory.slice(-2);
+        messages.push(...recentHistory);
+
+        messages.push({
+          role: 'user',
+          content: userMessage
+        });
+
+        const body = {
+          model: 'llama-3.1-8b-instant',
+          messages: messages,
+          max_tokens: 60,
+          temperature: 0.5
+        };
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify(body),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (response.status === 429) {
+          retryCount++;
+          if (retryCount >= maxRetries) {
+            return this.getFallbackResponse(userMessage);
+          }
+          continue;
+        }
+
+        if (!response.ok) {
+          console.error('Groq API Error:', response.status);
+          if (retryCount >= maxRetries - 1) {
+            return this.getFallbackResponse(userMessage);
+          }
+          retryCount++;
+          continue;
+        }
+
+        const data = await response.json();
+        
+        if (!data.choices?.[0]?.message?.content) {
+          if (retryCount >= maxRetries - 1) {
+            return this.getFallbackResponse(userMessage);
+          }
+          retryCount++;
+          continue;
+        }
+
+        return data.choices[0].message.content;
+      } catch (error) {
+        console.error('Groq Error:', error.message);
+        if (retryCount >= maxRetries - 1) {
+          return this.getFallbackResponse(userMessage);
+        }
+        retryCount++;
+      }
+    }
+
+    return this.getFallbackResponse(userMessage);
+  },
+
+  getFallbackResponse(userMessage) {
+    const msg = userMessage.toLowerCase();
+    const responses = {
+      projects: 'I\'ve built 4 production iOS apps: LeoLingo (speech therapy), PrePlus (AI study tool), MediOps (hospital management), and HeyMadhav (Gita learning). Which interests you most?',
+      experience: 'I interned at Infosys as iOS Developer & Scrum Master, led an 8-person team, and was selected for Apple\'s iOS Development Center (100 out of 6000+). Happy to share more!',
+      skills: 'Advanced in SwiftUI & Swift, proficient with UIKit, Firebase, Supabase, and AI integration. Comfortable with Figma, Git, and Agile methodologies.',
+      contact: 'You can reach me at tarkarsachin842@gmail.com, +91 9568635207, or linkedin.com/in/sachin-tarkar/'
+    };
+
+    if (msg.includes('project') || msg.includes('build') || msg.includes('app')) {
+      return responses.projects;
+    }
+    if (msg.includes('experience') || msg.includes('intern') || msg.includes('work')) {
+      return responses.experience;
+    }
+    if (msg.includes('skill') || msg.includes('tech') || msg.includes('stack')) {
+      return responses.skills;
+    }
+    if (msg.includes('contact') || msg.includes('reach') || msg.includes('email')) {
+      return responses.contact;
+    }
+
+    return 'Great question! I\'d love to discuss this in detail. Feel free to reach out directly at tarkarsachin842@gmail.com!';
+  },
+
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+};
+
+// Initialize AI Chat
+document.addEventListener('DOMContentLoaded', () => {
+  AIChat.init();
+});
