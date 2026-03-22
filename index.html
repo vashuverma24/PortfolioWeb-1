@@ -152,6 +152,55 @@
             </div>
           </div>
         </div>
+        <button class="resume-overlay-button" type="button" data-resume-open aria-label="Open resume">
+          <span class="resume-button-text">Resume</span>
+          <svg class="resume-button-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="12" y1="19" x2="12" y2="11"></line>
+            <line x1="9" y1="16" x2="15" y2="16"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="resume-modal-overlay" data-resume-modal hidden>
+        <div class="resume-modal-backdrop" data-resume-close></div>
+        <div class="resume-modal-content" role="dialog" aria-modal="true" aria-labelledby="resume-modal-heading">
+          <div class="resume-modal-header">
+            <h2 id="resume-modal-heading">My Resume</h2>
+            <button class="resume-modal-close" type="button" data-resume-close aria-label="Close resume">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+          <div class="resume-modal-body">
+            <iframe
+              title="Sachin Tarkar resume"
+              src="https://drive.google.com/file/d/15sK4-StduFAxBsbAufwuUE7k3eVgjyS5/preview"
+              loading="lazy"
+            ></iframe>
+          </div>
+          <div class="resume-modal-actions">
+            <a
+              class="button primary"
+              href="https://drive.google.com/file/d/15sK4-StduFAxBsbAufwuUE7k3eVgjyS5/view?usp=share_link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Open in Google Drive
+            </a>
+            <a
+              class="button ghost"
+              href="https://drive.google.com/uc?export=download&id=15sK4-StduFAxBsbAufwuUE7k3eVgjyS5"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Download
+            </a>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -1050,49 +1099,7 @@
         </div>
       </section>
 
-      <section class="section resume" id="resume">
-        <div class="section-header reveal" data-chapter="08">
-          <p class="eyebrow">Resume</p>
-          <h2>Preview my resume instantly.</h2>
-        </div>
-        <div class="resume-panel">
-          <details class="resume-toggle">
-            <summary>
-              <span>Show Resume Preview</span>
-              <span class="resume-toggle-icon" aria-hidden="true"></span>
-            </summary>
-            <div class="resume-card reveal">
-              <div class="resume-actions">
-                <a
-                  class="button primary"
-                  href="https://drive.google.com/file/d/15sK4-StduFAxBsbAufwuUE7k3eVgjyS5/view?usp=share_link"
-                  target="_blank"
-                  rel="noreferrer"
-                  >Open in New Tab</a
-                >
-                <a
-                  class="button ghost"
-                  href="https://drive.google.com/uc?export=download&id=15sK4-StduFAxBsbAufwuUE7k3eVgjyS5"
-                  target="_blank"
-                  rel="noreferrer"
-                  >Download Resume</a
-                >
-              </div>
-              <div class="resume-preview">
-                <iframe
-                  title="Sachin Tarkar resume preview"
-                  src="https://drive.google.com/file/d/15sK4-StduFAxBsbAufwuUE7k3eVgjyS5/preview"
-                  loading="lazy"
-                ></iframe>
-                <p class="resume-fallback">
-                  If the preview does not load, use the buttons above to open or
-                  download the resume.
-                </p>
-              </div>
-            </div>
-          </details>
-        </div>
-      </section>
+
     </main>
 
     <footer class="footer">

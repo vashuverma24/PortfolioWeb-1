@@ -677,6 +677,44 @@ const updateViewCount = async () => {
 
 updateViewCount();
 
+// Resume Modal Handler
+const resumeOpenButtons = document.querySelectorAll('[data-resume-open]');
+const resumeModal = document.querySelector('[data-resume-modal]');
+const resumeCloseButtons = document.querySelectorAll('[data-resume-close]');
+const resumeBackdrop = document.querySelector('.resume-modal-backdrop');
+
+const openResumeModal = () => {
+  if (resumeModal) {
+    resumeModal.hidden = false;
+    document.body.classList.add('modal-open');
+  }
+};
+
+const closeResumeModal = () => {
+  if (resumeModal) {
+    resumeModal.hidden = true;
+    document.body.classList.remove('modal-open');
+  }
+};
+
+resumeOpenButtons.forEach((button) => {
+  button.addEventListener('click', openResumeModal);
+});
+
+resumeCloseButtons.forEach((button) => {
+  button.addEventListener('click', closeResumeModal);
+});
+
+if (resumeBackdrop) {
+  resumeBackdrop.addEventListener('click', closeResumeModal);
+}
+
+window.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && resumeModal && !resumeModal.hidden) {
+    closeResumeModal();
+  }
+});
+
 const ghUser = 'SachinTarkar842';
 const lcUser = 'tarkarsachin842';
 
