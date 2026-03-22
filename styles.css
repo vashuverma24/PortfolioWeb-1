@@ -307,6 +307,7 @@ main {
   justify-content: flex-start;
   gap: 0;
   width: auto;
+  height: auto;
   margin: 0;
   background: transparent;
   border: none;
@@ -314,11 +315,16 @@ main {
   border-radius: 0;
   backdrop-filter: none;
   box-shadow: none;
-  position: absolute;
+  position: fixed;
   top: clamp(18px, 3.2vw, 30px);
   left: clamp(16px, 3vw, 32px);
-  z-index: 10;
+  z-index: 100;
   isolation: isolate;
+  pointer-events: none;
+}
+
+.nav * {
+  pointer-events: auto;
 }
 
 html[data-theme='light'] .nav {
@@ -328,34 +334,45 @@ html[data-theme='light'] .nav {
 }
 
 .nav-dock {
-  width: 64px;
+  width: 60px;
   padding: 10px;
-  border-radius: 26px;
-  background: rgba(10, 15, 23, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  background: rgba(10, 15, 23, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(14px) saturate(1.04);
   box-shadow:
     0 16px 28px rgba(4, 8, 16, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 8px;
   overflow: hidden;
   transition:
-    width 0.42s var(--ease-story),
+    width 0.3s var(--ease-story),
     background 0.28s ease,
     box-shadow 0.28s ease,
     border-color 0.28s ease;
+  pointer-events: auto;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .nav:hover .nav-dock,
 .nav:focus-within .nav-dock,
 .nav.is-expanded .nav-dock {
-  width: 206px;
-  background: rgba(10, 15, 23, 0.44);
-  border-color: rgba(255, 255, 255, 0.12);
+  width: 240px;
+  height: auto;
+  max-height: calc(100vh - 60px);
+  align-items: flex-start;
+  padding: 14px 12px;
+  border-radius: 18px;
+  background: rgba(10, 15, 23, 0.95);
+  border-color: rgba(255, 255, 255, 0.14);
   box-shadow:
-    0 20px 34px rgba(4, 8, 16, 0.22),
+    0 20px 60px rgba(4, 8, 16, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 body.story-entered .nav-dock {
@@ -707,7 +724,7 @@ html[data-theme='light'] .cta.secondary {
     clamp(120px, 18vh, 168px)
     clamp(24px, 6vw, 84px)
     clamp(36px, 8vh, 64px)
-    clamp(104px, 11vw, 148px);
+    clamp(24px, 6vw, 84px);
   position: relative;
   z-index: 1;
 }
@@ -3671,7 +3688,7 @@ html[data-theme='light'] .project-list li::before {
 .contact {
   min-height: min(100svh, 1000px);
   grid-template-columns: 1fr;
-  gap: clamp(32px, 5vw, 60px);
+  gap: clamp(48px, 8vw, 80px);
   align-items: start;
   padding-top: clamp(110px, 13vh, 142px);
   padding-bottom: clamp(80px, 11vh, 116px);
@@ -3746,6 +3763,7 @@ html[data-theme='light'] .project-list li::before {
   gap: 32px;
   width: 100%;
   max-width: 500px;
+  margin-top: 24px;
 }
 
 .contact-card {
@@ -4581,7 +4599,19 @@ html[data-theme='light'] .report-modal-close {
   .nav:hover .nav-dock,
   .nav:focus-within .nav-dock,
   .nav.is-expanded .nav-dock {
-    width: 188px;
+    width: auto;
+    height: auto;
+    max-height: calc(100vh - 100px);
+    flex-direction: column;
+    padding: 12px;
+    border-radius: 18px;
+    background: rgba(10, 15, 23, 0.92);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 20px 60px rgba(4, 8, 16, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .nav-actions {
@@ -4885,7 +4915,18 @@ html[data-theme='light'] .report-modal-close {
   .nav:hover .nav-dock,
   .nav:focus-within .nav-dock,
   .nav.is-expanded .nav-dock {
-    width: 176px;
+    width: auto;
+    height: auto;
+    max-height: calc(100vh - 80px);
+    flex-direction: column;
+    padding: 12px;
+    border-radius: 18px;
+    background: rgba(10, 15, 23, 0.95);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 20px 60px rgba(4, 8, 16, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    overflow-y: auto;
   }
 
   .nav-links {
