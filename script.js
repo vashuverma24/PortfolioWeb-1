@@ -1331,7 +1331,7 @@ const fetchLeetCodeStats = async () => {
     lcRankMeta,
     safeTopPercent !== null
       ? `Top ${safeTopPercent < 10 ? safeTopPercent.toFixed(1) : safeTopPercent.toFixed(0)}%`
-      : 'Contest rank snapshot'
+      : ''
   );
 
   const difficultyScore =
