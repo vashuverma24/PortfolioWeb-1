@@ -13,7 +13,7 @@
     <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png?v=3" />
     <link rel="icon" type="image/png" sizes="256x256" href="favicon-256.png?v=3" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png?v=3" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20260328g" />
   </head>
   <body>
     <div class="page-shell">
@@ -548,18 +548,17 @@
     <button
       class="ask-ai-launcher"
       type="button"
-      data-modal-open="ask-ai-modal"
       data-ask-ai-open
     >
       Ask AI
     </button>
 
-    <div class="stats-modal ask-ai-modal" id="ask-ai-modal" data-modal hidden>
-      <div class="stats-modal-panel ask-ai-panel" role="dialog" aria-modal="true" aria-labelledby="ask-ai-title">
+    <div class="ask-ai-drawer" data-ask-ai-drawer hidden>
+      <div class="ask-ai-panel" role="dialog" aria-modal="false" aria-labelledby="ask-ai-title">
         <button
-          class="stats-modal-close"
+          class="ask-ai-close"
           type="button"
-          data-modal-close
+          data-ask-ai-close
           aria-label="Close Ask AI"
         >
           <span></span>
@@ -592,6 +591,6 @@
       </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=20260328g"></script>
   </body>
 </html>

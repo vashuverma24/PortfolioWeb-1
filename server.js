@@ -1,118 +1,46 @@
-const http = require('http');
-const fs = require('fs/promises');
-const path = require('path');
+import "dotenv/config";
+import express from "express";
+import fetch from "node-fetch";
 
-const askAiHandler = require('./api/ask-ai');
+const app = express();
+app.use(express.json());
 
-const ROOT = process.cwd();
-const PORT = Number(process.env.PORT || 3000);
-const MIME_TYPES = {
-  '.html': 'text/html; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
-  '.js': 'application/javascript; charset=utf-8',
-  '.json': 'application/json; charset=utf-8',
-  '.svg': 'image/svg+xml',
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
-  '.jpeg': 'image/jpeg',
-  '.gif': 'image/gif',
-  '.ico': 'image/x-icon',
-};
+const PORT = 3000;
 
-const loadEnvFile = async (fileName) => {
-  const filePath = path.join(ROOT, fileName);
+app.post("/chat", async (req, res) => {
+  const userMessage = req.body.message;
 
-  try {
-    const content = await fs.readFile(filePath, 'utf8');
-    content.split(/\r?\n/).forEach((line) => {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) return;
-
-      const separatorIndex = trimmed.indexOf('=');
-      if (separatorIndex === -1) return;
-
-      const key = trimmed.slice(0, separatorIndex).trim();
-      const value = trimmed.slice(separatorIndex + 1).trim();
-
-      if (key && process.env[key] === undefined) {
-        process.env[key] = value;
-      }
-    });
-  } catch {
-    // Ignore missing env files.
-  }
-};
-
-const getSafeFilePath = (pathname) => {
-  const rawPath = pathname === '/' ? '/index.html' : pathname;
-  const relativePath = decodeURIComponent(rawPath).replace(/^\/+/, '');
-  const normalizedPath = path.normalize(relativePath);
-
-  if (normalizedPath.startsWith('..')) {
-    return null;
-  }
-
-  return path.join(ROOT, normalizedPath);
-};
-
-const serveStaticFile = async (req, res, pathname) => {
-  const filePath = getSafeFilePath(pathname);
-
-  if (!filePath) {
-    res.statusCode = 403;
-    res.end('Forbidden');
-    return;
+  if (!userMessage) {
+    return res.status(400).json({ error: "Message is required" });
   }
 
   try {
-    const data = await fs.readFile(filePath);
-    const extension = path.extname(filePath).toLowerCase();
-    res.statusCode = 200;
-    res.setHeader('Content-Type', MIME_TYPES[extension] || 'application/octet-stream');
-    res.end(data);
-  } catch {
-    res.statusCode = 404;
-    res.end('Not found');
-  }
-};
-
-const readRequestBody = (req) =>
-  new Promise((resolve, reject) => {
-    let raw = '';
-
-    req.on('data', (chunk) => {
-      raw += chunk;
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "llama-3.1-8b-instant",
+        messages: [
+          {
+            role: "system",
+            content: "You are Sachin's portfolio assistant. Explain projects, skills, and experience clearly."
+          },
+          {
+            role: "user",
+            content: userMessage
+          }
+        ]
+      })
     });
 
-    req.on('end', () => resolve(raw));
-    req.on('error', reject);
-  });
+    const data = await response.json();
+    res.json({ reply: data.choices[0].message.content });
+  } catch (error) {
+    res.status(500).json({ error: error.message || "Something went wrong" });
+  }
+});
 
-const startServer = async () => {
-  await loadEnvFile('.env.local');
-  await loadEnvFile('.env');
-
-  const server = http.createServer(async (req, res) => {
-    const url = new URL(req.url, `http://${req.headers.host || `localhost:${PORT}`}`);
-
-    if (url.pathname === '/api/ask-ai') {
-      try {
-        req.body = await readRequestBody(req);
-        await askAiHandler(req, res);
-      } catch {
-        res.statusCode = 500;
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({ error: 'Local server request failed' }));
-      }
-      return;
-    }
-
-    await serveStaticFile(req, res, url.pathname);
-  });
-
-  server.listen(PORT, () => {
-    console.log(`Portfolio running at http://localhost:${PORT}`);
-  });
-};
-
-startServer();
+app.listen(PORT, () => console.log("Server running on port 3000"));

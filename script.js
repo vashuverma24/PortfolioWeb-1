@@ -7,12 +7,15 @@ const heroDot = document.querySelector('.hero-dot');
 const modalButtons = Array.from(document.querySelectorAll('[data-modal-open]'));
 const modals = Array.from(document.querySelectorAll('[data-modal]'));
 const askAiOpenButtons = Array.from(document.querySelectorAll('[data-ask-ai-open]'));
+const askAiDrawer = document.querySelector('[data-ask-ai-drawer]');
+const askAiCloseButtons = Array.from(document.querySelectorAll('[data-ask-ai-close]'));
 const askAiForm = document.querySelector('[data-ask-ai-form]');
 const askAiInput = document.querySelector('[data-ask-ai-input]');
 const askAiLog = document.querySelector('[data-ask-ai-log]');
 const askAiChips = Array.from(document.querySelectorAll('[data-ask-ai-prompt]'));
 const askAiSubmit = document.querySelector('.ask-ai-submit');
 const askAiHistory = [];
+const GROQ_API_KEY = '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';
 
 const markActiveLink = (id) => {
   navLinks.forEach((link) => {
@@ -58,29 +61,76 @@ const appendAskAiLoadingMessage = () => {
 
 const requestAskAiReply = async (question) => {
   try {
-    const response = await fetch('/api/ask-ai', {
-      method: 'POST',
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${GROQ_API_KEY}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        question,
-        history: askAiHistory.slice(-8),
-        pageTitle: document.title,
-        pagePath: window.location.pathname,
-      }),
+        model: "llama-3.1-8b-instant",
+        messages: [
+          {
+            role: "system",
+            content: `You are Sachin Tarkar's portfolio assistant. Keep responses SHORT and CONCISE - 1-2 sentences max.
+
+ABOUT SACHIN:
+- iOS App Developer & UI/UX Designer
+- B.Tech Computer Science & Engineering, Galgotias University (2022-2026), CGPA: 8.29
+- Selected iOS Developer at iOS Development Center (Powered by Apple & Infosys)
+- iOS App Developer Intern at Infosys Ltd., Mysore
+
+PROJECTS:
+- LeoLingo: Speech therapy iPad app for children using SwiftUI, Firebase, UI/UX design
+- PrePlus: AI study companion with SwiftUI, AI integration, Supabase
+- MediOps: Healthcare management app with Swift, UIKit, Supabase, role-based access
+- Gravity: Swift Student Challenge 2025 - planet gravity simulation with SwiftUI, SceneKit
+- HeyMadhav: Bhagavad Gita learning app with SwiftUI, AI integration
+
+SKILLS:
+Languages: Swift, SwiftUI, UIKit, Java, Python
+Tools: Xcode, VS Code, Git, GitHub, Figma
+Frameworks: Firebase, Supabase, SceneKit
+Concepts: Data Structures, Algorithms, OOP, DBMS
+
+EXPERIENCE:
+- Scrum Master & team facilitator at Infosys
+- Built SwiftUI modules for hospital management systems
+- Worked with designers and backend engineers on production apps
+
+CONTACT:
+- Email: tarkarsachin842@gmail.com
+- Phone: +91 9568635207
+- LinkedIn: /in/sachin-tarkar
+- GitHub: /SachinTarkar842
+- Instagram: @sachinarjunsingh
+
+Answer questions accurately based on this information. Be helpful and direct.`
+          },
+          {
+            role: "user",
+            content: question
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 150
+      })
     });
 
     const data = await response.json();
 
-    if (!response.ok || !data?.answer) {
-      throw new Error(data?.error || 'AI request failed');
+    if (!response.ok) {
+      throw new Error(data?.error?.message || 'API request failed');
     }
 
-    return data.answer;
+    if (!data?.choices?.[0]?.message?.content) {
+      throw new Error('No response from API');
+    }
+
+    return data.choices[0].message.content;
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'AI request failed';
-    return `Ask AI is unavailable right now. ${message}`;
+    const message = error instanceof Error ? error.message : 'API request failed';
+    return `Sorry, I couldn't process that. ${message}`;
   }
 };
 
@@ -109,8 +159,21 @@ const initAskAi = () => {
 
   appendAskAiMessage(
     'assistant',
-    'Hi. I can answer questions about Sachin’s projects, skills, experience, education, and contact details.'
+    'Hi. Ask me anything about Sachin’s work.'
   );
+};
+
+const setAskAiState = (isOpen) => {
+  if (!askAiDrawer) return;
+
+  askAiDrawer.hidden = !isOpen;
+
+  if (isOpen) {
+    initAskAi();
+    if (askAiInput) {
+      window.requestAnimationFrame(() => askAiInput.focus());
+    }
+  }
 };
 
 if (!prefersReducedMotion && 'IntersectionObserver' in window) {
@@ -267,9 +330,19 @@ if (modalButtons.length && modals.length) {
   syncModalLock();
 }
 
-if (askAiOpenButtons.length) {
+if (askAiOpenButtons.length && askAiDrawer) {
   askAiOpenButtons.forEach((button) => {
-    button.addEventListener('click', initAskAi);
+    button.addEventListener('click', () => {
+      setAskAiState(true);
+    });
+  });
+}
+
+if (askAiCloseButtons.length) {
+  askAiCloseButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      setAskAiState(false);
+    });
   });
 }
 
@@ -291,3 +364,9 @@ if (askAiForm && askAiInput) {
     askAiInput.focus();
   });
 }
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    setAskAiState(false);
+  }
+});
