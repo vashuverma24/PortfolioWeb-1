@@ -891,7 +891,7 @@ h3 {
 .experience-visual {
   align-self: center;
   justify-self: end;
-  width: min(100%, 24rem);
+  width: min(100%, 18rem);
   margin-top: 0.5rem;
 }
 
@@ -900,6 +900,17 @@ h3 {
   border-radius: 1.8rem;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
   transform: rotate(3deg);
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.4s ease,
+    filter 0.4s ease;
+  will-change: transform;
+}
+
+.experience-visual img:hover {
+  transform: rotate(0deg) scale(1.08) translateY(-8px);
+  box-shadow: 0 32px 96px rgba(0, 0, 0, 0.52);
+  filter: brightness(1.1);
 }
 
 .contact-editorial {
