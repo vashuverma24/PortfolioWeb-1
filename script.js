@@ -4,6 +4,7 @@ const sections = Array.from(document.querySelectorAll('section[id]'));
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const hero = document.querySelector('.hero');
 const heroDot = document.querySelector('.hero-dot');
+const globalCursor = document.querySelector('.global-cursor');
 const modalButtons = Array.from(document.querySelectorAll('[data-modal-open]'));
 const modals = Array.from(document.querySelectorAll('[data-modal]'));
 const askAiOpenButtons = Array.from(document.querySelectorAll('[data-ask-ai-open]'));
@@ -362,6 +363,39 @@ if (askAiForm && askAiInput) {
     await submitAskAiPrompt(askAiInput.value);
     askAiInput.value = '';
     askAiInput.focus();
+  });
+}
+
+if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)').matches) {
+  let cursorX = 0;
+  let cursorY = 0;
+  let frameId = 0;
+
+  const updateCursorPosition = () => {
+    globalCursor.style.setProperty('--cursor-x', `${cursorX}px`);
+    globalCursor.style.setProperty('--cursor-y', `${cursorY}px`);
+    frameId = 0;
+  };
+
+  const queueCursorPosition = (x, y) => {
+    cursorX = x;
+    cursorY = y;
+
+    if (!frameId) {
+      frameId = window.requestAnimationFrame(updateCursorPosition);
+    }
+  };
+
+  document.addEventListener('mousemove', (event) => {
+    queueCursorPosition(event.clientX, event.clientY);
+  }, { passive: true });
+
+  document.addEventListener('mouseenter', () => {
+    globalCursor.style.opacity = '1';
+  });
+
+  document.addEventListener('mouseleave', () => {
+    globalCursor.style.opacity = '0';
   });
 }
 
