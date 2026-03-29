@@ -62,12 +62,9 @@ img {
   position: fixed;
   left: 0;
   top: 0;
-  width: 0.95rem;
-  height: 0.95rem;
-  border-radius: 50%;
-  background: var(--text);
-  box-shadow: 0 0 28px rgba(244, 241, 235, 0.3);
-  transform: translate3d(var(--cursor-x, 0px), var(--cursor-y, 0px), 0) translate(-50%, -50%);
+  width: 1.8rem;
+  height: 1.8rem;
+  transform: translate3d(var(--cursor-x, 0px), var(--cursor-y, 0px), 0) translate(-50%, -50%) rotate(var(--cursor-angle, 0deg));
   pointer-events: none;
   z-index: 999;
   opacity: 1;
@@ -76,26 +73,52 @@ img {
 }
 
 .global-cursor::before {
-  content: '';
+  content: '✈';
   position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: var(--text);
-  box-shadow: 0 0 28px rgba(244, 241, 235, 0.3);
-  opacity: 0.35;
-  filter: blur(8px);
-  transform: scale(1.8);
-  animation: cursorFog 0.6s ease-out forwards;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.8rem;
+  color: var(--text);
+  filter: drop-shadow(0 0 8px rgba(244, 241, 235, 0.4));
 }
 
-@keyframes cursorFog {
+.cursor-trail {
+  display: none;
+}
+
+@keyframes trailFade {
   0% {
-    opacity: 0.6;
-    transform: scale(1);
+    opacity: 0;
   }
   100% {
     opacity: 0;
-    transform: scale(2.5);
+  }
+}
+
+.cursor-sparkle {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 0.3rem;
+  height: 0.3rem;
+  background: var(--text);
+  box-shadow: 0 0 4px rgba(244, 241, 235, 0.9);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 997;
+  animation: sparkleAnimation 0.5s ease-out forwards;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+@keyframes sparkleAnimation {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3) translate(var(--sparkle-x), var(--sparkle-y));
   }
 }
 
@@ -260,7 +283,7 @@ h3 {
     translate(-50%, -50%);
   pointer-events: none;
   z-index: 2;
-  opacity: var(--hero-dot-opacity, 0);
+  opacity: 0;
   transition: opacity 0.18s ease;
   will-change: transform, opacity;
 }
@@ -283,6 +306,20 @@ h3 {
   white-space: nowrap;
   text-wrap: balance;
   text-align: center;
+  opacity: 0;
+  animation: textReveal 6s ease-out forwards;
+}
+
+@keyframes textReveal {
+  0% {
+    opacity: 0;
+  }
+  70% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .hero-foot {

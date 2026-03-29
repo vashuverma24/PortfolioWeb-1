@@ -389,16 +389,192 @@ if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)'
   let frameId = 0;
   let targetX = 0;
   let targetY = 0;
-  let isInHero = false;
+  let cursorAngle = 0;
+  let prevX = 0;
+  let prevY = 0;
+  let lastSparkleTime = 0;
+  let isAnimating = false;
+  let animationStartTime = 0;
+  const animationDuration = 6000; // 6 seconds
+
+  // Get text element for animation
+  const textElement = document.querySelector('.hero h1');
+  const heroSection = document.querySelector('.hero');
+  let currentMouseX = window.innerWidth / 2;
+  let currentMouseY = window.innerHeight / 2;
+  
+  // Start animation on page load
+  const startDrawingAnimation = () => {
+    if (!textElement || !heroSection) return;
+    
+    isAnimating = true;
+    animationStartTime = Date.now();
+    
+    // Get hero bounds
+    const heroBounds = heroSection.getBoundingClientRect();
+    const textBounds = textElement.getBoundingClientRect();
+    
+    // Start from left edge of text, middle height
+    const startX = textBounds.left;
+    const startY = textBounds.top + textBounds.height / 2;
+    
+    // End at right edge of text
+    const endX = textBounds.right;
+    const endY = textBounds.top + textBounds.height / 2;
+    
+    cursorX = startX;
+    cursorY = startY;
+    targetX = startX;
+    targetY = startY;
+    prevX = startX;
+    prevY = startY;
+    
+    // Temporarily increase cursor size significantly
+    globalCursor.style.width = '3.8rem';
+    globalCursor.style.height = '3.8rem';
+    
+    // Animate plane across text
+    const animateAcrossText = () => {
+      const elapsed = Date.now() - animationStartTime;
+      const progress = Math.min(elapsed / animationDuration, 1);
+      
+      // Phase 1: Move across text (0-0.70)
+      if (progress < 0.70) {
+        const textProgress = progress / 0.70;
+        // Smoother easing curve for movement
+        const easeProgress = textProgress < 0.5 
+          ? 2 * textProgress * textProgress 
+          : -1 + (4 - 2 * textProgress) * textProgress;
+        
+        // Linear path across entire text width
+        targetX = startX + (endX - startX) * easeProgress;
+        // Slight wave motion
+        targetY = startY + Math.sin(easeProgress * Math.PI) * 50;
+        
+        // Calculate rotation angle based on movement direction
+        cursorAngle = calculateAngle(prevX, prevY, targetX, targetY);
+        prevX = targetX;
+        prevY = targetY;
+        
+        // Create more sparkles during animation
+        createAnimationSparkles(cursorX, cursorY);
+      }
+      // Phase 2: Move away to current mouse position (0.70-1)
+      else if (progress < 1) {
+        const transitionProgress = (progress - 0.70) / 0.30;
+        // Smooth easing for transition
+        const easeTransition = transitionProgress < 0.5
+          ? 2 * transitionProgress * transitionProgress
+          : -1 + (4 - 2 * transitionProgress) * transitionProgress;
+        
+        targetX = endX + (currentMouseX - endX) * easeTransition;
+        targetY = endY + (currentMouseY - endY) * easeTransition;
+        
+        // Calculate rotation angle based on movement direction
+        cursorAngle = calculateAngle(prevX, prevY, targetX, targetY);
+        prevX = targetX;
+        prevY = targetY;
+        
+        // Gradually decrease cursor size back to normal
+        const sizeProgress = transitionProgress;
+        const currentSize = 3.8 - (3.8 - 1.8) * sizeProgress;
+        globalCursor.style.width = currentSize + 'rem';
+        globalCursor.style.height = currentSize + 'rem';
+        
+        createAnimationSparkles(cursorX, cursorY);
+      } else {
+        isAnimating = false;
+        // Reset cursor size
+        globalCursor.style.width = '1.8rem';
+        globalCursor.style.height = '1.8rem';
+      }
+      
+      if (isAnimating) {
+        requestAnimationFrame(animateAcrossText);
+      }
+    };
+    
+    animateAcrossText();
+  };
+
+  const createAnimationSparkles = (x, y) => {
+    // Create more sparkles during animation (5-8 per frame for bigger effect)
+    const sparkleCount = 5 + Math.floor(Math.random() * 4);
+    
+    for (let i = 0; i < sparkleCount; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'cursor-sparkle';
+      sparkle.style.left = x + 'px';
+      sparkle.style.top = y + 'px';
+      
+      // Random sparkle direction
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 10 + Math.random() * 32;
+      const sparkleX = Math.cos(angle) * distance;
+      const sparkleY = Math.sin(angle) * distance;
+      
+      sparkle.style.setProperty('--sparkle-x', `${sparkleX}px`);
+      sparkle.style.setProperty('--sparkle-y', `${sparkleY}px`);
+      document.body.appendChild(sparkle);
+      
+      setTimeout(() => sparkle.remove(), 500);
+    }
+  };
 
   const updateCursorPosition = () => {
-    // Smooth easing towards target position
-    cursorX += (targetX - cursorX) * 0.2;
-    cursorY += (targetY - cursorY) * 0.2;
+    // Use cubic easing for smoother movement
+    const dx = targetX - cursorX;
+    const dy = targetY - cursorY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    // Adaptive easing based on distance
+    let easeAmount = 0.15;
+    if (distance < 5) {
+      easeAmount = 0.2;
+    } else if (distance > 100) {
+      easeAmount = 0.12;
+    }
+    
+    cursorX += dx * easeAmount;
+    cursorY += dy * easeAmount;
 
     globalCursor.style.setProperty('--cursor-x', `${cursorX}px`);
     globalCursor.style.setProperty('--cursor-y', `${cursorY}px`);
+    globalCursor.style.setProperty('--cursor-angle', `${cursorAngle}deg`);
     frameId = window.requestAnimationFrame(updateCursorPosition);
+  };
+
+  const calculateAngle = (fromX, fromY, toX, toY) => {
+    const dx = toX - fromX;
+    const dy = toY - fromY;
+    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+    return angle;
+  };
+
+  const createSparkles = (x, y) => {
+    const now = Date.now();
+    if (now - lastSparkleTime < 20) return;
+    lastSparkleTime = now;
+
+    const sparkleCount = 2 + Math.floor(Math.random() * 2);
+    
+    for (let i = 0; i < sparkleCount; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'cursor-sparkle';
+      sparkle.style.left = x + 'px';
+      sparkle.style.top = y + 'px';
+      
+      const tailAngle = cursorAngle + 180;
+      const distance = 6 + Math.random() * 18;
+      const sparkleX = Math.cos((tailAngle * Math.PI) / 180) * distance;
+      const sparkleY = Math.sin((tailAngle * Math.PI) / 180) * distance;
+      
+      sparkle.style.setProperty('--sparkle-x', `${sparkleX}px`);
+      sparkle.style.setProperty('--sparkle-y', `${sparkleY}px`);
+      document.body.appendChild(sparkle);
+      
+      setTimeout(() => sparkle.remove(), 500);
+    }
   };
 
   const showCursor = () => {
@@ -409,23 +585,39 @@ if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)'
     globalCursor.style.opacity = '0';
   };
 
-  const checkIfInHero = (y) => {
-    if (!hero) return false;
-    const heroRect = hero.getBoundingClientRect();
-    return y >= heroRect.top && y <= heroRect.bottom;
+  // Start animation when page loads
+  const initAnimation = () => {
+    startDrawingAnimation();
+    // Start the update loop
+    if (!frameId) {
+      frameId = window.requestAnimationFrame(updateCursorPosition);
+    }
   };
 
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAnimation);
+  } else {
+    initAnimation();
+  }
+
   document.addEventListener('mousemove', (event) => {
+    // Always track current mouse position for animation destination
+    currentMouseX = event.clientX;
+    currentMouseY = event.clientY;
+    
+    if (isAnimating) return;
+    
     targetX = event.clientX;
     targetY = event.clientY;
     
-    isInHero = checkIfInHero(event.clientY);
-    
-    if (!isInHero) {
-      showCursor();
-    } else {
-      hideCursor();
+    if (Math.abs(prevX - targetX) > 0.5 || Math.abs(prevY - targetY) > 0.5) {
+      cursorAngle = calculateAngle(prevX, prevY, targetX, targetY);
     }
+    prevX = targetX;
+    prevY = targetY;
+    
+    showCursor();
+    createSparkles(cursorX, cursorY);
 
     if (!frameId) {
       frameId = window.requestAnimationFrame(updateCursorPosition);
@@ -433,9 +625,7 @@ if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)'
   }, { passive: true });
 
   document.addEventListener('mouseenter', () => {
-    if (!isInHero) {
-      showCursor();
-    }
+    showCursor();
   });
 
   document.addEventListener('mouseleave', () => {
