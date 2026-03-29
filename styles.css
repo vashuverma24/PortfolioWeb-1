@@ -1243,8 +1243,8 @@ h3 {
   flex-direction: column;
   gap: 0;
   width: 100%;
-  max-height: min(72vh, 34rem);
-  padding: 1rem;
+  max-height: min(72vh, 51rem);
+  padding: 0.75rem;
   border: 1px solid var(--line);
   border-radius: 1.35rem;
   background: rgba(8, 8, 8, 0.96);
@@ -1253,9 +1253,9 @@ h3 {
 }
 
 .ask-ai-panel h3 {
-  margin-top: 0.15rem;
+  margin-top: 0;
   font-family: 'Outfit', sans-serif;
-  font-size: 1.45rem;
+  font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: -0.03em;
 }
@@ -1294,28 +1294,29 @@ h3 {
 }
 
 .ask-ai-intro {
-  margin-top: 0.25rem;
+  margin-top: 0;
+  margin-bottom: 0.4rem;
   color: var(--muted);
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   max-width: 19rem;
 }
 
 .ask-ai-suggestions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.55rem;
-  margin-top: 0.8rem;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
 }
 
 .ask-ai-chip {
-  min-height: 2.3rem;
-  padding: 0.55rem 0.85rem;
+  min-height: 2rem;
+  padding: 0.4rem 0.75rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.03);
   color: var(--text);
   font: inherit;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   cursor: pointer;
   transition:
     transform 0.24s ease,
@@ -1329,24 +1330,38 @@ h3 {
 }
 
 .ask-ai-log {
-  display: grid;
-  gap: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
   flex: 1;
-  min-height: 12rem;
-  max-height: 15.5rem;
-  margin-top: 0.85rem;
+  min-height: 18rem;
+  max-height: 23.25rem;
+  margin-top: 0.4rem;
   overflow: auto;
   padding-right: 0.15rem;
+  align-items: flex-start;
 }
 
 .ask-ai-message {
   max-width: 88%;
-  padding: 0.72rem 0.9rem;
-  border-radius: 1rem;
+  width: fit-content;
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.9rem;
   border: 1px solid var(--line);
-  white-space: pre-line;
-  line-height: 1.55;
-  font-size: 0.94rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  line-height: 1.4;
+  font-size: 0.9rem;
+}
+
+.ask-ai-message-user {
+  align-self: flex-end;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ask-ai-message-assistant {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .ask-ai-message-assistant {
@@ -1369,13 +1384,13 @@ h3 {
 .ask-ai-form {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.75rem;
-  margin-top: 0.9rem;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
 }
 
 .ask-ai-input {
-  min-height: 3.25rem;
-  padding: 0 1rem;
+  min-height: 2.6rem;
+  padding: 0 0.9rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.03);
@@ -1563,135 +1578,461 @@ button:focus-visible {
   }
 }
 
-@media (max-width: 640px) {
-  .project-nav-indicator {
-    opacity: 1;
-    transform: translateY(-50%) scale(0.86);
-    right: 0.8rem;
-    width: 3.8rem;
-    height: 3.8rem;
-  }
-
-  .project-prowess-header h2 {
-    font-size: clamp(3.2rem, 14vw, 4.8rem);
-  }
-
-  .project-prowess-copy h3 {
-    max-width: none;
-    font-size: clamp(2rem, 9vw, 2.8rem);
-  }
-
-  .mojo-overlay {
-    width: clamp(4.5rem, 22vw, 6.4rem);
-  }
-
-  body::before {
-    background-size: auto, 26px 26px;
-  }
-
+@media (max-width: 768px) {
   .page-shell {
     width: min(calc(100% - 1rem), var(--max-width));
   }
 
-  .site-nav {
-    gap: 0.8rem 1.15rem;
+  .global-cursor {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .global-cursor::before {
+    font-size: 1.5rem;
+  }
+
+  .hero {
+    min-height: calc(100svh - 3rem);
+    padding-top: 4rem;
+    padding-bottom: 6rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 12vw, 6rem);
+  }
+
+  .hero-kicker {
+    font-size: 0.7rem;
+  }
+
+  .hero-foot p {
+    font-size: 0.78rem;
+    width: min(100%, calc(100% - 1rem));
+  }
+
+  .project-prowess-header h2 {
+    font-size: clamp(3rem, 10vw, 5rem);
+  }
+
+  .project-prowess-copy h3 {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+  }
+
+  .mojo-overlay {
+    width: clamp(5rem, 18vw, 10rem);
+  }
+
+  .about-copy h2 {
+    font-size: clamp(3rem, 10vw, 5rem);
+  }
+
+  .about-portrait {
+    width: min(100%, 25rem);
+  }
+
+  .experience-body h3,
+  .contact-copy h3 {
+    font-size: clamp(1.6rem, 8vw, 2.5rem);
+  }
+
+  .skill-cloud {
+    gap: 0.6rem;
+  }
+
+  .skill-pill {
+    min-height: 2.8rem;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.85rem;
+  }
+
+  .panel h3 {
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
+  }
+
+  .ask-ai-launcher {
+    right: 1rem;
+    bottom: 1rem;
+    min-height: 3rem;
+    padding: 0.8rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .ask-ai-drawer {
+    right: 1rem;
+    bottom: 5rem;
+    width: min(22rem, calc(100vw - 2rem));
+  }
+
+  .ask-ai-panel {
+    max-height: min(70vh, 45rem);
+  }
+
+  .ask-ai-log {
+    max-height: 21rem;
+  }
+
+  .experience-entry {
+    gap: 0.8rem;
+  }
+
+  .experience-index {
+    width: 3rem;
+    height: 3rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    width: min(calc(100% - 1rem), var(--max-width));
+    padding-bottom: 2rem;
+  }
+
+  .site-header {
+    padding: 1rem 0 0.8rem;
+    gap: 0.5rem;
   }
 
   .brand,
   .site-year,
   .site-nav a {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+  }
+
+  .site-nav {
+    gap: 0.6rem 0.9rem;
   }
 
   .hero {
-    padding-top: 5rem;
-    padding-bottom: 7rem;
+    min-height: calc(100svh - 2.5rem);
+    padding-top: 3rem;
+    padding-bottom: 5rem;
   }
 
   .hero h1 {
-    font-size: clamp(3.5rem, 17vw, 5.6rem);
+    font-size: clamp(2.5rem, 14vw, 4.5rem);
     white-space: normal;
   }
 
-  .hero-kicker,
-  .hero-foot p {
-    font-size: 0.72rem;
+  .hero-kicker {
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
   }
 
   .hero-foot {
-    width: min(36rem, calc(100% - 1.5rem));
+    bottom: clamp(2rem, 5vh, 3rem);
+    width: min(100%, calc(100% - 1rem));
+  }
+
+  .hero-foot p {
+    font-size: 0.7rem;
+    width: 100%;
   }
 
   .hero-dot {
     display: none;
   }
 
+  .project-nav-indicator {
+    opacity: 1;
+    transform: translateY(-50%) scale(0.8);
+    right: 0.6rem;
+    width: 3.2rem;
+    height: 3.2rem;
+  }
+
+  .project-prowess-header h2 {
+    font-size: clamp(2.5rem, 12vw, 4rem);
+  }
+
+  .project-prowess-copy h3 {
+    font-size: clamp(1.4rem, 7vw, 2.2rem);
+    max-width: none;
+  }
+
+  .project-prowess-meta {
+    font-size: 0.7rem;
+  }
+
+  .mojo-overlay {
+    width: clamp(4rem, 16vw, 7rem);
+  }
+
   .about-copy h2 {
-    font-size: clamp(3.3rem, 16vw, 5rem);
+    font-size: clamp(2.5rem, 12vw, 4.2rem);
   }
 
-  .experience-body h3,
-  .contact-copy h3 {
-    font-size: clamp(1.9rem, 10vw, 2.8rem);
+  .about-education-degree {
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
   }
 
-  .skill-cloud {
-    gap: 0.65rem;
+  .about-education-score {
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
   }
 
-  .skill-cloud span {
-    min-height: 3rem;
-    padding-inline: 1rem;
-    font-size: 0.9rem;
+  .about-summary {
+    font-size: 0.95rem;
+    line-height: 1.8;
   }
 
   .about-portrait {
-    width: min(100%, 28rem);
+    width: min(100%, 22rem);
+  }
+
+  .skill-cloud {
+    gap: 0.5rem;
+    max-width: 100%;
+  }
+
+  .skill-pill {
+    min-height: 2.6rem;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .leetcode-cta {
+    min-width: 100%;
+    padding: 0.8rem 1.5rem;
+    font-size: clamp(1rem, 4vw, 1.6rem);
   }
 
   .experience-topline {
-    padding-bottom: 0.8rem;
+    padding-bottom: 0.7rem;
+    gap: 0.5rem 1rem;
+  }
+
+  .experience-body h3 {
+    font-size: clamp(1.4rem, 6vw, 1.8rem);
+  }
+
+  .experience-meta-line {
+    font-size: 0.8rem;
+  }
+
+  .experience-points {
+    gap: 0.65rem;
+    padding-left: 1rem;
+  }
+
+  .experience-points li {
+    font-size: 0.9rem;
+  }
+
+  .experience-visual {
+    width: min(100%, 18rem);
+  }
+
+  .contact-copy h3 {
+    font-size: clamp(1.4rem, 6vw, 2rem);
+  }
+
+  .contact-row {
+    min-height: auto;
+    padding: 0.8rem 0;
+    gap: 0.25rem;
+  }
+
+  .contact-row span {
+    font-size: 0.7rem;
   }
 
   .contact-row strong {
-    font-size: 1rem;
+    font-size: clamp(0.95rem, 3vw, 1.2rem);
+  }
+
+  .contact-list li {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+    padding-bottom: 0.8rem;
+  }
+
+  .contact-list li span:first-child {
+    font-size: 0.9rem;
+  }
+
+  .availability-list span {
+    min-height: 2.8rem;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.8rem;
+  }
+
+  .button {
+    min-height: 2.8rem;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.9rem;
+  }
+
+  .stats-modal-panel {
+    width: min(100%, 48rem);
+    max-height: min(85vh, 50rem);
+    padding: 1.2rem;
+  }
+
+  .stats-modal-panel h3 {
+    font-size: clamp(1.6rem, 6vw, 2.5rem);
+  }
+
+  .stats-modal-close {
+    width: 2.6rem;
+    height: 2.6rem;
   }
 
   .ask-ai-launcher {
     right: 0.8rem;
     bottom: 0.8rem;
-    min-height: 3.2rem;
-    padding-inline: 1rem;
-    font-size: 0.82rem;
+    min-height: 2.8rem;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.8rem;
   }
 
   .ask-ai-drawer {
     right: 0.8rem;
-    bottom: 4.8rem;
+    bottom: 4.2rem;
     width: calc(100vw - 1.6rem);
   }
 
   .ask-ai-panel {
-    max-height: min(72vh, 34rem);
+    max-height: min(68vh, 42rem);
+    padding: 0.9rem;
+  }
+
+  .ask-ai-panel h3 {
+    font-size: 1.3rem;
+  }
+
+  .ask-ai-intro {
+    font-size: 0.88rem;
   }
 
   .ask-ai-suggestions {
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
 
   .ask-ai-chip {
+    min-height: 2.2rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.78rem;
     width: 100%;
     justify-content: center;
   }
 
-  .contact-list li {
-    grid-template-columns: 1fr;
-    gap: 0.45rem;
+  .ask-ai-log {
+    gap: 0.55rem;
+    max-height: 20rem;
+    margin-top: 0.7rem;
+  }
+
+  .ask-ai-message {
+    max-width: 90%;
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.85rem;
+    font-size: 0.88rem;
+  }
+
+  .ask-ai-form {
+    gap: 0.6rem;
+    margin-top: 0.8rem;
+  }
+
+  .ask-ai-input {
+    min-height: 3rem;
+    padding: 0 0.9rem;
+    font-size: 0.9rem;
+  }
+
+  .panel {
+    padding: 1.4rem;
+  }
+
+  .panel h3 {
+    margin-top: 0.4rem;
+    font-size: clamp(1.3rem, 5vw, 1.8rem);
+  }
+
+  .panel p,
+  .feature-list li,
+  .project-points li {
+    font-size: 0.95rem;
+  }
+
+  .feature-list,
+  .project-points {
+    gap: 0.65rem;
+    margin-top: 0.9rem;
+  }
+
+  .section-heading h2 {
+    font-size: clamp(1.8rem, 6vw, 3rem);
+  }
+
+  .section-index {
+    min-width: 3rem;
+    min-height: 3rem;
+    font-size: 0.7rem;
   }
 
   .site-footer {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  body::before {
+    background-size: auto, 26px 26px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-shell {
+    width: min(calc(100% - 0.8rem), var(--max-width));
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 12vw, 3.5rem);
+  }
+
+  .hero-kicker {
+    font-size: 0.6rem;
+  }
+
+  .project-prowess-header h2 {
+    font-size: clamp(2rem, 10vw, 3.5rem);
+  }
+
+  .about-copy h2 {
+    font-size: clamp(2rem, 10vw, 3.5rem);
+  }
+
+  .experience-body h3 {
+    font-size: clamp(1.2rem, 5vw, 1.6rem);
+  }
+
+  .contact-copy h3 {
+    font-size: clamp(1.2rem, 5vw, 1.6rem);
+  }
+
+  .skill-pill {
+    min-height: 2.4rem;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.75rem;
+  }
+
+  .panel {
+    padding: 1.2rem;
+  }
+
+  .panel h3 {
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+  }
+
+  .ask-ai-panel h3 {
+    font-size: 1.2rem;
+  }
+
+  .stats-modal-panel {
+    padding: 1rem;
   }
 }
 

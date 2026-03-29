@@ -429,9 +429,17 @@ if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)'
     prevX = startX;
     prevY = startY;
     
-    // Temporarily increase cursor size significantly
-    globalCursor.style.width = '3.8rem';
-    globalCursor.style.height = '3.8rem';
+    // Responsive cursor size based on screen width
+    let cursorSize = '3.8rem';
+    if (window.innerWidth < 768) {
+      cursorSize = '2.8rem';
+    }
+    if (window.innerWidth < 480) {
+      cursorSize = '2.2rem';
+    }
+    
+    globalCursor.style.width = cursorSize;
+    globalCursor.style.height = cursorSize;
     
     // Animate plane across text
     const animateAcrossText = () => {
@@ -477,7 +485,9 @@ if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)'
         
         // Gradually decrease cursor size back to normal
         const sizeProgress = transitionProgress;
-        const currentSize = 3.8 - (3.8 - 1.8) * sizeProgress;
+        const normalSize = window.innerWidth < 768 ? 1.5 : 1.8;
+        const maxSize = window.innerWidth < 768 ? 2.8 : (window.innerWidth < 480 ? 2.2 : 3.8);
+        const currentSize = maxSize - (maxSize - normalSize) * sizeProgress;
         globalCursor.style.width = currentSize + 'rem';
         globalCursor.style.height = currentSize + 'rem';
         
@@ -485,8 +495,9 @@ if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)'
       } else {
         isAnimating = false;
         // Reset cursor size
-        globalCursor.style.width = '1.8rem';
-        globalCursor.style.height = '1.8rem';
+        const normalSize = window.innerWidth < 768 ? 1.5 : 1.8;
+        globalCursor.style.width = normalSize + 'rem';
+        globalCursor.style.height = normalSize + 'rem';
       }
       
       if (isAnimating) {
@@ -635,7 +646,61 @@ if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)'
       frameId = 0;
     }
   });
+
+  // Scroll-based plane animation
+  let lastScrollSparkleTime = 0;
+  const scrollSparkleDelay = 50; // milliseconds between sparkles during scroll
+
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = scrolled / docHeight;
+
+    if (!isAnimating) {
+      // Move cursor based on scroll position
+      const maxX = window.innerWidth * 0.8;
+      const startX = window.innerWidth * 0.1;
+      targetX = startX + (maxX - startX) * scrollPercent;
+      targetY = window.innerHeight * (0.2 + scrollPercent * 0.3);
+
+      // Calculate angle based on scroll direction
+      cursorAngle = calculateAngle(prevX, prevY, targetX, targetY);
+      prevX = targetX;
+      prevY = targetY;
+
+      // Add scroll sparkles
+      const now = Date.now();
+      if (now - lastScrollSparkleTime > scrollSparkleDelay && scrollPercent > 0 && scrollPercent < 1) {
+        lastScrollSparkleTime = now;
+        createScrollSparkles(cursorX, cursorY);
+      }
+    }
+  }, { passive: true });
 }
+
+const createScrollSparkles = (x, y) => {
+  // Create fewer sparkles for scroll (2-3 per event)
+  const sparkleCount = 2 + Math.floor(Math.random() * 2);
+  
+  for (let i = 0; i < sparkleCount; i++) {
+    const sparkle = document.createElement('div');
+    sparkle.className = 'cursor-sparkle';
+    sparkle.style.left = x + 'px';
+    sparkle.style.top = y + 'px';
+    
+    // Random sparkle direction
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 8 + Math.random() * 20;
+    const sparkleX = Math.cos(angle) * distance;
+    const sparkleY = Math.sin(angle) * distance;
+    
+    sparkle.style.setProperty('--sparkle-x', `${sparkleX}px`);
+    sparkle.style.setProperty('--sparkle-y', `${sparkleY}px`);
+    document.body.appendChild(sparkle);
+    
+    setTimeout(() => sparkle.remove(), 400);
+  }
+};
 
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') {
