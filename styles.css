@@ -2324,6 +2324,7 @@ button:focus-visible {
   .skills-stage-grid {
     inset: 20% 6% 16%;
     background-size: 2rem 2rem;
+    background-color: rgba(36, 34, 34, 0.063);
   }
 
   .skills-stage-glow {
