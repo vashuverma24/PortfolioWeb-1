@@ -13,14 +13,14 @@ const askAiCloseButtons = Array.from(document.querySelectorAll('[data-ask-ai-clo
 const askAiForm = document.querySelector('[data-ask-ai-form]');
 const askAiInput = document.querySelector('[data-ask-ai-input]');
 const askAiLog = document.querySelector('[data-ask-ai-log]');
-const askAiChips = Array.from(document.querySelectorAll('[data-ask-ai-prompt]'));
 const askAiSubmit = document.querySelector('.ask-ai-submit');
 const askAiHistory = [];
 const GROQ_API_KEY = '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';
 
 const markActiveLink = (id) => {
   navLinks.forEach((link) => {
-    const isActive = link.getAttribute('href') === `#${id}`;
+    const href = link.getAttribute('href');
+    const isActive = href === `#${id}`;
     link.classList.toggle('is-active', isActive);
 
     if (isActive) {
@@ -31,12 +31,17 @@ const markActiveLink = (id) => {
   });
 };
 
+// Scroll to section when clicking nav links
+navLinks.forEach((link) => {
+  link.addEventListener('click', (e) => {
+    const targetId = link.getAttribute('href').substring(1);
+    markActiveLink(targetId);
+  });
+});
+
 const setAskAiPending = (isPending) => {
   if (askAiInput) askAiInput.disabled = isPending;
   if (askAiSubmit) askAiSubmit.disabled = isPending;
-  askAiChips.forEach((chip) => {
-    chip.disabled = isPending;
-  });
 };
 
 const appendAskAiMessage = (role, message) => {
@@ -221,6 +226,25 @@ if (sections.length && navLinks.length && 'IntersectionObserver' in window) {
   sections.forEach((section) => sectionObserver.observe(section));
 }
 
+if (!('IntersectionObserver' in window) && sections.length && navLinks.length) {
+  window.addEventListener('scroll', () => {
+    let current = '';
+    
+    sections.forEach((section) => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.clientHeight;
+      
+      if (window.pageYOffset >= sectionTop - 200) {
+        current = section.getAttribute('id');
+      }
+    });
+    
+    if (current) {
+      markActiveLink(current);
+    }
+  }, { passive: true });
+}
+
 if (hero && heroDot && !prefersReducedMotion && window.matchMedia('(pointer: fine)').matches) {
   let heroRect = null;
   let dotX = 0;
@@ -278,10 +302,12 @@ if (hero && heroDot && !prefersReducedMotion && window.matchMedia('(pointer: fin
     hideHeroDot();
     resetHeroDot();
   });
+  
   window.addEventListener('resize', () => {
     updateHeroRect();
     resetHeroDot();
   });
+  
   window.addEventListener('scroll', updateHeroRect, { passive: true });
 
   hideHeroDot();
@@ -347,15 +373,6 @@ if (askAiCloseButtons.length) {
   });
 }
 
-if (askAiChips.length) {
-  askAiChips.forEach((chip) => {
-    chip.addEventListener('click', async () => {
-      initAskAi();
-      await submitAskAiPrompt(chip.dataset.askAiPrompt || '');
-    });
-  });
-}
-
 if (askAiForm && askAiInput) {
   askAiForm.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -370,32 +387,63 @@ if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)'
   let cursorX = 0;
   let cursorY = 0;
   let frameId = 0;
+  let targetX = 0;
+  let targetY = 0;
+  let isInHero = false;
 
   const updateCursorPosition = () => {
+    // Smooth easing towards target position
+    cursorX += (targetX - cursorX) * 0.2;
+    cursorY += (targetY - cursorY) * 0.2;
+
     globalCursor.style.setProperty('--cursor-x', `${cursorX}px`);
     globalCursor.style.setProperty('--cursor-y', `${cursorY}px`);
-    frameId = 0;
+    frameId = window.requestAnimationFrame(updateCursorPosition);
   };
 
-  const queueCursorPosition = (x, y) => {
-    cursorX = x;
-    cursorY = y;
+  const showCursor = () => {
+    globalCursor.style.opacity = '1';
+  };
+
+  const hideCursor = () => {
+    globalCursor.style.opacity = '0';
+  };
+
+  const checkIfInHero = (y) => {
+    if (!hero) return false;
+    const heroRect = hero.getBoundingClientRect();
+    return y >= heroRect.top && y <= heroRect.bottom;
+  };
+
+  document.addEventListener('mousemove', (event) => {
+    targetX = event.clientX;
+    targetY = event.clientY;
+    
+    isInHero = checkIfInHero(event.clientY);
+    
+    if (!isInHero) {
+      showCursor();
+    } else {
+      hideCursor();
+    }
 
     if (!frameId) {
       frameId = window.requestAnimationFrame(updateCursorPosition);
     }
-  };
-
-  document.addEventListener('mousemove', (event) => {
-    queueCursorPosition(event.clientX, event.clientY);
   }, { passive: true });
 
   document.addEventListener('mouseenter', () => {
-    globalCursor.style.opacity = '1';
+    if (!isInHero) {
+      showCursor();
+    }
   });
 
   document.addEventListener('mouseleave', () => {
-    globalCursor.style.opacity = '0';
+    hideCursor();
+    if (frameId) {
+      cancelAnimationFrame(frameId);
+      frameId = 0;
+    }
   });
 }
 
