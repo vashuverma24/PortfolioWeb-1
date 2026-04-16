@@ -15,7 +15,7 @@ const askAiInput = document.querySelector('[data-ask-ai-input]');
 const askAiLog = document.querySelector('[data-ask-ai-log]');
 const askAiSubmit = document.querySelector('.ask-ai-submit');
 const askAiHistory = [];
-const GROQ_API_KEY = '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';
+const GEMINI_API_KEY = 'AQ.Ab8RN6J8XoLYY1YT-ttSiiBdVKoSjQq1RDkFGtOFwS7JsIt_6A'; // Your Gemini API key
 
 const markActiveLink = (id) => {
   navLinks.forEach((link) => {
@@ -67,18 +67,15 @@ const appendAskAiLoadingMessage = () => {
 
 const requestAskAiReply = async (question) => {
   try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${GROQ_API_KEY}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
-        messages: [
-          {
-            role: "system",
-            content: `You are Sachin Tarkar's portfolio assistant. Keep responses SHORT and CONCISE - 1-2 sentences max.
+        systemInstruction: {
+          parts: [{
+            text: `You are Sachin Tarkar's portfolio assistant. Keep responses SHORT and CONCISE - 1-2 sentences max.
 
 ABOUT SACHIN:
 - iOS App Developer & UI/UX Designer
@@ -112,14 +109,18 @@ CONTACT:
 - Instagram: @sachinarjunsingh
 
 Answer questions accurately based on this information. Be helpful and direct.`
-          },
+          }]
+        },
+        contents: [
           {
             role: "user",
-            content: question
+            parts: [{ text: question }]
           }
         ],
-        temperature: 0.7,
-        max_tokens: 150
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 150
+        }
       })
     });
 
@@ -129,11 +130,11 @@ Answer questions accurately based on this information. Be helpful and direct.`
       throw new Error(data?.error?.message || 'API request failed');
     }
 
-    if (!data?.choices?.[0]?.message?.content) {
+    if (!data?.candidates?.[0]?.content?.parts?.[0]?.text) {
       throw new Error('No response from API');
     }
 
-    return data.choices[0].message.content;
+    return data.candidates[0].content.parts[0].text;
   } catch (error) {
     const message = error instanceof Error ? error.message : 'API request failed';
     return `Sorry, I couldn't process that. ${message}`;

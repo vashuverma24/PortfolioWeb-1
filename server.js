@@ -15,29 +15,26 @@ app.post("/chat", async (req, res) => {
   }
 
   try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
-        messages: [
-          {
-            role: "system",
-            content: "You are Sachin's portfolio assistant. Explain projects, skills, and experience clearly."
-          },
+        systemInstruction: {
+          parts: [{ text: "You are Sachin's portfolio assistant. Explain projects, skills, and experience clearly." }]
+        },
+        contents: [
           {
             role: "user",
-            content: userMessage
+            parts: [{ text: userMessage }]
           }
         ]
       })
     });
 
     const data = await response.json();
-    res.json({ reply: data.choices[0].message.content });
+    res.json({ reply: data.candidates[0].content.parts[0].text });
   } catch (error) {
     res.status(500).json({ error: error.message || "Something went wrong" });
   }
