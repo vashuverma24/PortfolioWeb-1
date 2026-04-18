@@ -13,33 +13,34 @@
     <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png?v=3" />
     <link rel="icon" type="image/png" sizes="256x256" href="favicon-256.png?v=3" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png?v=3" />
-    <link rel="stylesheet" href="styles.css?v=20260328g" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300..500;1,300..500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=20260418" />
   </head>
   <body class="project-detail-page">
     <div class="global-cursor"></div>
-    <div class="page-shell">
       <header class="site-header">
         <a class="brand" href="index.html#top" aria-label="Back to portfolio">Sachin Tarkar</a>
         <nav class="site-nav" aria-label="Primary">
+          <a href="index.html#home">Home</a>
           <a href="index.html#projects">Work</a>
           <a href="index.html#about">About</a>
+          <a href="index.html#experience">Experience</a>
           <a href="index.html#contact">Contact</a>
-          <a
-            href="https://drive.google.com/file/d/1h_XCkMY52OAqJD6QULvOAGfvVJzDyh3V/view?usp=share_link"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Resume
-          </a>
         </nav>
-        <p class="site-year">&copy;2026</p>
+        <a class="site-resume" href="https://drive.google.com/file/d/1h_XCkMY52OAqJD6QULvOAGfvVJzDyh3V/view?usp=share_link" target="_blank" rel="noreferrer">
+          RESUME <span>↗</span>
+        </a>
       </header>
+
+      <div class="page-shell">
 
       <main class="project-detail-main">
         <section class="project-detail-hero">
           <div class="project-detail-copy reveal">
             <p class="card-label">MediOps / Healthcare Management</p>
-            <h1>Healthcare flows with cleaner operational structure.</h1>
+            <h1>Healthcare flows <em>with cleaner operational structure</em></h1>
             <p>Role-based hospital workflows designed for faster access and clearer actions.</p>
             <p class="project-prowess-meta">UIKit + Swift + Supabase</p>
             <div class="project-detail-links">
@@ -67,13 +68,13 @@
         <section class="project-detail-grid">
           <article class="panel project-detail-card reveal">
             <p class="card-label">Goal</p>
-            <h3>Organize care operations</h3>
+            <h3>Organize <em>care operations</em></h3>
             <p>Bring patient, doctor, and admin tasks into a clearer mobile system.</p>
           </article>
 
           <article class="panel project-detail-card reveal">
             <p class="card-label">Features</p>
-            <h3>Core flow</h3>
+            <h3>Core <em>flow</em></h3>
             <ul>
               <li>Role-based access</li>
               <li>Care management</li>
@@ -83,7 +84,7 @@
 
           <article class="panel project-detail-card reveal">
             <p class="card-label">Direction</p>
-            <h3>Clear startup feel</h3>
+            <h3>Clear <em>startup feel</em></h3>
             <p>Simple entry point, clean hierarchy, and healthcare-first visual clarity.</p>
           </article>
         </section>
@@ -121,9 +122,12 @@
             data-ask-ai-input
             aria-label="Ask AI about the portfolio"
           />
-          <button class="button button-primary ask-ai-submit" type="submit">Send</button>
-        </form>
       </div>
+      <footer class="site-footer">
+        <p>Sachin Tarkar</p>
+        <p>iOS App Developer &amp; UI/UX Designer</p>
+        <a href="index.html#top">Back to home ↗</a>
+      </footer>
     </div>
 
     <script src="script.js?v=20260328g"></script>

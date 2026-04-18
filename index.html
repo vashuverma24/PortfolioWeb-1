@@ -13,39 +13,40 @@
     <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png?v=3" />
     <link rel="icon" type="image/png" sizes="256x256" href="favicon-256.png?v=3" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png?v=3" />
-    <link rel="stylesheet" href="styles.css?v=20260329b" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300..500;1,300..500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=20260418" />
   </head>
   <body>
     <div class="global-cursor"></div>
-    <div class="page-shell">
       <header class="site-header">
         <a class="brand" href="#top" aria-label="Sachin Tarkar home">
           Sachin Tarkar
         </a>
 
         <nav class="site-nav" aria-label="Primary">
+          <a href="#home" data-nav-link>Home</a>
           <a href="#projects" data-nav-link>Work</a>
           <a href="#about" data-nav-link>About</a>
+          <a href="#experience" data-nav-link>Experience</a>
           <a href="#contact" data-nav-link>Contact</a>
-          <a
-            href="https://drive.google.com/file/d/1h_XCkMY52OAqJD6QULvOAGfvVJzDyh3V/view?usp=share_link"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Resume
-          </a>
         </nav>
 
-        <p class="site-year">&copy;2026</p>
+        <a class="site-resume" href="https://drive.google.com/file/d/1h_XCkMY52OAqJD6QULvOAGfvVJzDyh3V/view?usp=share_link" target="_blank" rel="noreferrer">
+          RESUME <span>↗</span>
+        </a>
       </header>
 
+      <div class="page-shell">
+
       <main id="top">
-        <section class="hero section">
+        <section class="hero section" id="home">
           <span class="hero-dot" aria-hidden="true"></span>
 
           <div class="hero-copy reveal">
             <p class="hero-kicker">iOS Developer · UI&ndash;UX Designer · Product Designer</p>
-            <h1>Design With Intent</h1>
+            <h1>Design With <em>Intent</em></h1>
           </div>
 
           <div class="hero-foot reveal">
@@ -59,7 +60,8 @@
 
         <section class="project-prowess section" id="projects">
           <div class="project-prowess-header reveal">
-            <p class="eyebrow">Projects</p>
+            <p class="eyebrow">Work</p>
+            <h2>Project <em>Prowess</em></h2>
           </div>
 
           <div class="project-prowess-layout">
@@ -85,7 +87,7 @@
 
               <div class="project-prowess-copy reveal">
                 <p class="card-label">LeoLingo / Speech Therapy iPad App</p>
-                <h3>Speech practice through guided play.</h3>
+                <h3>Speech practice <em>through guided play</em></h3>
                 <p>Playful speech learning for children.</p>
                 <p class="project-prowess-meta">SWIFTUI + SUPABASE + UI/UX DESIGN</p>
                 <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1rem;">
@@ -143,7 +145,7 @@
               </a>
               <div class="project-secondary-copy">
                 <p class="card-label">PrePlus / AI Study Companion</p>
-                <h3>Smarter notes, quizzes, and revision.</h3>
+                <h3>Smarter notes, <em>quizzes, and revision</em></h3>
                 <p class="project-prowess-meta">SwiftUI + AI + Supabase</p>
               </div>
             </article>
@@ -169,7 +171,7 @@
               </a>
               <div class="project-secondary-copy">
                 <p class="card-label">MediOps / Healthcare Management</p>
-                <h3>Care workflows made cleaner and faster.</h3>
+                <h3>Care workflows <em>made cleaner and faster</em></h3>
                 <p class="project-prowess-meta">UIKit + Swift + Supabase</p>
               </div>
             </article>
@@ -195,7 +197,7 @@
               </a>
               <div class="project-secondary-copy">
                 <p class="card-label">Gravity / Swift Student Challenge 2025</p>
-                <h3>Explore how planets react to changing gravity.</h3>
+                <h3>Explore how planets <em>react to changing gravity</em></h3>
                 <p class="project-prowess-meta">SwiftUI + SceneKit</p>
               </div>
             </article>
@@ -206,7 +208,7 @@
           <div class="about-layout">
             <div class="about-copy reveal">
               <p class="eyebrow">About</p>
-              <h2>Sachin Tarkar</h2>
+              <h2>Sachin <em>Tarkar</em></h2>
               <div class="about-education-copy">
                 <p class="about-education-degree">
                   B.Tech in Computer Science &amp; Engineering
@@ -214,7 +216,7 @@
                 <p class="about-education-meta">
                   Galgotias University / 2022 to 2026
                 </p>
-                <p class="about-education-score">8.29 CGPA</p>
+                <p class="about-education-score"><em>8.29</em> CGPA</p>
               </div>
               <p class="about-summary">
                 I build user-focused iOS products with SwiftUI and UIKit,
@@ -487,7 +489,7 @@
           <div class="section-heading reveal">
             <div>
               <p class="eyebrow">Experience</p>
-              <h2>Hands-on impact with real products and real teams.</h2>
+              <h2>Where I've <em>worked</em></h2>
             </div>
           </div>
 
@@ -573,21 +575,19 @@
           <div class="section-heading reveal">
             <div>
               <p class="eyebrow">Contact</p>
-              <h2>Let&rsquo;s create something people love to use.</h2>
+              <h2>Let's <em>talk</em></h2>
             </div>
           </div>
 
           <div class="contact-editorial reveal">
             <div class="contact-copy">
-              <p class="card-label">Reach out directly</p>
-              <h3>Let&rsquo;s talk.</h3>
               <a
                 class="button button-primary contact-resume"
                 href="https://drive.google.com/file/d/1h_XCkMY52OAqJD6QULvOAGfvVJzDyh3V/view?usp=share_link"
                 target="_blank"
                 rel="noreferrer"
               >
-                Open Resume
+                Open RESUME <span>↗</span>
               </a>
             </div>
 
@@ -644,7 +644,7 @@
       <footer class="site-footer">
         <p>Sachin Tarkar</p>
         <p>iOS App Developer &amp; UI/UX Designer</p>
-        <a href="#top">Back to top</a>
+        <a href="#top">Back to top ↗</a>
       </footer>
     </div>
 

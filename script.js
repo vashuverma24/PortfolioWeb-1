@@ -219,12 +219,19 @@ if (sections.length && navLinks.length && 'IntersectionObserver' in window) {
       }
     },
     {
-      threshold: [0.3, 0.5, 0.7],
-      rootMargin: '-18% 0px -42% 0px',
+      threshold: [0.1, 0.2, 0.3, 0.4, 0.5],
+      rootMargin: '-10% 0px -30% 0px',
     }
   );
 
   sections.forEach((section) => sectionObserver.observe(section));
+
+  // Add a fallback for the very bottom of the page (Contact section)
+  window.addEventListener('scroll', () => {
+    if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 50) {
+      markActiveLink('contact');
+    }
+  }, { passive: true });
 }
 
 if (!('IntersectionObserver' in window) && sections.length && navLinks.length) {
