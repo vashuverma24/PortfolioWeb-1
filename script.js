@@ -418,91 +418,149 @@ if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)'
     isAnimating = true;
     animationStartTime = Date.now();
     
-    // Get hero bounds
-    const heroBounds = heroSection.getBoundingClientRect();
+    // Total duration for the expanded sequence
+    const totalDuration = 7000; 
+    
+    // Get text bounds
     const textBounds = textElement.getBoundingClientRect();
     
-    // Start from left edge of text, middle height
+    // Start from further off-screen left for a longer approach
+    const offscreenX = -500;
     const startX = textBounds.left;
     const startY = textBounds.top + textBounds.height / 2;
     
     // End at right edge of text
     const endX = textBounds.right;
     const endY = textBounds.top + textBounds.height / 2;
+
+    // Get fusion stage
+    const fusionStage = document.querySelector('.hero-fusion-stage');
     
-    cursorX = startX;
-    cursorY = startY;
-    targetX = startX;
-    targetY = startY;
-    prevX = startX;
-    prevY = startY;
+    // Initial hardware-accel defaults
+    cursorX = offscreenX;
+    cursorY = startY - 100; // Start slightly higher for an approach arc
+    targetX = offscreenX;
+    targetY = startY - 100;
+    prevX = offscreenX;
+    prevY = startY - 100;
     
-    // Responsive cursor size based on screen width
-    let cursorSize = '3.8rem';
-    if (window.innerWidth < 768) {
-      cursorSize = '2.8rem';
+    // Initialize fusion effect (Blur + Contrast)
+    if (fusionStage) {
+      fusionStage.style.setProperty('--fusion-blur', '4px');
+      fusionStage.style.setProperty('--fusion-contrast', '12'); 
     }
-    if (window.innerWidth < 480) {
-      cursorSize = '2.2rem';
-    }
+    
+    // Reset any existing reveal
+    textElement.style.setProperty('--reveal-pos', '0%');
+    
+    // Responsive cursor size (Scaled up per request)
+    let cursorSize = '4.5rem';
+    if (window.innerWidth < 768) cursorSize = '3.5rem';
+    if (window.innerWidth < 480) cursorSize = '2.8rem';
     
     globalCursor.style.width = cursorSize;
     globalCursor.style.height = cursorSize;
+    globalCursor.style.fontSize = cursorSize;
+    globalCursor.style.filter = 'none';
     
-    // Animate plane across text
     const animateAcrossText = () => {
       const elapsed = Date.now() - animationStartTime;
-      const progress = Math.min(elapsed / animationDuration, 1);
+      const progress = Math.min(elapsed / totalDuration, 1);
       
-      // Phase 1: Move across text (0-0.70)
-      if (progress < 0.70) {
-        const textProgress = progress / 0.70;
-        // Smoother easing curve for movement
-        const easeProgress = textProgress < 0.5 
-          ? 2 * textProgress * textProgress 
-          : -1 + (4 - 2 * textProgress) * textProgress;
+      // Improve smoothing by updating position factor during animation
+      const lerp = (start, end, t) => start + (end - start) * t;
+
+      // PHASE 0: Entry (0 - 0.22) - Slightly longer for smoother acceleration
+      if (progress < 0.22) {
+        const entryProgress = progress / 0.22;
+        // High-order Ease-out for silky entry
+        const easeEntry = 1 - Math.pow(1 - entryProgress, 5);
         
-        // Linear path across entire text width
-        targetX = startX + (endX - startX) * easeProgress;
-        // Slight wave motion
-        targetY = startY + Math.sin(easeProgress * Math.PI) * 50;
+        targetX = offscreenX + (startX - offscreenX) * easeEntry;
+        // Descending arc from (startY - 100) to startY
+        targetY = (startY - 100) + (100 * easeEntry);
         
-        // Calculate rotation angle based on movement direction
+        // Direct catch-up for maximum smoothness during entry
+        cursorX = targetX;
+        cursorY = targetY;
+        
+        cursorAngle = calculateAngle(prevX, prevY, targetX, targetY);
+        prevX = targetX;
+        prevY = targetY;
+        createAnimationSparkles(cursorX, cursorY);
+      }
+      // PHASE 1: Drawing Reveal (0.22 - 0.78)
+      else if (progress < 0.78) {
+        const drawProgress = (progress - 0.22) / 0.56;
+        // Ultra-smooth Ease-in-out
+        const easeDraw = drawProgress < 0.5 
+          ? 8 * Math.pow(drawProgress, 4) 
+          : 1 - Math.pow(-2 * drawProgress + 2, 4) / 2;
+        
+        targetX = startX + (endX - startX) * easeDraw;
+        targetY = startY + Math.sin(drawProgress * Math.PI * 2) * 50;
+        
+        // Direct catch-up for maximum smoothness during drawing
+        cursorX = targetX;
+        cursorY = targetY;
+        
+        // Update text reveal mask sync with plane
+        // Added a slight offset (easeDraw - 0.05) to ensure sparkles are ahead of the text reveal
+        const revealPercent = Math.max(0, Math.min(100, (easeDraw - 0.04) * 105)); 
+        textElement.style.setProperty('--reveal-pos', `${revealPercent}%`);
+        
         cursorAngle = calculateAngle(prevX, prevY, targetX, targetY);
         prevX = targetX;
         prevY = targetY;
         
-        // Create more sparkles during animation
-        createAnimationSparkles(cursorX, cursorY);
+        // High-density sparkles for fusion effect
+        createAnimationSparkles(cursorX, cursorY, true);
       }
-      // Phase 2: Move away to current mouse position (0.70-1)
+      // PHASE 2: Transition to Mouse (0.75 - 1.0)
       else if (progress < 1) {
-        const transitionProgress = (progress - 0.70) / 0.30;
-        // Smooth easing for transition
+        const transitionProgress = (progress - 0.75) / 0.25;
+        
+        // Restore text crispness (Disable fusion) early for a snappier feel
+        if (fusionStage) {
+          fusionStage.style.setProperty('--fusion-blur', '0px');
+          fusionStage.style.setProperty('--fusion-contrast', '1');
+        }
+
         const easeTransition = transitionProgress < 0.5
           ? 2 * transitionProgress * transitionProgress
           : -1 + (4 - 2 * transitionProgress) * transitionProgress;
         
+        // Ensure text is 100% revealed
+        textElement.style.setProperty('--reveal-pos', '100%');
+        
         targetX = endX + (currentMouseX - endX) * easeTransition;
         targetY = endY + (currentMouseY - endY) * easeTransition;
         
-        // Calculate rotation angle based on movement direction
+        // Scale down cursor (Crisply)
+        const normalSize = window.innerWidth < 768 ? 1.5 : 1.8;
+        const maxSize = parseFloat(cursorSize);
+        const currentSize = maxSize - (maxSize - normalSize) * transitionProgress;
+        
+        globalCursor.style.width = currentSize + 'rem';
+        globalCursor.style.height = currentSize + 'rem';
+        // Force the text to stay crisp
+        globalCursor.style.fontSize = currentSize + 'rem';
+        globalCursor.style.filter = 'none';
+        
         cursorAngle = calculateAngle(prevX, prevY, targetX, targetY);
         prevX = targetX;
         prevY = targetY;
-        
-        // Gradually decrease cursor size back to normal
-        const sizeProgress = transitionProgress;
-        const normalSize = window.innerWidth < 768 ? 1.5 : 1.8;
-        const maxSize = window.innerWidth < 768 ? 2.8 : (window.innerWidth < 480 ? 2.2 : 3.8);
-        const currentSize = maxSize - (maxSize - normalSize) * sizeProgress;
-        globalCursor.style.width = currentSize + 'rem';
-        globalCursor.style.height = currentSize + 'rem';
-        
         createAnimationSparkles(cursorX, cursorY);
       } else {
         isAnimating = false;
-        // Reset cursor size
+        textElement.style.setProperty('--reveal-pos', '100%');
+        
+        // Restore text crispness (Disable fusion)
+        if (fusionStage) {
+          fusionStage.style.setProperty('--fusion-blur', '0px');
+          fusionStage.style.setProperty('--fusion-contrast', '1');
+        }
+        
         const normalSize = window.innerWidth < 768 ? 1.5 : 1.8;
         globalCursor.style.width = normalSize + 'rem';
         globalCursor.style.height = normalSize + 'rem';
@@ -515,28 +573,61 @@ if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)'
     
     animateAcrossText();
   };
+;
 
-  const createAnimationSparkles = (x, y) => {
-    // Create more sparkles during animation (5-8 per frame for bigger effect)
-    const sparkleCount = 5 + Math.floor(Math.random() * 4);
+  const createAnimationSparkles = (x, y, isDrawing = false) => {
+    // Increased density during drawing phase
+    const sparkleCount = isDrawing 
+      ? 20 + Math.floor(Math.random() * 15) 
+      : 8 + Math.floor(Math.random() * 6);
+    
+    const fusionStage = document.querySelector('.hero-fusion-stage');
     
     for (let i = 0; i < sparkleCount; i++) {
       const sparkle = document.createElement('div');
       sparkle.className = 'cursor-sparkle';
-      sparkle.style.left = x + 'px';
-      sparkle.style.top = y + 'px';
+      
+      // Randomly choose between Gold (accent) and White sparkles
+      const isGold = Math.random() > 0.45;
+      const goldColor = '#c4956a'; // Explicit gold accent
+      const whiteColor = '#ffffff';
+      
+      sparkle.style.background = isGold ? goldColor : whiteColor;
+      
+      // Enhanced Glow for maximum visibility
+      const glowColor = isGold ? 'rgba(196, 149, 106, 0.8)' : 'rgba(255, 255, 255, 0.9)';
+      sparkle.style.boxShadow = `0 0 12px ${glowColor}, 0 0 4px ${glowColor}`;
+      
+      // If drawing, use relative pos within fusion stage
+      if (isDrawing && fusionStage) {
+        const bounds = fusionStage.getBoundingClientRect();
+        sparkle.style.left = (x - bounds.left) + 'px';
+        sparkle.style.top = (y - bounds.top) + 'px';
+        
+        // Larger sparkles during drawing (3px - 7px range)
+        const size = (3 + Math.random() * 4) + 'px';
+        sparkle.style.width = size;
+        sparkle.style.height = size;
+        
+        fusionStage.appendChild(sparkle);
+      } else {
+        sparkle.style.left = x + 'px';
+        sparkle.style.top = y + 'px';
+        document.body.appendChild(sparkle);
+      }
       
       // Random sparkle direction
       const angle = Math.random() * Math.PI * 2;
-      const distance = 10 + Math.random() * 32;
+      // More confined dispersal for a 'tighter' path look during drawing
+      const distance = isDrawing ? (5 + Math.random() * 35) : (10 + Math.random() * 32);
       const sparkleX = Math.cos(angle) * distance;
       const sparkleY = Math.sin(angle) * distance;
       
       sparkle.style.setProperty('--sparkle-x', `${sparkleX}px`);
       sparkle.style.setProperty('--sparkle-y', `${sparkleY}px`);
-      document.body.appendChild(sparkle);
       
-      setTimeout(() => sparkle.remove(), 500);
+      // Longer lifespan for drawing sparkles to create a dramatic tail (1.5s)
+      setTimeout(() => sparkle.remove(), isDrawing ? 1500 : 500);
     }
   };
 

@@ -82,7 +82,7 @@ img {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  font-size: 1.8rem;
+  font-size: inherit;
   color: var(--accent);
 }
 
@@ -337,16 +337,40 @@ h3 em {
   text-align: center;
   max-width: min(64rem, calc(100% - 2rem));
 }
+.hero-fusion-stage {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  /* Gooey Fusion Filter (Blur + High Contrast) */
+  /* This allows particles to 'melt' into the text */
+  filter: blur(var(--fusion-blur, 0px)) contrast(var(--fusion-contrast, 1));
+  transition: filter 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+  pointer-events: none;
+}
 
 .hero h1 {
   font-family: 'DM Serif Display', serif;
   font-size: clamp(4rem, 7vw, 7.5rem);
   font-weight: 400;
   letter-spacing: -0.02em;
-  line-height: 0.95;
+  line-height: 1.15;
   text-align: center;
-  opacity: 0;
-  animation: fadeUp 1s ease-out forwards;
+  opacity: 1;
+  padding: 0 0.5rem 1.4rem;
+  /* Layered masks: One for the drawing reveal, one for the symmetrical edge fading */
+  -webkit-mask-image: 
+    linear-gradient(to right, #000 var(--reveal-pos, 0%), transparent var(--reveal-pos, 0%)),
+    linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  mask-image: 
+    linear-gradient(to right, #000 var(--reveal-pos, 0%), transparent var(--reveal-pos, 0%)),
+    linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 .hero h1 em {
