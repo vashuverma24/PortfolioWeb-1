@@ -15,7 +15,7 @@ const askAiInput = document.querySelector('[data-ask-ai-input]');
 const askAiLog = document.querySelector('[data-ask-ai-log]');
 const askAiSubmit = document.querySelector('.ask-ai-submit');
 const askAiHistory = [];
-const GEMINI_API_KEY = 'AQ.Ab8RN6J8XoLYY1YT-ttSiiBdVKoSjQq1RDkFGtOFwS7JsIt_6A'; // Your Gemini API key
+const GROQ_API_KEY = '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';
 
 const markActiveLink = (id) => {
   navLinks.forEach((link) => {
@@ -49,7 +49,11 @@ const appendAskAiMessage = (role, message) => {
 
   const bubble = document.createElement('div');
   bubble.className = `ask-ai-message ask-ai-message-${role}`;
-  bubble.textContent = message;
+  
+  // Format message: convert **text** to <span class="accent-highlight">text</span>
+  const formattedMessage = message.replace(/\*\*(.*?)\*\*/g, '<span class="accent-highlight">$1</span>');
+  bubble.innerHTML = formattedMessage;
+  
   askAiLog.appendChild(bubble);
   askAiLog.scrollTop = askAiLog.scrollHeight;
 };
@@ -67,60 +71,56 @@ const appendAskAiLoadingMessage = () => {
 
 const requestAskAiReply = async (question) => {
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+    const SACHIN_CONTEXT = `
+      You are Sachin Tarkar. You are directly answering questions from visitors on your portfolio website. 
+      Always respond in the first person ("I", "my", "me").
+      ABOUT YOU:
+      - iOS App Developer & UI/UX Designer
+      - B.Tech Computer Science & Engineering, Galgotias University (2022-2026), CGPA: 8.29
+      - Selected iOS Developer at iOS Development Center (Powered by Apple & Infosys)
+      - iOS App Developer Intern at Infosys Ltd., Mysore
+      PROJECTS:
+      - LeoLingo: Speech therapy iPad app for children using SwiftUI, Firebase, UI/UX design. (Kids-friendly adventure workshop theme).
+      - PrePlus: AI study companion with SwiftUI, AI integration, Supabase.
+      - MediOps: Healthcare management app with Swift, UIKit, Supabase, role-based access.
+      - Gravity: Swift Student Challenge 2025 - planet gravity simulation with SwiftUI, SceneKit.
+      - HeyMadhav: Bhagavad Gita learning app with SwiftUI, AI integration.
+      SKILLS:
+      - Languages: Swift, SwiftUI, UIKit, Java, Python.
+      - Tools: Xcode, VS Code, Git, GitHub, Figma.
+      - Frameworks: Firebase, Supabase, SceneKit.
+      - Concepts: Data Structures, Algorithms, OOP, DBMS.
+      EXPERIENCE:
+      - Scrum Master & team facilitator at Infosys.
+      - Built SwiftUI modules for hospital management systems.
+      - Worked with designers and backend engineers on production apps.
+      CONTACT:
+      - Email: tarkarsachin842@gmail.com
+      - Phone: +91 9568635207
+      - LinkedIn: /in/sachin-tarkar
+      - GitHub: /SachinTarkar842
+      - Instagram: @sachinarjunsingh
+      PERSONALITY:
+      Be extremely concise. Answer in 1-2 SHORT sentences maximum. 
+      Use a warm, confident, and casual tone—like you are chatting with a recruiter or fellow developer. 
+      IMPORTANT: Only wrap the most vital 1-2 words in double asterisks like **this** per message. Over-highlighting is forbidden. Keep it punchy!
+    `;
+
+    // Note: Calling Groq directly from client (Standalone mode)
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        systemInstruction: {
-          parts: [{
-            text: `You are Sachin Tarkar's portfolio assistant. Keep responses SHORT and CONCISE - 1-2 sentences max.
-
-ABOUT SACHIN:
-- iOS App Developer & UI/UX Designer
-- B.Tech Computer Science & Engineering, Galgotias University (2022-2026), CGPA: 8.29
-- Selected iOS Developer at iOS Development Center (Powered by Apple & Infosys)
-- iOS App Developer Intern at Infosys Ltd., Mysore
-
-PROJECTS:
-- LeoLingo: Speech therapy iPad app for children using SwiftUI, Firebase, UI/UX design
-- PrePlus: AI study companion with SwiftUI, AI integration, Supabase
-- MediOps: Healthcare management app with Swift, UIKit, Supabase, role-based access
-- Gravity: Swift Student Challenge 2025 - planet gravity simulation with SwiftUI, SceneKit
-- HeyMadhav: Bhagavad Gita learning app with SwiftUI, AI integration
-
-SKILLS:
-Languages: Swift, SwiftUI, UIKit, Java, Python
-Tools: Xcode, VS Code, Git, GitHub, Figma
-Frameworks: Firebase, Supabase, SceneKit
-Concepts: Data Structures, Algorithms, OOP, DBMS
-
-EXPERIENCE:
-- Scrum Master & team facilitator at Infosys
-- Built SwiftUI modules for hospital management systems
-- Worked with designers and backend engineers on production apps
-
-CONTACT:
-- Email: tarkarsachin842@gmail.com
-- Phone: +91 9568635207
-- LinkedIn: /in/sachin-tarkar
-- GitHub: /SachinTarkar842
-- Instagram: @sachinarjunsingh
-
-Answer questions accurately based on this information. Be helpful and direct.`
-          }]
-        },
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: question }]
-          }
+        model: "llama-3.1-8b-instant", // High speed model from your Swift reference
+        messages: [
+          { role: "system", content: SACHIN_CONTEXT },
+          { role: "user", content: question }
         ],
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 150
-        }
+        temperature: 0.7,
+        max_tokens: 800
       })
     });
 
@@ -130,12 +130,9 @@ Answer questions accurately based on this information. Be helpful and direct.`
       throw new Error(data?.error?.message || 'API request failed');
     }
 
-    if (!data?.candidates?.[0]?.content?.parts?.[0]?.text) {
-      throw new Error('No response from API');
-    }
-
-    return data.candidates[0].content.parts[0].text;
+    return data.choices[0].message.content;
   } catch (error) {
+    console.error('Ask AI Error:', error);
     const message = error instanceof Error ? error.message : 'API request failed';
     return `Sorry, I couldn't process that. ${message}`;
   }
@@ -166,7 +163,7 @@ const initAskAi = () => {
 
   appendAskAiMessage(
     'assistant',
-    'Hi. Ask me anything about Sachin’s work.'
+    'Hi! I am Sachin. Ask me anything about my work.'
   );
 };
 
@@ -174,6 +171,12 @@ const setAskAiState = (isOpen) => {
   if (!askAiDrawer) return;
 
   askAiDrawer.hidden = !isOpen;
+  
+  // Hide the launcher when the chatbox is open
+  const askAiLauncher = document.querySelector('.ask-ai-launcher');
+  if (askAiLauncher) {
+    askAiLauncher.hidden = isOpen;
+  }
 
   if (isOpen) {
     initAskAi();
@@ -811,3 +814,5 @@ if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)'
     }
   }, { passive: true });
 }
+
+
