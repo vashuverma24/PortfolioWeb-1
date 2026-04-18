@@ -570,6 +570,30 @@ if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)'
     return angle;
   };
 
+  const createScrollSparkles = (x, y) => {
+    // Fewer sparkles for scroll to keep performance high (1-2 per trigger)
+    const sparkleCount = 1 + Math.floor(Math.random() * 2);
+    
+    for (let i = 0; i < sparkleCount; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'cursor-sparkle';
+      sparkle.style.left = x + 'px';
+      sparkle.style.top = y + 'px';
+      
+      // Random direction trail
+      const angle = (cursorAngle + 180 + (Math.random() * 40 - 20)) * (Math.PI / 180);
+      const distance = 8 + Math.random() * 22;
+      const sparkleX = Math.cos(angle) * distance;
+      const sparkleY = Math.sin(angle) * distance;
+      
+      sparkle.style.setProperty('--sparkle-x', `${sparkleX}px`);
+      sparkle.style.setProperty('--sparkle-y', `${sparkleY}px`);
+      document.body.appendChild(sparkle);
+      
+      setTimeout(() => sparkle.remove(), 600);
+    }
+  };
+
   const createSparkles = (x, y) => {
     const now = Date.now();
     if (now - lastSparkleTime < 20) return;
@@ -661,24 +685,35 @@ if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)'
 
   window.addEventListener('scroll', () => {
     const scrolled = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollPercent = scrolled / docHeight;
+    const docHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - window.innerHeight;
+    const scrollPercent = Math.min(Math.max(scrolled / docHeight, 0), 1);
 
     if (!isAnimating) {
-      // Move cursor based on scroll position
-      const maxX = window.innerWidth * 0.8;
-      const startX = window.innerWidth * 0.1;
-      targetX = startX + (maxX - startX) * scrollPercent;
-      targetY = window.innerHeight * (0.2 + scrollPercent * 0.3);
+      // Base diagonal path
+      const maxX = window.innerWidth * 0.85;
+      const startX = window.innerWidth * 0.15;
+      const baseX = startX + (maxX - startX) * scrollPercent;
+      const baseY = window.innerHeight * (0.2 + scrollPercent * 0.4);
 
-      // Calculate angle based on scroll direction
-      cursorAngle = calculateAngle(prevX, prevY, targetX, targetY);
+      // Add "Snake" oscillation (Sine wave based on scroll position)
+      // We use scrolled * constant to ensure the wave moves as the user scrolls
+      const waveX = Math.sin(scrolled * 0.006) * 60;
+      const waveY = Math.cos(scrolled * 0.008) * 25;
+
+      targetX = baseX + waveX;
+      targetY = baseY + waveY;
+
+      // Calculate angle based on the new undulating path
+      if (Math.abs(prevX - targetX) > 0.1 || Math.abs(prevY - targetY) > 0.1) {
+        cursorAngle = calculateAngle(prevX, prevY, targetX, targetY);
+      }
+      
       prevX = targetX;
       prevY = targetY;
 
-      // Add scroll sparkles
+      // Add scroll sparkles consistently
       const now = Date.now();
-      if (now - lastScrollSparkleTime > scrollSparkleDelay && scrollPercent > 0 && scrollPercent < 1) {
+      if (now - lastScrollSparkleTime > 45) {
         lastScrollSparkleTime = now;
         createScrollSparkles(cursorX, cursorY);
       }
