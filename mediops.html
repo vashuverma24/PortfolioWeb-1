@@ -3,133 +3,261 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MediOps | Sachin Tarkar</title>
-    <meta
-      name="description"
-      content="MediOps project details by Sachin Tarkar. Healthcare management app built with Swift, UIKit, and operational clarity."
-    />
+    <title>MediOps — Case Study | Sachin Tarkar</title>
+    <meta name="description" content="MediOps case study. Hospital management system built with Swift, UIKit, and role-based interface design." />
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg?v=3" />
-    <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png?v=3" />
-    <link rel="icon" type="image/png" sizes="256x256" href="favicon-256.png?v=3" />
-    <link rel="apple-touch-icon" href="apple-touch-icon.png?v=3" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300..500;1,300..500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css?v=20260418" />
+    <style>
+      @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+      .ani { opacity:0; animation: fadeUp 0.65s cubic-bezier(.22,1,.36,1) forwards; }
+      .ani.d1{animation-delay:.05s} .ani.d2{animation-delay:.15s} .ani.d3{animation-delay:.25s} .ani.d4{animation-delay:.38s} .ani.d5{animation-delay:.50s}
+
+      .cs { max-width:1200px; margin:0 auto; padding:0 2rem; }
+
+      .cs-hero { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; min-height:88vh; padding:7rem 0 4rem; border-bottom:1px solid var(--line); }
+      .cs-tag-row { display:flex; align-items:center; gap:1rem; margin-bottom:2rem; }
+      .cs-num { font-family:'DM Serif Display',serif; font-size:1rem; color:var(--accent); letter-spacing:.05em; }
+      .cs-tag { font-family:'DM Mono',monospace; font-size:.6rem; text-transform:uppercase; letter-spacing:.16em; color:var(--muted); padding:.3rem .75rem; border:1px solid var(--line); border-radius:999px; }
+      .cs-h1 { font-family:'DM Serif Display',serif; font-size:clamp(2.8rem,5vw,4.5rem); line-height:1.08; letter-spacing:-.03em; margin:0 0 1.2rem; }
+      .cs-h1 em { font-style:italic; color:var(--accent); }
+      .cs-lead { font-size:1rem; line-height:1.75; color:var(--secondary); margin:0 0 2rem; max-width:42ch; }
+      .cs-hero-stack { display:flex; flex-direction:column; gap:1.5rem; margin-bottom:2.5rem; }
+      .cs-hero-meta { display:flex; flex-direction:column; gap:.3rem; }
+      .cs-meta-label { font-family:'DM Mono',monospace; font-size:.55rem; text-transform:uppercase; letter-spacing:.18em; color:var(--muted); }
+      .cs-meta-value { font-size:.9rem; color:var(--text); }
+      .cs-actions { display:flex; gap:.8rem; flex-wrap:wrap; }
+      .cs-hero-right img { width:100%; border-radius:12px; display:block; }
+
+      .cs-body { padding:3rem 0; }
+      .cs-pair { display:grid; grid-template-columns:1fr 1fr; gap:3rem; padding:3rem 0; border-bottom:1px solid var(--line); align-items:start; }
+      .cs-full { padding:3rem 0; border-bottom:1px solid var(--line); }
+
+      .cs-block-label { font-family:'DM Mono',monospace; font-size:.58rem; text-transform:uppercase; letter-spacing:.18em; color:var(--accent); margin-bottom:.75rem; }
+      .cs-block-h { font-family:'DM Serif Display',serif; font-size:clamp(1.4rem,2.5vw,2rem); line-height:1.2; margin:0 0 1rem; letter-spacing:-.02em; }
+      .cs-block-h em { font-style:italic; color:var(--secondary); }
+      .cs-block-p { font-size:.95rem; line-height:1.75; color:var(--secondary); margin:0 0 .75rem; }
+      .cs-block-p strong { color:var(--text); font-weight:500; }
+      .cs-block-p:last-child { margin-bottom:0; }
+
+      .cs-pull { font-family:'DM Serif Display',serif; font-size:clamp(1.2rem,2.5vw,1.75rem); line-height:1.45; font-style:italic; color:var(--text); border-left:3px solid var(--accent); padding-left:1.5rem; margin:0; }
+
+      .cs-feat-list { list-style:none; padding:0; margin:.5rem 0 0; display:flex; flex-direction:column; gap:0; }
+      .cs-feat-list li { font-size:.92rem; color:var(--secondary); padding:.75rem 0; border-bottom:1px solid var(--line); display:flex; gap:.75rem; align-items:baseline; }
+      .cs-feat-list li:last-child { border-bottom:none; }
+      .cs-feat-list li::before { content:attr(data-n); font-family:'DM Mono',monospace; font-size:.55rem; color:var(--accent); flex-shrink:0; padding-top:.2rem; }
+
+      /* Role visual — 3 columns */
+      .cs-role-visual {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+        margin:1rem 0;
+      }
+      .cs-rv-col {
+        padding: 1.2rem;
+        border-right: 1px solid var(--line);
+      }
+      .cs-rv-col:last-child { border-right: none; }
+      .cs-rv-label { font-family:'DM Mono',monospace; font-size:.55rem; color:var(--accent); text-transform:uppercase; letter-spacing:.14em; margin-bottom:.4rem; }
+      .cs-rv-val { font-size:.85rem; color:var(--secondary); line-height:1.5; }
+
+      .cs-roles { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.8rem; }
+      .cs-role { font-family:'DM Mono',monospace; font-size:.62rem; text-transform:uppercase; letter-spacing:.1em; color:var(--secondary); padding:.3rem .8rem; border:1px solid var(--line); border-radius:999px; }
+
+      .cs-takes { display:flex; flex-direction:column; margin-top:.5rem; }
+      .cs-take { display:grid; grid-template-columns:1.2rem 1fr; gap:.8rem; padding:.8rem 0; border-bottom:1px solid var(--line); align-items:start; }
+      .cs-take:last-child { border-bottom:none; }
+      .cs-take-n { font-family:'DM Mono',monospace; font-size:.55rem; color:var(--muted); padding-top:.2rem; }
+      .cs-take-t { font-size:.9rem; line-height:1.65; color:var(--secondary); margin:0; }
+
+      .cs-img { width:100%; border-radius:10px; display:block; margin-top:1.2rem; }
+      .cs-img-cap { font-family:'DM Mono',monospace; font-size:.58rem; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; margin-top:.6rem; }
+
+      .cs-nav { padding:3rem 0; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
+
+      @media (max-width:768px) {
+        .cs-hero { grid-template-columns:1fr; min-height:auto; padding:6rem 0 3rem; }
+        .cs-hero-right { order:-1; }
+        .cs-pair { grid-template-columns:1fr; gap:2rem; }
+        .cs-role-visual { grid-template-columns:1fr; }
+        .cs-rv-col { border-right:none; border-bottom:1px solid var(--line); }
+        .cs-rv-col:last-child { border-bottom:none; }
+      }
+    </style>
   </head>
   <body class="project-detail-page">
     <div class="global-cursor"></div>
-      <header class="site-header">
-        <a class="brand" href="index.html#top" aria-label="Back to portfolio">Sachin Tarkar</a>
-        <nav class="site-nav" aria-label="Primary">
-          <a href="index.html#home">Home</a>
-          <a href="index.html#projects">Work</a>
-          <a href="index.html#about">About</a>
-          <a href="index.html#experience">Experience</a>
-          <a href="index.html#contact">Contact</a>
-        </nav>
-        <a class="site-resume" href="https://drive.google.com/file/d/1h_XCkMY52OAqJD6QULvOAGfvVJzDyh3V/view?usp=share_link" target="_blank" rel="noreferrer">
-          RESUME <span>↗</span>
-        </a>
-      </header>
+    <header class="site-header">
+      <a class="brand" href="index.html#top" aria-label="Back to portfolio">Sachin Tarkar</a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html#home">Home</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#projects">Work</a>
+        <a href="index.html#skills">Skills</a>
+        <a href="index.html#experience">Experience</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+      <a class="site-resume" href="https://drive.google.com/file/d/1h_XCkMY52OAqJD6QULvOAGfvVJzDyh3V/view?usp=share_link" target="_blank" rel="noreferrer">RESUME <span>↗</span></a>
+    </header>
 
-      <div class="page-shell">
+    <div class="cs">
+      <main>
 
-      <main class="project-detail-main">
-        <section class="project-detail-hero">
-          <div class="project-detail-copy reveal">
-            <p class="card-label">MediOps / Healthcare Management</p>
-            <h1>Healthcare flows <em>with cleaner operational structure</em></h1>
-            <p>Role-based hospital workflows designed for faster access and clearer actions.</p>
-            <p class="project-prowess-meta">UIKit + Swift + Supabase</p>
-            <div class="project-detail-links">
-              <a class="button button-primary" href="index.html#projects">Back to Work</a>
-              <a
-                class="button button-secondary"
-                href="https://github.com/SachinTarkar842/MediOps"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Repository
-              </a>
+        <!-- Hero -->
+        <section class="cs-hero">
+          <div class="cs-hero-left">
+            <div class="cs-tag-row ani d1">
+              <span class="cs-num">03</span>
+              <span class="cs-tag">Case Study</span>
+              <span class="cs-tag">UIKit · Swift · Agile</span>
+            </div>
+            <h1 class="cs-h1 ani d2">Medi<em>Ops</em><br>Hospital Management</h1>
+            <p class="cs-lead ani d3">Redesigning how healthcare teams work — role-based dashboards and structured workflows that cut through operational complexity.</p>
+
+            <div class="cs-hero-stack ani d3">
+              <div class="cs-hero-meta">
+                <span class="cs-meta-label">My Role</span>
+                <span class="cs-meta-value">UI/UX Design · iOS Development · Scrum Master</span>
+              </div>
+              <div class="cs-hero-meta">
+                <span class="cs-meta-label">Tech Stack</span>
+                <span class="cs-meta-value">UIKit · Swift · Supabase</span>
+              </div>
+            </div>
+
+            <div class="cs-actions ani d4">
+              <a class="button button-primary" href="index.html#projects">All Projects</a>
+              <a class="button button-secondary" href="https://github.com/SachinTarkar842/MediOps" target="_blank" rel="noreferrer">Repository ↗</a>
             </div>
           </div>
 
-          <figure class="project-detail-visual reveal">
-            <img
-              src="mediOps1.png"
-              alt="MediOps healthcare app interface"
-              loading="lazy"
-            />
-          </figure>
+          <div class="cs-hero-right ani d5">
+            <img src="mediOps1.png" alt="MediOps hospital management role-based dashboard" loading="lazy" />
+          </div>
         </section>
 
-        <section class="project-detail-grid">
-          <article class="panel project-detail-card reveal">
-            <p class="card-label">Goal</p>
-            <h3>Organize <em>care operations</em></h3>
-            <p>Bring patient, doctor, and admin tasks into a clearer mobile system.</p>
-          </article>
+        <!-- Content -->
+        <div class="cs-body">
 
-          <article class="panel project-detail-card reveal">
-            <p class="card-label">Features</p>
-            <h3>Core <em>flow</em></h3>
-            <ul>
-              <li>Role-based access</li>
-              <li>Care management</li>
-              <li>Operational visibility</li>
-            </ul>
-          </article>
+          <!-- Problem + Solution -->
+          <div class="cs-pair reveal">
+            <div class="cs-block">
+              <p class="cs-block-label">Problem</p>
+              <h2 class="cs-block-h">Healthcare drowns in <em>complexity</em></h2>
+              <p class="cs-block-p">Complex workflows, cluttered interfaces, poor data handling. Hospital software built by engineers — not the nurses, doctors, and admins who use it every day.</p>
+            </div>
+            <div class="cs-block">
+              <p class="cs-block-label">Solution</p>
+              <h2 class="cs-block-h">Dashboard-first, <em>role-aware</em></h2>
+              <p class="cs-block-p">Each role — Admin, Doctor, Patient — sees exactly what they need on login. No deep nav trees. No training manuals. Just immediate, relevant clarity.</p>
+            </div>
+          </div>
 
-          <article class="panel project-detail-card reveal">
-            <p class="card-label">Direction</p>
-            <h3>Clear <em>startup feel</em></h3>
-            <p>Simple entry point, clean hierarchy, and healthcare-first visual clarity.</p>
-          </article>
-        </section>
+          <!-- Role visual + Features -->
+          <div class="cs-pair reveal">
+            <div class="cs-block">
+              <p class="cs-block-label">Three Roles, One System</p>
+              <h2 class="cs-block-h">Built for <em>each user</em></h2>
+              <div class="cs-role-visual">
+                <div class="cs-rv-col">
+                  <p class="cs-rv-label">Admin</p>
+                  <p class="cs-rv-val">Staff and appointment oversight</p>
+                </div>
+                <div class="cs-rv-col">
+                  <p class="cs-rv-label">Doctor</p>
+                  <p class="cs-rv-val">Patient records and scheduling</p>
+                </div>
+                <div class="cs-rv-col">
+                  <p class="cs-rv-label">Patient</p>
+                  <p class="cs-rv-val">Appointments and health data</p>
+                </div>
+              </div>
+            </div>
+            <div class="cs-block">
+              <p class="cs-block-label">Core Features</p>
+              <h2 class="cs-block-h">What it <em>does</em></h2>
+              <ul class="cs-feat-list">
+                <li data-n="A">Role-based access — each view built independently</li>
+                <li data-n="B">Appointment and patient data management</li>
+                <li data-n="C">Scannable dashboards with strong hierarchy</li>
+                <li data-n="D">Efficient workflows — minimum steps per action</li>
+              </ul>
+            </div>
+          </div>
+
+
+
+          <!-- Pull quote -->
+          <div class="cs-full reveal">
+            <p class="cs-pull">"Admin needs depth. Doctors need speed. Patients need simplicity. Strict view isolation — each role's experience is architecturally separate, sharing data but never interface patterns."</p>
+          </div>
+
+          <!-- Outcome + Learnings -->
+          <div class="cs-pair reveal">
+            <div class="cs-block">
+              <p class="cs-block-label">Outcome</p>
+              <h2 class="cs-block-h">Clearer workflows, <em>faster teams</em></h2>
+              <p class="cs-block-p">Improved clarity across all three user roles. Agile sprint consistency improved week over week as the team aligned earlier on design intent.</p>
+              <div class="cs-roles" style="margin-top:1.2rem;">
+                <span class="cs-role">UI / UX Design</span>
+                <span class="cs-role">iOS Development</span>
+                <span class="cs-role">Agile / Scrum</span>
+              </div>
+            </div>
+            <div class="cs-block">
+              <p class="cs-block-label">Learnings</p>
+              <h2 class="cs-block-h">What I <em>took away</em></h2>
+              <div class="cs-takes">
+                <div class="cs-take">
+                  <span class="cs-take-n">01</span>
+                  <p class="cs-take-t">Designing for multiple user roles requires systems thinking, not just visual design.</p>
+                </div>
+                <div class="cs-take">
+                  <span class="cs-take-n">02</span>
+                  <p class="cs-take-t">In complex systems, every added element must justify its presence — simplicity is a discipline.</p>
+                </div>
+                <div class="cs-take">
+                  <span class="cs-take-n">03</span>
+                  <p class="cs-take-t">Early design feedback in Agile cycles prevents engineering rework — show, don't describe.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="cs-nav">
+          <a class="button button-secondary" href="preplus.html">&#8592; PrePlus</a>
+          <a class="button button-secondary" href="index.html#projects">All Projects</a>
+        </div>
+
       </main>
     </div>
 
-    <button
-      class="ask-ai-launcher"
-      type="button"
-      data-ask-ai-open
-    >
-      Ask AI
-    </button>
-
+    <button class="ask-ai-launcher" type="button" data-ask-ai-open>Ask AI</button>
     <div class="ask-ai-drawer" data-ask-ai-drawer hidden>
       <div class="ask-ai-panel" role="dialog" aria-modal="false" aria-labelledby="ask-ai-title">
-        <button
-          class="ask-ai-close"
-          type="button"
-          data-ask-ai-close
-          aria-label="Close Ask AI"
-        >
-          <span></span>
-          <span></span>
-        </button>
+        <button class="ask-ai-close" type="button" data-ask-ai-close aria-label="Close Ask AI"><span></span><span></span></button>
         <h3 id="ask-ai-title">Portfolio Assistant</h3>
         <div class="ask-ai-log" data-ask-ai-log aria-live="polite"></div>
         <form class="ask-ai-form" data-ask-ai-form>
-          <input
-            class="ask-ai-input"
-            type="text"
-            name="ask-ai"
-            placeholder="Ask something about the portfolio"
-            autocomplete="off"
-            data-ask-ai-input
-            aria-label="Ask AI about the portfolio"
-          />
+          <input class="ask-ai-input" type="text" name="ask-ai" placeholder="Ask something about the portfolio" autocomplete="off" data-ask-ai-input aria-label="Ask AI" />
+          <button class="button button-primary ask-ai-submit" type="submit">Send</button>
+        </form>
       </div>
-      <footer class="site-footer">
-        <p>Sachin Tarkar</p>
-        <p>iOS App Developer &amp; UI/UX Designer</p>
-        <a href="index.html#top">Back to home ↗</a>
-      </footer>
     </div>
-
+    <footer class="site-footer">
+      <p>Sachin Tarkar</p>
+      <p>Product-Focused iOS Developer &amp; UI/UX Designer</p>
+      <a href="index.html#top">Back to home ↗</a>
+    </footer>
     <script src="script.js?v=20260328g"></script>
   </body>
 </html>

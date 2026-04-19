@@ -27,8 +27,9 @@
 
         <nav class="site-nav" aria-label="Primary">
           <a href="#home" data-nav-link>Home</a>
-          <a href="#projects" data-nav-link>Work</a>
           <a href="#about" data-nav-link>About</a>
+          <a href="#projects" data-nav-link>Work</a>
+          <a href="#skills" data-nav-link>Skills</a>
           <a href="#experience" data-nav-link>Experience</a>
           <a href="#contact" data-nav-link>Contact</a>
         </nav>
@@ -45,7 +46,7 @@
           <span class="hero-dot" aria-hidden="true"></span>
 
           <div class="hero-copy reveal">
-            <p class="hero-kicker">iOS Developer · UI&ndash;UX Designer · Product Designer</p>
+            <p class="hero-kicker">Product-Focused iOS Developer · UI/UX Designer</p>
             <div class="hero-fusion-stage">
               <h1>Design With <em>Intent</em></h1>
             </div>
@@ -53,14 +54,86 @@
 
           <div class="hero-foot reveal">
             <p>
-              CREATING USER-FOCUSED IOS APPLICATIONS WITH SWIFTUI AND UIKIT,
-              BLENDING CLEAN DESIGN, STRONG LOGIC, AND REAL-WORLD PROBLEM
-              SOLVING.
+              I TURN IDEAS INTO REAL IOS APPLICATIONS BY COMBINING THOUGHTFUL DESIGN, STRONG DEVELOPMENT, AND PRACTICAL PROBLEM SOLVING.
             </p>
+            <p style="color: var(--accent); margin-top: 1rem; font-family: var(--font-mono); font-size: 0.85rem; letter-spacing: 0.05em;">
+              3+ Apps Built • Ex - iOS Developer Intern @ Infosys
+            </p>
+            <div style="margin-top: 1.5rem;">
+              <a href="#projects" class="button button-primary">View Work</a>
+            </div>
           </div>
         </section>
 
-        <section class="project-prowess section" id="projects">
+        <section class="section about-section" id="about">
+          <div class="about-layout">
+            <div class="about-copy reveal">
+              <p class="eyebrow">About</p>
+              <h2>Sachin <em>Tarkar</em></h2>
+              <div class="about-education-copy">
+                <p class="about-education-degree">
+                  B.Tech in Computer Science &amp; Engineering
+                </p>
+                <p class="about-education-meta">
+                  Galgotias University / 2022 to 2026
+                </p>
+                <p class="about-education-score"><em>8.29</em> CGPA</p>
+              </div>
+              <p class="about-summary">
+                I design and build user-focused digital products, combining UX thinking, iOS development, and AI-powered workflows. My work focuses on simplifying complex problems into intuitive, scalable experiences that are practical and meaningful.
+              </p>
+              <p class="about-summary" style="margin-top: 1rem;">
+                I'm driven by clarity, usability, and building products that people actually use.
+              </p>
+
+            </div>
+
+            <figure class="about-portrait reveal">
+              <img
+                src="p1.png"
+                alt="Portrait of Sachin Tarkar"
+                loading="lazy"
+              />
+            </figure>
+          </div>
+        </section>
+
+
+<div class="stats-modal" id="leetcode-stats-modal" data-modal hidden>
+          <div class="stats-modal-panel" role="dialog" aria-modal="true" aria-labelledby="leetcode-stats-title">
+            <button
+              class="stats-modal-close"
+              type="button"
+              data-modal-close
+              aria-label="Close LeetCode stats popup"
+            >
+              <span></span>
+              <span></span>
+            </button>
+            <p class="card-label">LeetCode Stats</p>
+            <h3 id="leetcode-stats-title">tarkarsachin842</h3>
+            <div class="stats-modal-media stats-modal-media-single">
+              <img
+                src="https://leetcard.jacoblin.cool/tarkarsachin842?theme=dark&amp;border=0&amp;radius=20&amp;ext=heatmap&amp;cache=0"
+                alt="LeetCode activity heatmap for Sachin Tarkar"
+                loading="lazy"
+                decoding="async"
+                referrerpolicy="no-referrer"
+              />
+            </div>
+            <a
+              class="text-link"
+              href="https://leetcode.com/tarkarsachin842/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Open LeetCode Profile
+            </a>
+          </div>
+        </div>
+
+
+<section class="project-prowess section" id="projects">
           <div class="project-prowess-header reveal">
             <p class="eyebrow">Work</p>
             <h2>Project <em>Prowess</em></h2>
@@ -178,56 +251,52 @@
               </div>
             </article>
 
-            <article class="project-secondary-card project-secondary-card-wide reveal">
-              <a
-                class="project-frame project-frame-secondary project-frame-link"
-                href="gravity.html"
-                aria-label="Open Gravity project details"
-              >
-                <img
-                  src="gravity.png"
-                  alt="Gravity simulation showing planets and gravitational interaction"
-                  loading="lazy"
-                />
-                <span class="project-nav-indicator" aria-hidden="true">
-                  <svg viewBox="0 0 80 80">
-                    <circle cx="40" cy="40" r="34"></circle>
-                    <path d="M28 52L52 28"></path>
-                    <path d="M32 28h20v20"></path>
-                  </svg>
-                </span>
-              </a>
-              <div class="project-secondary-copy">
-                <p class="card-label">Gravity / Swift Student Challenge 2025</p>
-                <h3>Explore how planets <em>react to changing gravity</em></h3>
-                <p class="project-prowess-meta">SwiftUI + SceneKit</p>
-              </div>
-            </article>
           </div>
-        </section>
-
-        <section class="section about-section" id="about">
-          <div class="about-layout">
-            <div class="about-copy reveal">
-              <p class="eyebrow">About</p>
-              <h2>Sachin <em>Tarkar</em></h2>
-              <div class="about-education-copy">
-                <p class="about-education-degree">
-                  B.Tech in Computer Science &amp; Engineering
-                </p>
-                <p class="about-education-meta">
-                  Galgotias University / 2022 to 2026
-                </p>
-                <p class="about-education-score"><em>8.29</em> CGPA</p>
-              </div>
-              <p class="about-summary">
-                I build user-focused iOS products with SwiftUI and UIKit,
-                combining clean design, thoughtful interaction, and solid app
-                logic. My work is driven by clarity, usability, and solving
-                real problems through software.
+        
+          <div class="reveal" style="margin-top: 6rem; position: relative;">
+            <p class="eyebrow" style="margin-bottom: 1rem;">Process</p>
+            <h3 style="font-size: clamp(2.5rem, 8vw, 4rem); font-family: var(--font-serif); margin-bottom: 2rem; letter-spacing: -0.02em;">How I <em>Build Products</em></h3>
+            
+            <div style="display: flex; flex-direction: column; gap: 2.5rem;">
+              <p style="font-size: 1.15rem; line-height: 1.7; color: var(--text); max-width: 48rem;">
+                I follow a structured approach to product building:
               </p>
+              
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; font-family: var(--font-mono); font-size: clamp(0.75rem, 3vw, 0.95rem); text-transform: uppercase; letter-spacing: 0.1em; color: var(--text);">
+                <span style="padding-bottom: 4px; border-bottom: 2px solid var(--accent);">Problem</span>
+                <span aria-hidden="true" style="color: var(--accent); opacity: 0.5;">&rarr;</span>
+                <span style="padding-bottom: 4px; border-bottom: 2px solid var(--accent);">Research</span>
+                <span aria-hidden="true" style="color: var(--accent); opacity: 0.5;">&rarr;</span>
+                <span style="padding-bottom: 4px; border-bottom: 2px solid var(--accent);">UX Design</span>
+                <span aria-hidden="true" style="color: var(--accent); opacity: 0.5;">&rarr;</span>
+                <span style="padding-bottom: 4px; border-bottom: 2px solid var(--accent);">Development</span>
+                <span aria-hidden="true" style="color: var(--accent); opacity: 0.5;">&rarr;</span>
+                <span style="padding-bottom: 4px; border-bottom: 2px solid var(--accent);">Iteration</span>
+              </div>
+              
+              <ul style="list-style-type: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.2rem; border-left: 2px solid var(--accent-light); padding-left: 1.5rem;">
+                <li style="font-size: 1.05rem; line-height: 1.6; color: var(--text);">
+                  Use AI tools to speed up ideation and prototyping
+                </li>
+                <li style="font-size: 1.05rem; line-height: 1.6; color: var(--text);">
+                  Focus on simplicity, usability, and real user value
+                </li>
+              </ul>
+            </div>
+          </div>
+</section>
 
-              <div class="skills-flat">
+
+
+        <section class="section" id="skills">
+          <div class="section-heading reveal">
+            <div>
+              <p class="eyebrow">Skills</p>
+              <h2>What I <em>know</em></h2>
+            </div>
+          </div>
+          <div style="padding: 0 1rem; max-width: 64rem; margin: 0;">
+<div class="skills-flat">
 
                 <div class="skills-group">
                   <p class="skills-group-label">Languages</p>
@@ -247,6 +316,10 @@
                     <span class="skill-icon-item">
                       <img src="https://cdn.simpleicons.org/apple/0A84FF" width="22" height="22" alt="" />
                       SwiftUI
+                    </span>
+                    <span class="skill-icon-item">
+                      <img src="https://cdn.simpleicons.org/mysql/4479A1" width="22" height="22" alt="" />
+                      SQL
                     </span>
                   </div>
                 </div>
@@ -269,6 +342,25 @@
                     <span class="skill-icon-item">
                       <img src="https://cdn.simpleicons.org/linux/FCC624" width="22" height="22" alt="" />
                       OS
+                    </span>
+                    <span class="skill-icon-item">
+                      <img src="https://cdn.simpleicons.org/atlassian/0052CC" width="22" height="22" alt="" />
+                      SDLC
+                    </span>
+                    <span class="skill-icon-item">
+                      <img src="https://api.iconify.design/lucide:brain-circuit.svg?color=%234353FF" width="22" height="22" alt="" />
+                      Design Thinking
+                    </span>
+                    <span class="skill-icon-item">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9" stroke="#c4956a" stroke-width="1.6"/>
+                        <path d="M12 3 A9 9 0 0 1 21 12" stroke="#F05138" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M21 12 A9 9 0 0 1 12 21" stroke="#FFCA28" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M12 21 A9 9 0 0 1 3 12" stroke="#3ECF8E" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M3 12 A9 9 0 0 1 12 3" stroke="#007ACC" stroke-width="3" stroke-linecap="round"/>
+                        <circle cx="12" cy="12" r="3" fill="#c4956a" opacity="0.6"/>
+                      </svg>
+                      Color Theory
                     </span>
                   </div>
                 </div>
@@ -350,8 +442,8 @@
                 </div>
 
               </div>
-
-              <div class="about-actions">
+              
+              <div class="skills-actions" style="margin-top: 3rem; text-align: left;">
                 <button
                   class="button leetcode-cta"
                   type="button"
@@ -361,50 +453,9 @@
                 </button>
               </div>
             </div>
-
-            <figure class="about-portrait reveal">
-              <img
-                src="p1.png"
-                alt="Portrait of Sachin Tarkar"
-                loading="lazy"
-              />
-            </figure>
-          </div>
         </section>
 
-        <div class="stats-modal" id="leetcode-stats-modal" data-modal hidden>
-          <div class="stats-modal-panel" role="dialog" aria-modal="true" aria-labelledby="leetcode-stats-title">
-            <button
-              class="stats-modal-close"
-              type="button"
-              data-modal-close
-              aria-label="Close LeetCode stats popup"
-            >
-              <span></span>
-              <span></span>
-            </button>
-            <p class="card-label">LeetCode Stats</p>
-            <h3 id="leetcode-stats-title">tarkarsachin842</h3>
-            <div class="stats-modal-media stats-modal-media-single">
-              <img
-                src="https://leetcard.jacoblin.cool/tarkarsachin842?theme=dark&amp;border=0&amp;radius=20&amp;ext=heatmap&amp;cache=0"
-                alt="LeetCode activity heatmap for Sachin Tarkar"
-                loading="lazy"
-                decoding="async"
-                referrerpolicy="no-referrer"
-              />
-            </div>
-            <a
-              class="text-link"
-              href="https://leetcode.com/tarkarsachin842/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Open LeetCode Profile
-            </a>
-          </div>
-        </div>
-
+        
         <section class="section" id="experience">
           <div class="section-heading reveal">
             <div>
@@ -446,7 +497,7 @@
               </div>
             </article>
 
-            <article class="experience-entry experience-entry-split reveal">
+            <article class="experience-entry reveal">
               <div class="experience-index">02</div>
               <div class="experience-body">
                 <div class="experience-topline">
@@ -480,18 +531,26 @@
                   View Internship Certificate
                 </a>
               </div>
-              <figure class="experience-visual">
-                <img
-                  src="certificateimage.png"
-                  alt="Infosys internship certificate"
-                  loading="lazy"
-                />
-              </figure>
+
             </article>
           </div>
         </section>
 
-        <section class="section" id="contact">
+        
+        <section class="section reveal" id="what-i-can-do">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Capabilities</p>
+              <h2>What I <em>Can Do</em></h2>
+            </div>
+          </div>
+          <div class="about-summary" style="margin-left: 0; margin-top: 1.5rem; max-width: 48rem;">
+            I leverage AI tools to rapidly prototype and build applications across iOS, Android, and web platforms.
+          </div>
+        </section>
+
+
+<section class="section" id="contact">
           <div class="section-heading reveal">
             <div>
               <p class="eyebrow">Contact</p>

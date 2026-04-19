@@ -3,133 +3,227 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PrePlus | Sachin Tarkar</title>
-    <meta
-      name="description"
-      content="PrePlus project details by Sachin Tarkar. AI study companion built with SwiftUI, Supabase, and smart revision workflows."
-    />
+    <title>PrePlus — Case Study | Sachin Tarkar</title>
+    <meta name="description" content="PrePlus case study. AI-powered study companion built with SwiftUI, Supabase, and intelligent revision workflows." />
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg?v=3" />
-    <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png?v=3" />
-    <link rel="icon" type="image/png" sizes="256x256" href="favicon-256.png?v=3" />
-    <link rel="apple-touch-icon" href="apple-touch-icon.png?v=3" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300..500;1,300..500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css?v=20260418" />
+    <style>
+      @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+      .ani { opacity:0; animation: fadeUp 0.65s cubic-bezier(.22,1,.36,1) forwards; }
+      .ani.d1{animation-delay:.05s} .ani.d2{animation-delay:.15s} .ani.d3{animation-delay:.25s} .ani.d4{animation-delay:.38s} .ani.d5{animation-delay:.50s}
+
+      .cs { max-width:1200px; margin:0 auto; padding:0 2rem; }
+
+      /* Hero */
+      .cs-hero { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; min-height:88vh; padding:7rem 0 4rem; border-bottom:1px solid var(--line); }
+      .cs-tag-row { display:flex; align-items:center; gap:1rem; margin-bottom:2rem; }
+      .cs-num { font-family:'DM Serif Display',serif; font-size:1rem; color:var(--accent); letter-spacing:.05em; }
+      .cs-tag { font-family:'DM Mono',monospace; font-size:.6rem; text-transform:uppercase; letter-spacing:.16em; color:var(--muted); padding:.3rem .75rem; border:1px solid var(--line); border-radius:999px; }
+      .cs-h1 { font-family:'DM Serif Display',serif; font-size:clamp(2.8rem,5vw,4.5rem); line-height:1.08; letter-spacing:-.03em; margin:0 0 1.2rem; }
+      .cs-h1 em { font-style:italic; color:var(--accent); }
+      .cs-lead { font-size:1rem; line-height:1.75; color:var(--secondary); margin:0 0 2rem; max-width:42ch; }
+      .cs-hero-stack { display:flex; flex-direction:column; gap:1.5rem; margin-bottom:2.5rem; }
+      .cs-hero-meta { display:flex; flex-direction:column; gap:.3rem; }
+      .cs-meta-label { font-family:'DM Mono',monospace; font-size:.55rem; text-transform:uppercase; letter-spacing:.18em; color:var(--muted); }
+      .cs-meta-value { font-size:.9rem; color:var(--text); }
+      .cs-actions { display:flex; gap:.8rem; flex-wrap:wrap; }
+      .cs-hero-right img { width:100%; border-radius:12px; display:block; }
+
+      /* Body grid */
+      .cs-body { padding:3rem 0; }
+      .cs-pair { display:grid; grid-template-columns:1fr 1fr; gap:3rem; padding:3rem 0; border-bottom:1px solid var(--line); align-items:start; }
+      .cs-full { padding:3rem 0; border-bottom:1px solid var(--line); }
+
+      .cs-block-label { font-family:'DM Mono',monospace; font-size:.58rem; text-transform:uppercase; letter-spacing:.18em; color:var(--accent); margin-bottom:.75rem; }
+      .cs-block-h { font-family:'DM Serif Display',serif; font-size:clamp(1.4rem,2.5vw,2rem); line-height:1.2; margin:0 0 1rem; letter-spacing:-.02em; }
+      .cs-block-h em { font-style:italic; color:var(--secondary); }
+      .cs-block-p { font-size:.95rem; line-height:1.75; color:var(--secondary); margin:0 0 .75rem; }
+      .cs-block-p strong { color:var(--text); font-weight:500; }
+      .cs-block-p:last-child { margin-bottom:0; }
+
+      .cs-pull { font-family:'DM Serif Display',serif; font-size:clamp(1.2rem,2.5vw,1.75rem); line-height:1.45; font-style:italic; color:var(--text); border-left:3px solid var(--accent); padding-left:1.5rem; margin:0; }
+
+      .cs-feat-list { list-style:none; padding:0; margin:.5rem 0 0; display:flex; flex-direction:column; gap:0; }
+      .cs-feat-list li { font-size:.92rem; color:var(--secondary); padding:.75rem 0; border-bottom:1px solid var(--line); display:flex; gap:.75rem; align-items:baseline; }
+      .cs-feat-list li:last-child { border-bottom:none; }
+      .cs-feat-list li::before { content:attr(data-n); font-family:'DM Mono',monospace; font-size:.55rem; color:var(--accent); flex-shrink:0; padding-top:.2rem; }
+
+      .cs-roles { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.8rem; }
+      .cs-role { font-family:'DM Mono',monospace; font-size:.62rem; text-transform:uppercase; letter-spacing:.1em; color:var(--secondary); padding:.3rem .8rem; border:1px solid var(--line); border-radius:999px; }
+
+      .cs-takes { display:flex; flex-direction:column; margin-top:.5rem; }
+      .cs-take { display:grid; grid-template-columns:1.2rem 1fr; gap:.8rem; padding:.8rem 0; border-bottom:1px solid var(--line); align-items:start; }
+      .cs-take:last-child { border-bottom:none; }
+      .cs-take-n { font-family:'DM Mono',monospace; font-size:.55rem; color:var(--muted); padding-top:.2rem; }
+      .cs-take-t { font-size:.9rem; line-height:1.65; color:var(--secondary); margin:0; }
+
+      .cs-img { width:100%; border-radius:10px; display:block; margin-top:1.2rem; }
+      .cs-img-cap { font-family:'DM Mono',monospace; font-size:.58rem; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; margin-top:.6rem; }
+
+      .cs-nav { padding:3rem 0; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
+
+      @media (max-width:768px) {
+        .cs-hero { grid-template-columns:1fr; min-height:auto; padding:6rem 0 3rem; }
+        .cs-hero-right { order:-1; }
+        .cs-pair { grid-template-columns:1fr; gap:2rem; }
+      }
+    </style>
   </head>
   <body class="project-detail-page">
     <div class="global-cursor"></div>
-      <header class="site-header">
-        <a class="brand" href="index.html#top" aria-label="Back to portfolio">Sachin Tarkar</a>
-        <nav class="site-nav" aria-label="Primary">
-          <a href="index.html#home">Home</a>
-          <a href="index.html#projects">Work</a>
-          <a href="index.html#about">About</a>
-          <a href="index.html#experience">Experience</a>
-          <a href="index.html#contact">Contact</a>
-        </nav>
-        <a class="site-resume" href="https://drive.google.com/file/d/1h_XCkMY52OAqJD6QULvOAGfvVJzDyh3V/view?usp=share_link" target="_blank" rel="noreferrer">
-          RESUME <span>↗</span>
-        </a>
-      </header>
+    <header class="site-header">
+      <a class="brand" href="index.html#top" aria-label="Back to portfolio">Sachin Tarkar</a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html#home">Home</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#projects">Work</a>
+        <a href="index.html#skills">Skills</a>
+        <a href="index.html#experience">Experience</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+      <a class="site-resume" href="https://drive.google.com/file/d/1h_XCkMY52OAqJD6QULvOAGfvVJzDyh3V/view?usp=share_link" target="_blank" rel="noreferrer">RESUME <span>↗</span></a>
+    </header>
 
-      <div class="page-shell">
+    <div class="cs">
+      <main>
 
-      <main class="project-detail-main">
-        <section class="project-detail-hero">
-          <div class="project-detail-copy reveal">
-            <p class="card-label">PrePlus / AI Study Companion</p>
-            <h1>Study flows <em>built around faster revision</em></h1>
-            <p>AI-assisted notes, quiz support, and cleaner revision workflows.</p>
-            <p class="project-prowess-meta">SwiftUI + AI + Supabase</p>
-            <div class="project-detail-links">
-              <a class="button button-primary" href="index.html#projects">Back to Work</a>
-              <a
-                class="button button-secondary"
-                href="https://github.com/SachinTarkar842/Preplus"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Repository
-              </a>
+        <!-- Hero -->
+        <section class="cs-hero">
+          <div class="cs-hero-left">
+            <div class="cs-tag-row ani d1">
+              <span class="cs-num">02</span>
+              <span class="cs-tag">Case Study</span>
+              <span class="cs-tag">SwiftUI · AI · Supabase</span>
+            </div>
+            <h1 class="cs-h1 ani d2">Pre<em>Plus</em><br>AI Study Companion</h1>
+            <p class="cs-lead ani d3">An intelligence layer for student revision — notes, quizzes, and analytics structured around how you actually learn.</p>
+
+            <div class="cs-hero-stack ani d3">
+              <div class="cs-hero-meta">
+                <span class="cs-meta-label">My Role</span>
+                <span class="cs-meta-value">Product Design · iOS Development · AI Integration</span>
+              </div>
+              <div class="cs-hero-meta">
+                <span class="cs-meta-label">Tech Stack</span>
+                <span class="cs-meta-value">SwiftUI · Supabase · AI APIs</span>
+              </div>
+            </div>
+
+            <div class="cs-actions ani d4">
+              <a class="button button-primary" href="index.html#projects">All Projects</a>
+              <a class="button button-secondary" href="https://github.com/SachinTarkar842/Preplus" target="_blank" rel="noreferrer">Repository ↗</a>
             </div>
           </div>
 
-          <figure class="project-detail-visual reveal">
-            <img
-              src="preplus1.png"
-              alt="PrePlus notes and AI study interface"
-              loading="lazy"
-            />
-          </figure>
+          <div class="cs-hero-right ani d5">
+            <img src="preplus1.png" alt="PrePlus AI notes and study interface" loading="lazy" />
+          </div>
         </section>
 
-        <section class="project-detail-grid">
-          <article class="panel project-detail-card reveal">
-            <p class="card-label">Goal</p>
-            <h3>Reduce <em>study friction</em></h3>
-            <p>Make notes, answers, and revision feel easier to access and reuse.</p>
-          </article>
+        <!-- Content -->
+        <div class="cs-body">
 
-          <article class="panel project-detail-card reveal">
-            <p class="card-label">Features</p>
-            <h3>Core <em>flow</em></h3>
-            <ul>
-              <li>Smart notes</li>
-              <li>AI support</li>
-              <li>Quiz results</li>
-            </ul>
-          </article>
+          <!-- Problem + Solution -->
+          <div class="cs-pair reveal">
+            <div class="cs-block">
+              <p class="cs-block-label">Problem</p>
+              <h2 class="cs-block-h">Students study <em>without structure</em></h2>
+              <p class="cs-block-p">Unstructured notes, passive reading, no retention tracking. Five different apps that never talk to each other — and students still feel underprepared.</p>
+            </div>
+            <div class="cs-block">
+              <p class="cs-block-label">Solution</p>
+              <h2 class="cs-block-h">One platform that <em>thinks with you</em></h2>
+              <p class="cs-block-p">AI-generated notes, auto quiz generation, and progress analytics — each feature flowing naturally into the next phase of revision. One tool, complete loop.</p>
+            </div>
+          </div>
 
-          <article class="panel project-detail-card reveal">
-            <p class="card-label">Direction</p>
-            <h3>Dark <em>focused UI</em></h3>
-            <p>Minimal layout, warm tones, and strong content hierarchy.</p>
-          </article>
-        </section>
+          <!-- Features + Design -->
+          <div class="cs-pair reveal">
+            <div class="cs-block">
+              <p class="cs-block-label">Core Features</p>
+              <h2 class="cs-block-h">What it <em>does</em></h2>
+              <ul class="cs-feat-list">
+                <li data-n="A">AI Tutor — instant explanations on demand</li>
+                <li data-n="B">Smart Notes Library with intelligent tagging</li>
+                <li data-n="C">Auto Quiz Generation from your own notes</li>
+                <li data-n="D">Progress Tracking and Analytics dashboard</li>
+              </ul>
+            </div>
+            <div class="cs-block">
+              <p class="cs-block-label">Design Approach</p>
+              <h2 class="cs-block-h">One screen, <em>one purpose</em></h2>
+              <p class="cs-block-p">Every screen serves one job — read, create, or review. Never all three at once. This reduces cognitive friction and keeps the student in flow.</p>
+            </div>
+          </div>
+
+          <!-- Pull quote -->
+          <div class="cs-full reveal">
+            <p class="cs-pull">"Four features — notes, quizzes, analytics, AI — that had to feel like one. The solution: progressive disclosure. Surface one thing, reveal the next only when the user is ready."</p>
+          </div>
+
+          <!-- Outcome + Learnings -->
+          <div class="cs-pair reveal">
+            <div class="cs-block">
+              <p class="cs-block-label">Outcome</p>
+              <h2 class="cs-block-h">Shipped and <em>scalable</em></h2>
+              <p class="cs-block-p">A streamlined study experience with improved usability and a modular architecture that supports future AI features without redesigning core flows.</p>
+              <div class="cs-roles" style="margin-top:1.2rem;">
+                <span class="cs-role">Product Design</span>
+                <span class="cs-role">iOS Development</span>
+                <span class="cs-role">AI Features</span>
+              </div>
+            </div>
+            <div class="cs-block">
+              <p class="cs-block-label">Learnings</p>
+              <h2 class="cs-block-h">What I <em>took away</em></h2>
+              <div class="cs-takes">
+                <div class="cs-take">
+                  <span class="cs-take-n">01</span>
+                  <p class="cs-take-t">AI features need ruthless scoping — every automation must earn its place.</p>
+                </div>
+                <div class="cs-take">
+                  <span class="cs-take-n">02</span>
+                  <p class="cs-take-t">Complex learning flows work best designed as sequences, not isolated screens.</p>
+                </div>
+                <div class="cs-take">
+                  <span class="cs-take-n">03</span>
+                  <p class="cs-take-t">Design decisions today should never block growth tomorrow — build for scale from day one.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="cs-nav">
+          <a class="button button-secondary" href="leolingo.html">&#8592; LeoLingo</a>
+          <a class="button button-secondary" href="mediops.html">Next: MediOps &#8594;</a>
+        </div>
+
       </main>
     </div>
 
-    <button
-      class="ask-ai-launcher"
-      type="button"
-      data-ask-ai-open
-    >
-      Ask AI
-    </button>
-
+    <button class="ask-ai-launcher" type="button" data-ask-ai-open>Ask AI</button>
     <div class="ask-ai-drawer" data-ask-ai-drawer hidden>
       <div class="ask-ai-panel" role="dialog" aria-modal="false" aria-labelledby="ask-ai-title">
-        <button
-          class="ask-ai-close"
-          type="button"
-          data-ask-ai-close
-          aria-label="Close Ask AI"
-        >
-          <span></span>
-          <span></span>
-        </button>
+        <button class="ask-ai-close" type="button" data-ask-ai-close aria-label="Close Ask AI"><span></span><span></span></button>
         <h3 id="ask-ai-title">Portfolio Assistant</h3>
         <div class="ask-ai-log" data-ask-ai-log aria-live="polite"></div>
         <form class="ask-ai-form" data-ask-ai-form>
-          <input
-            class="ask-ai-input"
-            type="text"
-            name="ask-ai"
-            placeholder="Ask something about the portfolio"
-            autocomplete="off"
-            data-ask-ai-input
-            aria-label="Ask AI about the portfolio"
-          />
+          <input class="ask-ai-input" type="text" name="ask-ai" placeholder="Ask something about the portfolio" autocomplete="off" data-ask-ai-input aria-label="Ask AI" />
+          <button class="button button-primary ask-ai-submit" type="submit">Send</button>
+        </form>
       </div>
-      <footer class="site-footer">
-        <p>Sachin Tarkar</p>
-        <p>iOS App Developer &amp; UI/UX Designer</p>
-        <a href="index.html#top">Back to home ↗</a>
-      </footer>
     </div>
-
+    <footer class="site-footer">
+      <p>Sachin Tarkar</p>
+      <p>Product-Focused iOS Developer &amp; UI/UX Designer</p>
+      <a href="index.html#top">Back to home ↗</a>
+    </footer>
     <script src="script.js?v=20260328g"></script>
   </body>
 </html>

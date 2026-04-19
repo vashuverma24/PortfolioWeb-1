@@ -32,7 +32,6 @@ PROJECTS:
 - LeoLingo: Speech therapy iPad app for children using SwiftUI, Firebase, UI/UX design. (Kids-friendly adventure workshop theme).
 - PrePlus: AI study companion with SwiftUI, AI integration, Supabase.
 - MediOps: Healthcare management app with Swift, UIKit, Supabase, role-based access.
-- Gravity: Swift Student Challenge 2025 - planet gravity simulation with SwiftUI, SceneKit.
 - HeyMadhav: Bhagavad Gita learning app with SwiftUI, AI integration.
 
 SKILLS:

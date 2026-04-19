@@ -649,6 +649,12 @@ h3 em {
   width: min(calc(100% - 3rem), 1480px);
 }
 
+.project-detail-page .global-cursor {
+  width: 2.8rem;
+  height: 2.8rem;
+  font-size: 2.8rem;
+}
+
 .project-detail-main {
   padding-top: clamp(2rem, 4vw, 4rem);
   background: transparent;
@@ -897,16 +903,18 @@ h3 em {
 }
 
 .leetcode-cta {
-  min-height: 5.8rem;
-  min-width: min(100%, 34rem);
-  padding: 1rem 2.4rem;
-  border: 1px solid rgba(255, 255, 255, 0.58);
-  border-radius: 2rem;
-  background: linear-gradient(180deg, #f5f4ef 0%, #e8e6df 100%);
-  color: #050505;
-  font-size: clamp(1.25rem, 2.2vw, 2rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  padding: 0.8rem 1.6rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .leetcode-cta:hover {
@@ -2337,11 +2345,13 @@ button:focus-visible {
 
 /* ── Flat Skills Section ── */
 .skills-flat {
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 3rem 2.5rem;
   margin-top: 2.4rem;
   margin-bottom: 0.5rem;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .skills-group {
@@ -2364,14 +2374,15 @@ button:focus-visible {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 0.75rem 1.75rem;
+  gap: 1.5rem 2rem;
   align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .skill-icon-item {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.35rem;
   font-family: 'DM Mono', monospace;
   font-size: 0.68rem;
@@ -2380,7 +2391,7 @@ button:focus-visible {
   cursor: default;
   transition: color 0.2s ease;
   min-width: 40px;
-  text-align: center;
+  text-align: left;
 }
 
 .skill-icon-item img,

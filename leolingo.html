@@ -3,164 +3,462 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LeoLingo | Sachin Tarkar</title>
-    <meta
-      name="description"
-      content="LeoLingo project details by Sachin Tarkar. Speech therapy iPad app built with SwiftUI, Firebase, and playful UI design."
-    />
+    <title>LeoLingo — Case Study | Sachin Tarkar</title>
+    <meta name="description" content="LeoLingo case study. Speech therapy iOS app for children — interactive, playful, built with SwiftUI." />
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg?v=3" />
-    <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png?v=3" />
-    <link rel="icon" type="image/png" sizes="256x256" href="favicon-256.png?v=3" />
-    <link rel="apple-touch-icon" href="apple-touch-icon.png?v=3" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300..500;1,300..500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css?v=20260418" />
+    <style>
+      /* ── Animations ── */
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(24px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes fadeRight {
+        from { opacity: 0; transform: translateX(-16px); }
+        to   { opacity: 1; transform: translateX(0); }
+      }
+      .ani { opacity: 0; animation: fadeUp 0.65s cubic-bezier(.22,1,.36,1) forwards; }
+      .ani.d1 { animation-delay: 0.05s; }
+      .ani.d2 { animation-delay: 0.15s; }
+      .ani.d3 { animation-delay: 0.25s; }
+      .ani.d4 { animation-delay: 0.38s; }
+      .ani.d5 { animation-delay: 0.50s; }
+
+      /* ── Layout ── */
+      .cs { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+      /* ── Hero: left title, right image ── */
+      .cs-hero {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+        min-height: 88vh;
+        padding: 7rem 0 4rem;
+        border-bottom: 1px solid var(--line);
+      }
+      .cs-hero-left {}
+      .cs-tag-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .cs-num {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1rem;
+        color: var(--accent);
+        letter-spacing: 0.05em;
+      }
+      .cs-tag {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--muted);
+        padding: 0.3rem 0.75rem;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+      }
+      .cs-h1 {
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(2.8rem, 5vw, 4.5rem);
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+        margin: 0 0 1.2rem;
+      }
+      .cs-h1 em { font-style: italic; color: var(--accent); }
+      .cs-lead {
+        font-size: 1rem;
+        line-height: 1.75;
+        color: var(--secondary);
+        margin: 0 0 2rem;
+        max-width: 42ch;
+      }
+      .cs-hero-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+      }
+      .cs-hero-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+      .cs-meta-label {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.55rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: var(--muted);
+      }
+      .cs-meta-value {
+        font-size: 0.9rem;
+        color: var(--text);
+      }
+      .cs-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+
+      /* Hero right — image */
+      .cs-hero-right { position: relative; }
+      .cs-hero-img {
+        width: 100%;
+        border-radius: 12px;
+        display: block;
+      }
+      .cs-hero-right { position: relative; overflow: visible; }
+      .cs-mojo {
+        position: absolute;
+        bottom: 0;
+        left: 4%;
+        width: clamp(90px, 13vw, 160px);
+        pointer-events: none;
+        transform: translate(-33.33%, -23%);
+        filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5));
+        z-index: 2;
+      }
+      .cs-mojo img { width: 100%; display: block; }
+
+      /* ── Content Grid ── */
+      .cs-body { padding: 3rem 0; }
+
+      /* 2-col pair */
+      .cs-pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        border-bottom: 1px solid var(--line);
+        align-items: start;
+      }
+
+      /* Full-width band */
+      .cs-full {
+        padding: 3rem 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      /* Section block */
+      .cs-block {}
+      .cs-block-label {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.58rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: var(--accent);
+        margin-bottom: 0.75rem;
+      }
+      .cs-block-h {
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(1.4rem, 2.5vw, 2rem);
+        line-height: 1.2;
+        margin: 0 0 1rem;
+        letter-spacing: -0.02em;
+      }
+      .cs-block-h em { font-style: italic; color: var(--secondary); }
+      .cs-block-p {
+        font-size: 0.95rem;
+        line-height: 1.75;
+        color: var(--secondary);
+        margin: 0 0 0.75rem;
+      }
+      .cs-block-p strong { color: var(--text); font-weight: 500; }
+      .cs-block-p:last-child { margin-bottom: 0; }
+
+      /* Pull quote */
+      .cs-pull {
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+        line-height: 1.45;
+        font-style: italic;
+        color: var(--text);
+        border-left: 3px solid var(--accent);
+        padding-left: 1.5rem;
+        margin: 0;
+      }
+
+      /* Features list */
+      .cs-feat-list {
+        list-style: none;
+        padding: 0; margin: 0.5rem 0 0;
+        display: flex; flex-direction: column; gap: 0;
+      }
+      .cs-feat-list li {
+        font-size: 0.92rem;
+        color: var(--secondary);
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--line);
+        display: flex; gap: 0.75rem; align-items: baseline;
+      }
+      .cs-feat-list li:last-child { border-bottom: none; }
+      .cs-feat-list li::before {
+        content: attr(data-n);
+        font-family: 'DM Mono', monospace;
+        font-size: 0.55rem;
+        color: var(--accent);
+        letter-spacing: 0.1em;
+        flex-shrink: 0;
+        padding-top: 0.2rem;
+      }
+
+      /* Roles */
+      .cs-roles { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.8rem; }
+      .cs-role {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.62rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--secondary);
+        padding: 0.3rem 0.8rem;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+      }
+
+      /* Takeaways */
+      .cs-takes { display: flex; flex-direction: column; margin-top: 0.5rem; }
+      .cs-take {
+        display: grid;
+        grid-template-columns: 1.2rem 1fr;
+        gap: 0.8rem;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--line);
+        align-items: start;
+      }
+      .cs-take:last-child { border-bottom: none; }
+      .cs-take-n { font-family: 'DM Mono', monospace; font-size: 0.55rem; color: var(--muted); padding-top: 0.2rem; }
+      .cs-take-t { font-size: 0.9rem; line-height: 1.65; color: var(--secondary); margin: 0; }
+
+      /* Inline image */
+      .cs-img {
+        width: 100%; border-radius: 10px; display: block; margin-top: 1.2rem;
+      }
+      .cs-img-cap {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.58rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-top: 0.6rem;
+      }
+
+      /* Live link */
+      .cs-live {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-family: 'DM Mono', monospace;
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        text-decoration: none;
+        border-bottom: 1px solid rgba(196,149,106,0.35);
+        padding-bottom: 1px;
+        transition: border-color 0.2s;
+        margin-top: 0.8rem;
+        display: block;
+      }
+      .cs-live:hover { border-color: var(--accent); }
+
+      /* Footer nav */
+      .cs-nav {
+        padding: 3rem 0;
+        border-top: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      /* Mobile */
+      @media (max-width: 768px) {
+        .cs-hero { grid-template-columns: 1fr; min-height: auto; padding: 6rem 0 3rem; }
+        .cs-hero-right { order: -1; }
+        .cs-pair { grid-template-columns: 1fr; gap: 2rem; }
+        .cs-mojo { bottom: auto; top: -1rem; left: auto; right: -0.5rem; }
+      }
+    </style>
   </head>
   <body class="project-detail-page">
     <div class="global-cursor"></div>
-      <header class="site-header">
-        <a class="brand" href="index.html#top" aria-label="Back to portfolio">Sachin Tarkar</a>
-        <nav class="site-nav" aria-label="Primary">
-          <a href="index.html#home">Home</a>
-          <a href="index.html#projects">Work</a>
-          <a href="index.html#about">About</a>
-          <a href="index.html#experience">Experience</a>
-          <a href="index.html#contact">Contact</a>
-        </nav>
-        <a class="site-resume" href="https://drive.google.com/file/d/1h_XCkMY52OAqJD6QULvOAGfvVJzDyh3V/view?usp=share_link" target="_blank" rel="noreferrer">
-          RESUME <span>↗</span>
-        </a>
-      </header>
+    <header class="site-header">
+      <a class="brand" href="index.html#top" aria-label="Back to portfolio">Sachin Tarkar</a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html#home">Home</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#projects">Work</a>
+        <a href="index.html#skills">Skills</a>
+        <a href="index.html#experience">Experience</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+      <a class="site-resume" href="https://drive.google.com/file/d/1h_XCkMY52OAqJD6QULvOAGfvVJzDyh3V/view?usp=share_link" target="_blank" rel="noreferrer">RESUME <span>↗</span></a>
+    </header>
 
-      <div class="page-shell">
+    <div class="cs">
+      <main>
 
-      <main class="project-detail-main">
-        <section class="project-detail-hero">
-          <div class="project-detail-copy reveal">
-            <p class="card-label">LeoLingo / Speech Therapy iPad App</p>
-            <h1>Speech learning <em>shaped for children</em></h1>
-            <p>
-              LeoLingo is a child-friendly iPad product focused on guided speech
-              practice, playful interaction, and visible progress for caregivers.
-            </p>
-            <p class="project-prowess-meta">SWIFTUI + SUPABASE + UI/UX DESIGN</p>
-            <div class="project-detail-links">
-              <a class="button button-primary" href="index.html#projects">Back to Work</a>
-              <a
-                class="button button-secondary"
-                href="https://github.com/SachinTarkar842/LeoLingo"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Repository
+        <!-- ── Hero: title left, image right ── -->
+        <section class="cs-hero">
+
+          <div class="cs-hero-left">
+            <div class="cs-tag-row ani d1">
+              <span class="cs-num">01</span>
+              <span class="cs-tag">Case Study</span>
+              <span class="cs-tag">SwiftUI · iOS</span>
+            </div>
+            <h1 class="cs-h1 ani d2">Leo<em>Lingo</em><br>Speech Therapy App</h1>
+            <p class="cs-lead ani d3">Making speech therapy accessible and playful for children — through voice interaction, games, and Mojo the lion.</p>
+
+            <div class="cs-hero-stack ani d3">
+              <div class="cs-hero-meta">
+                <span class="cs-meta-label">My Role</span>
+                <span class="cs-meta-value">UI/UX Design · iOS Development · Interaction Design</span>
+              </div>
+              <div class="cs-hero-meta">
+                <span class="cs-meta-label">Tech Stack</span>
+                <span class="cs-meta-value">SwiftUI · Firebase · SceneKit</span>
+              </div>
+            </div>
+
+            <div class="cs-actions ani d4">
+              <a class="button button-primary" href="index.html#projects">All Projects</a>
+              <a class="button button-secondary" href="https://github.com/SachinTarkar842/LeoLingo" target="_blank" rel="noreferrer">Repository ↗</a>
+              <a class="button button-secondary" href="https://sachintarkar842.github.io/LeoLingo-Connect/" target="_blank" rel="noreferrer">Live Site ↗</a>
+            </div>
+          </div>
+
+          <div class="cs-hero-right ani d5">
+            <img class="cs-hero-img" src="leolingo1.png" alt="LeoLingo iPad dashboard" loading="lazy" />
+            <div class="cs-mojo">
+              <img src="HeyMojo.gif" alt="Mojo mascot" loop />
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ── Content ── -->
+        <div class="cs-body">
+
+          <!-- Problem + Solution -->
+          <div class="cs-pair reveal">
+            <div class="cs-block">
+              <p class="cs-block-label">Problem</p>
+              <h2 class="cs-block-h">Speech therapy is <em>inaccessible</em></h2>
+              <p class="cs-block-p">Expensive sessions, long waiting lists, and boring at-home exercises. Children disengage — and families are left without tools to support progress between appointments.</p>
+            </div>
+            <div class="cs-block">
+              <p class="cs-block-label">Solution</p>
+              <h2 class="cs-block-h">Play as <em>therapy</em></h2>
+              <p class="cs-block-p">LeoLingo turns speech exercises into games led by <strong>Mojo</strong> — a 3D animated lion who makes every session feel like an adventure, not a clinical exercise.</p>
+            </div>
+          </div>
+
+          <!-- Features + Design -->
+          <div class="cs-pair reveal">
+            <div class="cs-block">
+              <p class="cs-block-label">Core Features</p>
+              <h2 class="cs-block-h">What it <em>does</em></h2>
+              <ul class="cs-feat-list">
+                <li data-n="A">Speech-based games and structured exercises</li>
+                <li data-n="B">Real-time voice interaction with feedback</li>
+                <li data-n="C">Child-friendly UI — large targets, icon-first nav</li>
+                <li data-n="D">Mojo — a 3D interactive lion guiding every session</li>
+              </ul>
+            </div>
+            <div class="cs-block">
+              <p class="cs-block-label">Design Approach</p>
+              <h2 class="cs-block-h">Make the right action <em>the fun action</em></h2>
+              <p class="cs-block-p">Every therapeutic action is the natural next step in the game. Children follow Mojo — not instructions. Warm jungle aesthetics. Minimal text. Pure play.</p>
+              <img class="cs-img" src="leolingo2.png" alt="LeoLingo activity flows" loading="lazy" />
+              <p class="cs-img-cap">Learning flows and activity screens</p>
+            </div>
+          </div>
+
+          <!-- Pull quote full width -->
+          <div class="cs-full reveal">
+            <p class="cs-pull">"Too gamified and the therapeutic value gets lost. Too clinical and children disengage in minutes. The answer: structured freedom — clear goals, hidden inside play."</p>
+          </div>
+
+          <!-- Live site -->
+          <div class="cs-pair reveal">
+            <div class="cs-block">
+              <p class="cs-block-label">Live Website</p>
+              <h2 class="cs-block-h">LeoLingo <em>Connect</em></h2>
+              <p class="cs-block-p">A dedicated marketing site bringing the product story to life with immersive visuals.</p>
+              <a class="cs-live" href="https://sachintarkar842.github.io/LeoLingo-Connect/" target="_blank" rel="noreferrer">sachintarkar842.github.io/LeoLingo-Connect ↗</a>
+            </div>
+            <div class="cs-block">
+              <a href="https://sachintarkar842.github.io/LeoLingo-Connect/" target="_blank" rel="noreferrer">
+                <img class="cs-img" src="leolingoConnect.png" alt="LeoLingo Connect marketing site" loading="lazy" style="margin-top:0;" />
               </a>
             </div>
           </div>
 
-          <figure class="project-detail-visual reveal">
-            <img
-              src="leolingo.png"
-              alt="LeoLingo app logo"
-              loading="lazy"
-            />
-          </figure>
-        </section>
-
-        <section class="project-detail-hero" style="padding-top: 4rem;">
-          <div class="project-detail-copy reveal">
-            <p class="card-label">Marketing Site</p>
-            <h2>LeoLingo Connect</h2>
-            <p>Explore the dedicated marketing website for LeoLingo Connect, featuring deeper product insights and visuals.</p>
-            <div class="project-detail-links">
-              <a
-                class="button button-primary"
-                href="https://sachintarkar842.github.io/LeoLingo-Connect/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Visit Marketing Site
-              </a>
+          <!-- Outcome + Learnings -->
+          <div class="cs-pair reveal">
+            <div class="cs-block">
+              <p class="cs-block-label">Outcome</p>
+              <h2 class="cs-block-h">Engaging, <em>accessible</em></h2>
+              <p class="cs-block-p">An accessible speech therapy experience with strong usability, emotional connection, and a character children genuinely respond to.</p>
+              <div class="cs-roles" style="margin-top:1.2rem;">
+                <span class="cs-role">UI / UX Design</span>
+                <span class="cs-role">iOS Development</span>
+                <span class="cs-role">Interaction Design</span>
+              </div>
+            </div>
+            <div class="cs-block">
+              <p class="cs-block-label">Learnings</p>
+              <h2 class="cs-block-h">What I <em>took away</em></h2>
+              <div class="cs-takes">
+                <div class="cs-take">
+                  <span class="cs-take-n">01</span>
+                  <p class="cs-take-t">Designing for children requires emotional resonance — logic alone doesn't hold attention.</p>
+                </div>
+                <div class="cs-take">
+                  <span class="cs-take-n">02</span>
+                  <p class="cs-take-t">How something feels matters as much as what it teaches.</p>
+                </div>
+                <div class="cs-take">
+                  <span class="cs-take-n">03</span>
+                  <p class="cs-take-t">A character like Mojo creates continuity — users return for the relationship, not just the feature.</p>
+                </div>
+              </div>
             </div>
           </div>
-          <figure class="project-detail-visual reveal">
-            <a href="https://sachintarkar842.github.io/LeoLingo-Connect/" target="_blank" style="display: block; border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-              <img
-                src="leolingoConnect.png"
-                alt="LeoLingo Connect Marketing Site"
-                loading="lazy"
-              />
-            </a>
-          </figure>
-        </section>
 
-        <section class="project-detail-grid">
-          <article class="panel project-detail-card reveal">
-            <p class="card-label">Goal</p>
-            <h3>Daily <em>speech practice</em></h3>
-            <p>Make speech therapy feel safe, playful, and repeatable for children.</p>
-          </article>
+        </div>
 
-          <article class="panel project-detail-card reveal">
-            <p class="card-label">Features</p>
-            <h3>Core <em>experience</em></h3>
-            <ul>
-              <li>Vocal coach interactions</li>
-              <li>Play-based learning flows</li>
-              <li>Progress visibility</li>
-            </ul>
-          </article>
+        <!-- Footer nav -->
+        <div class="cs-nav">
+          <a class="button button-secondary" href="index.html#projects">All Projects</a>
+          <a class="button button-secondary" href="preplus.html">Next: PrePlus &#8594;</a>
+        </div>
 
-          <article class="panel project-detail-card reveal">
-            <p class="card-label">Visuals</p>
-            <h3>Interface <em>direction</em></h3>
-            <p>Warm jungle-inspired UI, child-friendly illustrations, and simple feedback loops.</p>
-          </article>
-        </section>
       </main>
     </div>
 
-    <button
-      class="ask-ai-launcher"
-      type="button"
-      data-ask-ai-open
-    >
-      Ask AI
-    </button>
-
+    <button class="ask-ai-launcher" type="button" data-ask-ai-open>Ask AI</button>
     <div class="ask-ai-drawer" data-ask-ai-drawer hidden>
       <div class="ask-ai-panel" role="dialog" aria-modal="false" aria-labelledby="ask-ai-title">
-        <button
-          class="ask-ai-close"
-          type="button"
-          data-ask-ai-close
-          aria-label="Close Ask AI"
-        >
-          <span></span>
-          <span></span>
-        </button>
+        <button class="ask-ai-close" type="button" data-ask-ai-close aria-label="Close Ask AI"><span></span><span></span></button>
         <h3 id="ask-ai-title">Portfolio Assistant</h3>
         <div class="ask-ai-log" data-ask-ai-log aria-live="polite"></div>
         <form class="ask-ai-form" data-ask-ai-form>
-          <input
-            class="ask-ai-input"
-            type="text"
-            name="ask-ai"
-            placeholder="Ask something about the portfolio"
-            autocomplete="off"
-            data-ask-ai-input
-            aria-label="Ask AI about the portfolio"
-          />
+          <input class="ask-ai-input" type="text" name="ask-ai" placeholder="Ask something about the portfolio" autocomplete="off" data-ask-ai-input aria-label="Ask AI" />
           <button class="button button-primary ask-ai-submit" type="submit">Send</button>
+        </form>
       </div>
-      <footer class="site-footer">
-        <p>Sachin Tarkar</p>
-        <p>iOS App Developer &amp; UI/UX Designer</p>
-        <a href="index.html#top">Back to home ↗</a>
-      </footer>
     </div>
-
+    <footer class="site-footer">
+      <p>Sachin Tarkar</p>
+      <p>Product-Focused iOS Developer &amp; UI/UX Designer</p>
+      <a href="index.html#top">Back to home ↗</a>
+    </footer>
     <script src="script.js?v=20260328g"></script>
   </body>
 </html>

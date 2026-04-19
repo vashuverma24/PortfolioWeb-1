@@ -15,7 +15,7 @@ const askAiInput = document.querySelector('[data-ask-ai-input]');
 const askAiLog = document.querySelector('[data-ask-ai-log]');
 const askAiSubmit = document.querySelector('.ask-ai-submit');
 const askAiHistory = [];
-const GROQ_API_KEY = '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';
+const GROQ_API_KEY = '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';
 
 const markActiveLink = (id) => {
   navLinks.forEach((link) => {
@@ -83,7 +83,6 @@ const requestAskAiReply = async (question) => {
       - LeoLingo: Speech therapy iPad app for children using SwiftUI, Firebase, UI/UX design. (Kids-friendly adventure workshop theme).
       - PrePlus: AI study companion with SwiftUI, AI integration, Supabase.
       - MediOps: Healthcare management app with Swift, UIKit, Supabase, role-based access.
-      - Gravity: Swift Student Challenge 2025 - planet gravity simulation with SwiftUI, SceneKit.
       - HeyMadhav: Bhagavad Gita learning app with SwiftUI, AI integration.
       SKILLS:
       - Languages: Swift, SwiftUI, UIKit, Java, Python.
