@@ -143,6 +143,19 @@
           </div>
         </section>
 
+        <!-- ── Interactive App Mockup ── -->
+        <div class="cs-full reveal" style="padding: 4rem 0;">
+            <div style="text-align: center; margin-bottom: 3rem;">
+              <p class="cs-block-label" style="display: block;">Interactive Prototype</p>
+              <h2 class="cs-block-h">MediOps <em>in action</em></h2>
+              <p class="cs-block-p" style="max-width: 500px; margin: 0 auto;">Experience the comprehensive hospital management interface.</p>
+            </div>
+            
+            <div style="position: relative; max-width: 800px; margin: 0 auto; border-radius: 20px; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px var(--line); display: flex; justify-content: center; align-items: center; background: #0b0612;">
+                <lottie-player id="appMockupLottie" src="medi.json" background="transparent" speed="1" style="width: 100%; height: auto; display: block;" loop></lottie-player>
+            </div>
+        </div>
+
         <!-- Content -->
         <div class="cs-body">
 
@@ -258,6 +271,28 @@
       <p>Product-Focused iOS Developer &amp; UI/UX Designer</p>
       <a href="index.html#top">Back to home ↗</a>
     </footer>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script>
+      // Automatically pause the heavy Lottie animation when off-screen to improve page performance
+      document.addEventListener("DOMContentLoaded", () => {
+        const lottiePlayer = document.getElementById("appMockupLottie");
+        if (lottiePlayer && 'IntersectionObserver' in window) {
+          const lottieObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                lottiePlayer.play();
+              } else {
+                lottiePlayer.pause();
+              }
+            });
+          }, { threshold: 0.1 }); // 10% visibility triggers play/pause
+          
+          lottieObserver.observe(lottiePlayer);
+        } else if (lottiePlayer) {
+          lottiePlayer.play();
+        }
+      });
+    </script>
     <script src="script.js?v=20260328g"></script>
   </body>
 </html>
