@@ -643,6 +643,12 @@ body.modal-open {
   mask-repeat: no-repeat;
 }
 
+@media (pointer: coarse) {
+  .hero h1 {
+    --reveal-pos: 100% !important;
+  }
+}
+
 .hero h1 em {
   font-style: italic;
   font-family: 'DM Serif Display', serif;
