@@ -815,3 +815,46 @@ if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)'
 }
 
 
+// ── Hamburger Nav Toggle ──────────────────────────────────────
+(function () {
+  const navToggle = document.getElementById('nav-toggle');
+  const siteNav = document.querySelector('.site-nav');
+  if (!navToggle || !siteNav) return;
+
+  const openNav = () => {
+    navToggle.classList.add('is-open');
+    siteNav.classList.add('is-open');
+    navToggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeNav = () => {
+    navToggle.classList.remove('is-open');
+    siteNav.classList.remove('is-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  };
+
+  navToggle.addEventListener('click', () => {
+    const isOpen = siteNav.classList.contains('is-open');
+    isOpen ? closeNav() : openNav();
+  });
+
+  // Close when any nav link is clicked
+  siteNav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => closeNav());
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && siteNav.classList.contains('is-open')) {
+      closeNav();
+      navToggle.focus();
+    }
+  });
+
+  // Close if screen is resized back to desktop
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 1024) closeNav();
+  }, { passive: true });
+}());

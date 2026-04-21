@@ -276,11 +276,24 @@
       }
 
       /* Mobile */
+      @media (max-width: 1024px) {
+        .cs-hero { padding: 5rem 0 3rem; min-height: auto; }
+        .cs { padding: 0 1.5rem; }
+      }
       @media (max-width: 768px) {
-        .cs-hero { grid-template-columns: 1fr; min-height: auto; padding: 6rem 0 3rem; }
+        .cs-hero { grid-template-columns: 1fr; min-height: auto; padding: 5rem 0 3rem; }
         .cs-hero-right { order: -1; }
         .cs-pair { grid-template-columns: 1fr; gap: 2rem; }
         .cs-mojo { bottom: auto; top: -1rem; left: auto; right: -0.5rem; }
+        .cs { padding: 0 1rem; }
+      }
+      @media (max-width: 480px) {
+        .cs-hero { padding: 4.5rem 0 2.5rem; }
+        .cs-h1 { font-size: clamp(2.2rem, 10vw, 3.5rem); }
+        .cs { padding: 0 0.8rem; }
+        .cs-actions { flex-direction: column; gap: 0.6rem; }
+        .cs-actions .button { width: 100%; justify-content: center; }
+        .cs-tag-row { flex-wrap: wrap; gap: 0.5rem; }
       }
     </style>
   </head>
@@ -297,6 +310,11 @@
         <a href="index.html#contact">Contact</a>
       </nav>
       <a class="site-resume" href="https://drive.google.com/file/d/1h_XCkMY52OAqJD6QULvOAGfvVJzDyh3V/view?usp=share_link" target="_blank" rel="noreferrer">RESUME <span>↗</span></a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </header>
 
     <div class="cs">
