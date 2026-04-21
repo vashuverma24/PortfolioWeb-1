@@ -723,7 +723,9 @@ if (globalCursor && !prefersReducedMotion && window.matchMedia('(pointer: fine)'
 
   // Start animation when page loads
   const initAnimation = () => {
-    startDrawingAnimation();
+    if (typeof startDrawingAnimation === 'function') {
+      startDrawingAnimation();
+    }
     // Start the update loop
     if (!frameId) {
       frameId = window.requestAnimationFrame(updateCursorPosition);
