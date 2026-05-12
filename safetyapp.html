@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LeoLingo — Case Study | Vashu Verma</title>
-    <meta name="description" content="LeoLingo case study. Speech therapy iOS app for children — interactive, playful, built with SwiftUI." />
+    <title>SafetyApp — Case Study | Vashu Verma</title>
+    <meta name="description" content="SafetyApp case study. AI Powered Women Safety Android App built with Java and XML." />
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg?v=3" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -111,17 +111,6 @@
         display: block;
       }
       .cs-hero-right { position: relative; overflow: visible; }
-      .cs-mojo {
-        position: absolute;
-        bottom: 0;
-        left: 4%;
-        width: clamp(90px, 13vw, 160px);
-        pointer-events: none;
-        transform: translate(-33.33%, -23%);
-        filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5));
-        z-index: 2;
-      }
-      .cs-mojo img { width: 100%; display: block; }
 
       /* ── Content Grid ── */
       .cs-body { padding: 3rem 0; }
@@ -284,7 +273,6 @@
         .cs-hero { grid-template-columns: 1fr; min-height: auto; padding: 5rem 0 3rem; }
         .cs-hero-right { order: -1; }
         .cs-pair { grid-template-columns: 1fr; gap: 2rem; }
-        .cs-mojo { bottom: auto; top: -1rem; left: auto; right: -0.5rem; }
         .cs { padding: 0 1rem; }
       }
       @media (max-width: 480px) {
@@ -327,51 +315,33 @@
             <div class="cs-tag-row ani d1">
               <span class="cs-num">01</span>
               <span class="cs-tag">Case Study</span>
-              <span class="cs-tag">SwiftUI · iOS</span>
+              <span class="cs-tag">Java · Android</span>
             </div>
-            <h1 class="cs-h1 ani d2">Leo<em>Lingo</em><br>Speech Therapy App</h1>
-            <p class="cs-lead ani d3">Making speech therapy accessible and playful for children — through voice interaction, games, and Mojo the lion.</p>
+            <h1 class="cs-h1 ani d2">Safety<em>App</em><br>AI Powered Women Safety</h1>
+            <p class="cs-lead ani d3">An intelligent Android application designed to enhance women’s safety by combining real-time emergency response features with AI-based safety analysis using NLP.</p>
 
             <div class="cs-hero-stack ani d3">
               <div class="cs-hero-meta">
                 <span class="cs-meta-label">My Role</span>
-                <span class="cs-meta-value">UI/UX Design · iOS Development · Interaction Design</span>
+                <span class="cs-meta-value">Android UI/UX Design · Android Development · NLP Integration</span>
               </div>
               <div class="cs-hero-meta">
                 <span class="cs-meta-label">Tech Stack</span>
-                <span class="cs-meta-value">SwiftUI · Firebase · SceneKit</span>
+                <span class="cs-meta-value">Java · XML · Supabase · NLP API</span>
               </div>
             </div>
 
             <div class="cs-actions ani d4">
               <a class="button button-primary" href="index.html#projects">All Projects</a>
-              <a class="button button-secondary" href="https://github.com/vashuverma24/LeoLingo" target="_blank" rel="noreferrer">Repository ↗</a>
-              <a class="button button-secondary" href="https://github.com/vashuverma24/LeoLingo" target="_blank" rel="noreferrer">Live Site ↗</a>
+              <a class="button button-secondary" href="https://github.com/vashuverma24/SafetyApp" target="_blank" rel="noreferrer">Repository ↗</a>
             </div>
           </div>
 
-          <div class="cs-hero-right ani d5">
-            <img class="cs-hero-img" src="leolingo1.png" alt="LeoLingo iPad dashboard" loading="lazy" />
-            <div class="cs-mojo">
-              <img src="HeyMojo.gif" alt="Mojo mascot" loop />
-            </div>
+          <div class="cs-hero-right ani d5" style="display: flex; justify-content: center;">
+            <img class="cs-hero-img mobile-mockup" src="safetyapp1.jpeg" alt="SafetyApp Home Interface" loading="lazy" />
           </div>
 
         </section>
-
-        <!-- ── Interactive App Mockup ── -->
-        <div class="cs-full reveal" style="padding: 4rem 0;">
-            <div style="text-align: center; margin-bottom: 3rem;">
-              <p class="cs-block-label" style="display: block;">Interactive Prototype</p>
-              <h2 class="cs-block-h">LeoLingo <em>in action</em></h2>
-              <p class="cs-block-p" style="max-width: 500px; margin: 0 auto;">Experience the playful iPad interface designed for children.</p>
-            </div>
-            
-            <div style="position: relative; max-width: 960px; margin: 0 auto; border-radius: 20px; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px var(--line); aspect-ratio: 16/10; display: flex; justify-content: center; align-items: center; background: #0b0612;">
-                <!-- We zoom into the Lottie (scale: 1.35) to crop out the ugly empty purple paddings and black bars. -->
-                <lottie-player id="appMockupLottie" src="Scene.json" background="transparent" speed="1" style="width: 100%; height: 100%; object-fit: cover; transform: scale(1.35);" loop autoplay></lottie-player>
-            </div>
-        </div>
 
         <!-- ── Content ── -->
         <div class="cs-body">
@@ -380,13 +350,13 @@
           <div class="cs-pair reveal">
             <div class="cs-block">
               <p class="cs-block-label">Problem</p>
-              <h2 class="cs-block-h">Speech therapy is <em>inaccessible</em></h2>
-              <p class="cs-block-p">Expensive sessions, long waiting lists, and boring at-home exercises. Children disengage — and families are left without tools to support progress between appointments.</p>
+              <h2 class="cs-block-h">Emergency response needs to be <em>instant</em></h2>
+              <p class="cs-block-p">In critical situations, users don't have the time to navigate complex menus. Moreover, there's a lack of proactive systems that analyze daily experiences to provide actionable safety insights.</p>
             </div>
             <div class="cs-block">
               <p class="cs-block-label">Solution</p>
-              <h2 class="cs-block-h">Play as <em>therapy</em></h2>
-              <p class="cs-block-p">LeoLingo turns speech exercises into games led by <strong>Mojo</strong> — a 3D animated lion who makes every session feel like an adventure, not a clinical exercise.</p>
+              <h2 class="cs-block-h">Reactive &amp; <em>Proactive Safety</em></h2>
+              <p class="cs-block-p">SafetyApp provides an immediate SOS system with automated background actions (audio recording, location sharing), paired with a Safety Diary that leverages NLP to identify risks and suggest personalized safety measures.</p>
             </div>
           </div>
 
@@ -396,37 +366,37 @@
               <p class="cs-block-label">Core Features</p>
               <h2 class="cs-block-h">What it <em>does</em></h2>
               <ul class="cs-feat-list">
-                <li data-n="A">Speech-based games and structured exercises</li>
-                <li data-n="B">Real-time voice interaction with feedback</li>
-                <li data-n="C">Child-friendly UI — large targets, icon-first nav</li>
-                <li data-n="D">Mojo — a 3D interactive lion guiding every session</li>
+                <li data-n="A">One-tap SOS and real-time GPS location sharing</li>
+                <li data-n="B">Automatic background audio recording in emergencies</li>
+                <li data-n="C">Fake call simulation for escape situations</li>
+                <li data-n="D">Safety Diary utilizing NLP for intelligent insights</li>
               </ul>
             </div>
             <div class="cs-block">
               <p class="cs-block-label">Design Approach</p>
-              <h2 class="cs-block-h">Make the right action <em>the fun action</em></h2>
-              <p class="cs-block-p">Every therapeutic action is the natural next step in the game. Children follow Mojo — not instructions. Warm jungle aesthetics. Minimal text. Pure play.</p>
-              <img class="cs-img" src="leolingo2.png" alt="LeoLingo activity flows" loading="lazy" />
-              <p class="cs-img-cap">Learning flows and activity screens</p>
+              <h2 class="cs-block-h">Designed for <em>Stress Conditions</em></h2>
+              <p class="cs-block-p">The interface is built to be highly intuitive and minimal, ensuring users can trigger safety protocols without hesitation. Visuals are clean and reassuring, powered by a robust OTP-based secure authentication backend.</p>
+              <img class="cs-img mobile-mockup" src="safetyapp2.jpeg" alt="SafetyApp AI Safety Analysis" loading="lazy" />
+              <p class="cs-img-cap" style="text-align: center;">Safety Diary and AI-driven insights screen</p>
             </div>
           </div>
 
           <!-- Pull quote full width -->
           <div class="cs-full reveal">
-            <p class="cs-pull">"Too gamified and the therapeutic value gets lost. Too clinical and children disengage in minutes. The answer: structured freedom — clear goals, hidden inside play."</p>
+            <p class="cs-pull">"This project addresses a real-world social problem by leveraging mobile technology and AI to improve personal safety. It not only provides immediate assistance during emergencies but also helps users become more aware of potential risks through intelligent insights."</p>
           </div>
 
-          <!-- Live site -->
+          <!-- Live site (Replaced with GitHub Repo) -->
           <div class="cs-pair reveal">
             <div class="cs-block">
-              <p class="cs-block-label">Live Website</p>
-              <h2 class="cs-block-h">LeoLingo <em>Connect</em></h2>
-              <p class="cs-block-p">A dedicated marketing site bringing the product story to life with immersive visuals.</p>
-              <a class="cs-live" href="https://github.com/vashuverma24/LeoLingo" target="_blank" rel="noreferrer">github.com/vashuverma24/LeoLingo ↗</a>
+              <p class="cs-block-label">Open Source</p>
+              <h2 class="cs-block-h">Explore the <em>Codebase</em></h2>
+              <p class="cs-block-p">The complete Android project is open source and available for review, highlighting clean architecture, API integrations, and practical application of NLP.</p>
+              <a class="cs-live" href="https://github.com/vashuverma24/SafetyApp" target="_blank" rel="noreferrer">github.com/vashuverma24/SafetyApp ↗</a>
             </div>
             <div class="cs-block">
-              <a href="https://github.com/vashuverma24/LeoLingo" target="_blank" rel="noreferrer">
-                <img class="cs-img" src="leolingoConnect.png" alt="LeoLingo Connect marketing site" loading="lazy" style="margin-top:0;" />
+              <a href="https://github.com/vashuverma24/SafetyApp" target="_blank" rel="noreferrer" style="display: flex; justify-content: center;">
+                <img class="cs-img mobile-mockup" src="safetyapp3.jpeg" alt="SafetyApp Emergency Contacts Interface" loading="lazy" style="margin-top:0;" />
               </a>
             </div>
           </div>
@@ -435,12 +405,11 @@
           <div class="cs-pair reveal">
             <div class="cs-block">
               <p class="cs-block-label">Outcome</p>
-              <h2 class="cs-block-h">Engaging, <em>accessible</em></h2>
-              <p class="cs-block-p">An accessible speech therapy experience with strong usability, emotional connection, and a character children genuinely respond to.</p>
+              <h2 class="cs-block-h">Reliable, <em>Secure</em></h2>
+              <p class="cs-block-p">A robust safety solution that successfully combines real-time emergency handling with AI-driven analytics, functioning efficiently even under high-stress conditions.</p>
               <div class="cs-roles" style="margin-top:1.2rem;">
-                <span class="cs-role">UI / UX Design</span>
-                <span class="cs-role">iOS Development</span>
-                <span class="cs-role">Interaction Design</span>
+                <span class="cs-role">Android Developer</span>
+                <span class="cs-role">UI/UX Designer</span>
               </div>
             </div>
             <div class="cs-block">
@@ -449,15 +418,15 @@
               <div class="cs-takes">
                 <div class="cs-take">
                   <span class="cs-take-n">01</span>
-                  <p class="cs-take-t">Designing for children requires emotional resonance — logic alone doesn't hold attention.</p>
+                  <p class="cs-take-t">Managing background services (audio/location) in Android requires careful handling of lifecycle and permissions.</p>
                 </div>
                 <div class="cs-take">
                   <span class="cs-take-n">02</span>
-                  <p class="cs-take-t">How something feels matters as much as what it teaches.</p>
+                  <p class="cs-take-t">Integrating basic NLP transforms standard diary text into actionable safety patterns.</p>
                 </div>
                 <div class="cs-take">
                   <span class="cs-take-n">03</span>
-                  <p class="cs-take-t">A character like Mojo creates continuity — users return for the relationship, not just the feature.</p>
+                  <p class="cs-take-t">UI for critical apps must prioritize large hit areas and zero friction.</p>
                 </div>
               </div>
             </div>
@@ -468,51 +437,16 @@
         <!-- Footer nav -->
         <div class="cs-nav">
           <a class="button button-secondary" href="index.html#projects">All Projects</a>
-          <a class="button button-secondary" href="preplus.html">Next: SmartNotes &#8594;</a>
         </div>
 
       </main>
     </div>
 
-    <button class="ask-ai-launcher" type="button" data-ask-ai-open>Ask AI</button>
-    <div class="ask-ai-drawer" data-ask-ai-drawer hidden>
-      <div class="ask-ai-panel" role="dialog" aria-modal="false" aria-labelledby="ask-ai-title">
-        <button class="ask-ai-close" type="button" data-ask-ai-close aria-label="Close Ask AI"><span></span><span></span></button>
-        <h3 id="ask-ai-title">Portfolio Assistant</h3>
-        <div class="ask-ai-log" data-ask-ai-log aria-live="polite"></div>
-        <form class="ask-ai-form" data-ask-ai-form>
-          <input class="ask-ai-input" type="text" name="ask-ai" placeholder="Ask something about the portfolio" autocomplete="off" data-ask-ai-input aria-label="Ask AI" />
-          <button class="button button-primary ask-ai-submit" type="submit">Send</button>
-        </form>
-      </div>
-    </div>
     <footer class="site-footer">
       <p>Vashu Verma</p>
       <p>Android Developer</p>
       <a href="index.html#top">Back to home ↗</a>
     </footer>
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    <script>
-      // Only play the heavy Lottie animation when its section is visible on the screen
-      document.addEventListener("DOMContentLoaded", () => {
-        const lottiePlayer = document.getElementById("appMockupLottie");
-        if (lottiePlayer && 'IntersectionObserver' in window) {
-          const lottieObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                lottiePlayer.play();
-              } else {
-                lottiePlayer.pause();
-              }
-            });
-          }, { threshold: 0.1 }); // 10% visibility triggers play/pause
-          
-          lottieObserver.observe(lottiePlayer);
-        } else if (lottiePlayer) {
-          lottiePlayer.play(); // Fallback
-        }
-      });
-    </script>
     <script src="script.js?v=20260328g"></script>
   </body>
 </html>

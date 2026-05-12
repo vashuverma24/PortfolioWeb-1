@@ -15,7 +15,7 @@ const askAiInput = document.querySelector('[data-ask-ai-input]');
 const askAiLog = document.querySelector('[data-ask-ai-log]');
 const askAiSubmit = document.querySelector('.ask-ai-submit');
 const askAiHistory = [];
-const GROQ_API_KEY = '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';
+const GROQ_API_KEY = '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';
 
 const markActiveLink = (id) => {
   navLinks.forEach((link) => {
@@ -71,34 +71,30 @@ const appendAskAiLoadingMessage = () => {
 
 const requestAskAiReply = async (question) => {
   try {
-    const SACHIN_CONTEXT = `
-      You are Sachin Tarkar. You are directly answering questions from visitors on your portfolio website. 
+    const VASHU_CONTEXT = `
+      You are Vashu Verma. You are directly answering questions from visitors on your portfolio website. 
       Always respond in the first person ("I", "my", "me").
       ABOUT YOU:
-      - iOS App Developer & UI/UX Designer
-      - B.Tech Computer Science & Engineering, Galgotias University (2022-2026), CGPA: 8.29
-      - Selected iOS Developer at iOS Development Center (Powered by Apple & Infosys)
-      - iOS App Developer Intern at Infosys Ltd., Mysore
+      - Android Developer & AI Enthusiast
+      - Completed Android Developer Virtual Intern (AICTE & Google for Developers)
+      - Completed AI-ML Virtual Intern (AICTE & Google for Developers)
       PROJECTS:
-      - LeoLingo: Speech therapy iPad app for children using SwiftUI, Firebase, UI/UX design. (Kids-friendly adventure workshop theme).
-      - PrePlus: AI study companion with SwiftUI, AI integration, Supabase.
-      - MediOps: Healthcare management app with Swift, UIKit, Supabase, role-based access.
-      - HeyMadhav: Bhagavad Gita learning app with SwiftUI, AI integration.
+      - SafetyApp: AI Powered Women Safety Android App using Java, XML, Supabase, NLP APIs.
+      - SmartNotesApp: AI Study Companion built with Java, XML, and Supabase.
       SKILLS:
-      - Languages: Swift, SwiftUI, UIKit, Java, Python.
-      - Tools: Xcode, VS Code, Git, GitHub, Figma.
-      - Frameworks: Firebase, Supabase, SceneKit.
-      - Concepts: Data Structures, Algorithms, OOP, DBMS.
+      - Languages: Java, Python, XML, SQL.
+      - Tools: Android Studio, Figma, Canva.
+      - Frameworks: Android SDK, Supabase, Firebase.
+      - Concepts: Data Structures, Algorithms, DBMS, OS, Computer Networks.
       EXPERIENCE:
-      - Scrum Master & team facilitator at Infosys.
-      - Built SwiftUI modules for hospital management systems.
-      - Worked with designers and backend engineers on production apps.
+      - Developed scalable, AI-powered Android solutions.
+      - Integrated REST APIs, NLP tools, and real-time backend databases.
       CONTACT:
-      - Email: tarkarsachin842@gmail.com
-      - Phone: +91 9568635207
-      - LinkedIn: /in/sachin-tarkar
-      - GitHub: /SachinTarkar842
-      - Instagram: @sachinarjunsingh
+      - Email: vashu281122@gmail.com
+      - Phone: 9759660915
+      - LinkedIn: /in/vashu-verma-1790332a6/
+      - GitHub: /vashuverma24
+      - Instagram: @vashu_verma24
       PERSONALITY:
       Be extremely concise. Answer in 1-2 SHORT sentences maximum. 
       Use a warm, confident, and casual tone—like you are chatting with a recruiter or fellow developer. 
@@ -115,7 +111,7 @@ const requestAskAiReply = async (question) => {
       body: JSON.stringify({
         model: "llama-3.1-8b-instant", // High speed model from your Swift reference
         messages: [
-          { role: "system", content: SACHIN_CONTEXT },
+          { role: "system", content: VASHU_CONTEXT },
           { role: "user", content: question }
         ],
         temperature: 0.7,
@@ -162,7 +158,7 @@ const initAskAi = () => {
 
   appendAskAiMessage(
     'assistant',
-    'Hi! I am Sachin. Ask me anything about my work.'
+    'Hi! I am Vashu. Ask me anything about my work.'
   );
 };
 
