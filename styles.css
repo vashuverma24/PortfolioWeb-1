@@ -760,9 +760,9 @@ body.modal-open {
 
 .project-prowess-layout {
   display: grid;
-  grid-template-columns: minmax(280px, 0.76fr) minmax(0, 1.24fr);
-  gap: clamp(2rem, 5vw, 5rem);
-  align-items: end;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  align-items: center;
   margin-bottom: clamp(2.5rem, 5vw, 4rem);
 }
 
@@ -1204,26 +1204,13 @@ body.modal-open {
   margin-top: 1rem;
 }
 
-.about-portrait::before {
-  content: '';
-  position: absolute;
-  inset: 10% 12% 10%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 70%);
-  filter: blur(34px);
-  opacity: 0.12;
-}
-
 .about-portrait img {
   position: relative;
   z-index: 1;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  height: auto;
   object-fit: cover;
-  border-radius: 50%;
-  -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 75%);
-  mask-image: radial-gradient(circle at center, black 30%, transparent 75%);
-  filter: brightness(0.95) contrast(1.05);
+  border-radius: 0;
 }
 
 .panel {
@@ -1325,9 +1312,11 @@ body.modal-open {
 }
 
 .experience-body {
-  display: grid;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   padding-top: 0.2rem;
+  width: 100%;
 }
 
 .experience-topline {
@@ -1336,8 +1325,9 @@ body.modal-open {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem 1.2rem;
-  padding-bottom: 1rem;
+  padding-bottom: 1.25rem;
   border-bottom: 1px solid var(--line);
+  width: 100%;
 }
 
 .experience-body h3 {
@@ -1393,23 +1383,61 @@ body.modal-open {
 }
 
 .experience-visual {
-  align-self: start;
-  justify-self: end;
-  width: min(100%, 11rem);
-  margin-top: 4rem;
+  display: none; /* We will use the new certificate-card-premium class */
 }
 
-.experience-visual img {
+/* Premium Framed Certificate Card */
+.certificate-card-premium {
+  position: relative;
   width: 100%;
-  border-radius: 1.2rem;
-  transform: none;
-  transition: filter 0.3s ease;
+  max-width: 220px;
+  margin: 0;
+  perspective: 2000px;
 }
 
-.experience-visual img:hover {
-  transform: none;
-  filter: brightness(1.05);
+.certificate-frame {
+  display: block;
+  padding: 0.8rem; /* Reduced matting */
+  background: #fdfdfd;
+  border: 10px solid #1a1a1a; /* Slightly thinner frame */
+  border-radius: 4px;
+  box-shadow: 
+    0 30px 60px rgba(0,0,0,0.5),
+    0 10px 20px rgba(0,0,0,0.3),
+    inset 0 0 15px rgba(0,0,0,0.1);
+  transform: rotateY(-8deg) rotateX(4deg) scale(0.98);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.6s ease;
+  cursor: zoom-in;
 }
+
+.certificate-frame:hover {
+  transform: rotateY(-2deg) rotateX(1deg) scale(1);
+  box-shadow: 
+    0 40px 80px rgba(0,0,0,0.6),
+    0 15px 30px rgba(0,0,0,0.4);
+}
+
+.certificate-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 0 2px rgba(0,0,0,0.1);
+}
+
+/* Decoration for the certificate card */
+.certificate-card-premium::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 10%;
+  right: 10%;
+  height: 20px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, transparent 70%);
+  filter: blur(10px);
+  z-index: -1;
+}
+
 
 .contact-editorial {
   display: grid;
@@ -2519,6 +2547,11 @@ section[id],
 
   .experience-visual {
     width: min(100%, 18rem);
+  }
+
+  .experience-body {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
   }
 
   .contact-copy h3 {
